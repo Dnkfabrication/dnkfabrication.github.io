@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="DNK Tasks">
+<meta name="theme-color" content="#0e0f11">
+<title>DNK Tasks</title>
+<!-- Home-screen icon: dark tile, orange DNK + checkmark (inline data-URI SVG) -->
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxODAiIGhlaWdodD0iMTgwIiB2aWV3Qm94PSIwIDAgMTgwIDE4MCI+PHJlY3Qgd2lkdGg9IjE4MCIgaGVpZ2h0PSIxODAiIHJ4PSIzNiIgZmlsbD0iIzE1MTcxYSIvPjx0ZXh0IHg9IjkwIiB5PSI4MiIgZm9udC1mYW1pbHk9IkFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjUyIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjZmY3YTE4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5ETks8L3RleHQ+PHBhdGggZD0iTTU4IDExNSBsMjAgMjIgbDQ2IC01MiIgc3Ryb2tlPSIjZmY3YTE4IiBzdHJva2Utd2lkdGg9IjEzIiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4=">
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+       background:#15171a;color:#eee;padding-bottom:96px;
+       padding-top:env(safe-area-inset-top)}
+  header{position:sticky;top:0;z-index:20;background:#0e0f11;
+         border-bottom:1px solid #2a2d31;
+         padding:calc(env(safe-area-inset-top) + 12px) 16px 12px}
+  header .ttl{display:flex;align-items:baseline;gap:8px}
+  header h1{font-size:20px;margin:0;color:#ff7a18;letter-spacing:.5px}
+  header .tag{font-size:11px;color:#7d8893;font-style:italic}
+  .statusbar{display:flex;justify-content:space-between;align-items:center;
+             margin-top:6px;font-size:12px;color:#8a96a0}
+  .refresh{background:#23262b;border:1px solid #343941;color:#cdd6df;
+           border-radius:8px;padding:6px 12px;font-size:13px}
+  .stale{background:#3a2c12;color:#ffce8a;border:1px solid #6b531f;
+         padding:8px 16px;font-size:13px;text-align:center;display:none}
+  .wrap{max-width:680px;margin:0 auto;padding:8px 12px 0}
+  .section{margin-top:14px}
+  .section.empty{display:none}
+  .sechead{font-size:13px;font-weight:700;letter-spacing:.6px;color:#9aa6b0;
+           text-transform:uppercase;padding:6px 6px 8px;display:flex;
+           justify-content:space-between;align-items:center}
+  .sechead .cnt{color:#5f6b75;font-weight:600}
+  .task{background:#1f2329;border:1px solid #2c3138;border-radius:12px;
+        margin-bottom:8px;overflow:hidden;transition:opacity .25s,transform .25s,max-height .3s}
+  .task.leaving{opacity:0;transform:translateX(40px);max-height:0;
+                margin:0;border-width:0;padding:0}
+  .row{display:flex;align-items:center;gap:12px;padding:14px 14px}
+  .ck{flex:0 0 30px;width:30px;height:30px;border-radius:50%;
+      border:2px solid #5b6671;background:transparent;
+      display:flex;align-items:center;justify-content:center;cursor:pointer}
+  .ck.checked{background:#2e9e4f;border-color:#2e9e4f}
+  .ck svg{width:16px;height:16px;display:none}
+  .ck.checked svg{display:block}
+  .ttlw{flex:1;min-width:0}
+  .ttext{font-size:16px;line-height:1.3;word-break:break-word}
+  .meta{font-size:11px;color:#7d8893;margin-top:2px}
+  .chip{flex:0 0 auto;font-size:12px;font-weight:700;padding:5px 9px;
+        border-radius:8px;background:#2a2f36;color:#aeb8c2;white-space:nowrap}
+  .chip.today{background:#163a55;color:#7fd0ff}
+  .chip.over{background:#4a1717;color:#ff9b9b}
+  .chip.lead{background:#3a2553;color:#d2a8ff}
+  .chip.soon{background:#23303a;color:#9cd}
+  .pri{display:inline-block;font-size:10px;font-weight:800;margin-left:6px;
+       color:#ffb066}
+  .drawer{display:none;border-top:1px solid #2c3138;padding:12px 14px 14px;
+          background:#191c21}
+  .task.open .drawer{display:block}
+  .detail{font-size:14px;color:#c4ccd4;white-space:pre-wrap;line-height:1.45;
+          margin-bottom:10px}
+  .actions{display:flex;flex-wrap:wrap;gap:8px}
+  .btn{border:0;border-radius:9px;padding:11px 14px;font-size:14px;
+       font-weight:700;cursor:pointer}
+  .btn.asap{background:#5a2c12;color:#ffb978}
+  .btn.date{background:#1f3a4d;color:#9fd6ff}
+  .btn.done{background:#1d3a26;color:#8ff0a8}
+  .btn.make{background:#3a2553;color:#dcb8ff}
+  .btn.dismiss{background:#332126;color:#f0a0ad}
+  .btn.ghost{background:#23262b;color:#c8d2db;border:1px solid #343941}
+  .dateform{display:none;margin-top:10px;gap:8px;align-items:center;flex-wrap:wrap}
+  .dateform.show{display:flex}
+  input[type=date],input[type=text],textarea{background:#15171a;color:#fff;
+       border:1px solid #343941;border-radius:9px;padding:12px;font-size:16px;width:100%}
+  .empty-all{text-align:center;color:#6c7782;padding:48px 16px;font-size:15px}
+  /* floating add */
+  .fab{position:fixed;right:18px;bottom:calc(env(safe-area-inset-bottom) + 18px);
+       width:60px;height:60px;border-radius:50%;background:#ff7a18;color:#1a1205;
+       border:0;font-size:34px;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.5);
+       z-index:30;line-height:1}
+  /* modal */
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:40;
+         display:none;align-items:flex-end}
+  .modal.show{display:flex}
+  .sheet{background:#1b1e23;width:100%;max-width:680px;margin:0 auto;
+         border-radius:18px 18px 0 0;padding:18px 16px calc(env(safe-area-inset-bottom) + 18px)}
+  .sheet h2{margin:2px 0 14px;font-size:18px;color:#ff7a18}
+  .sheet label{display:block;font-size:13px;color:#9aa6b0;margin:12px 0 5px}
+  .sheet .save{width:100%;margin-top:16px;background:#ff7a18;color:#1a1205;
+       border:0;border-radius:12px;padding:16px;font-size:18px;font-weight:800}
+  .sheet .cancel{width:100%;margin-top:8px;background:transparent;color:#8a96a0;
+       border:0;padding:10px;font-size:15px}
+  /* completed view */
+  .compbar{text-align:center;padding:20px 16px 8px}
+  .compbar a{color:#7d8893;font-size:14px;text-decoration:none;
+       border-bottom:1px dashed #444b54;padding-bottom:2px}
+  .comprow{background:#191c21;border:1px solid #2c3138;border-radius:10px;
+       padding:11px 14px;margin-bottom:7px;font-size:14px;color:#9fae9f}
+  .comprow .when{font-size:11px;color:#6c7782;margin-top:3px}
+  .backbtn{background:#23262b;border:1px solid #343941;color:#cdd6df;
+       border-radius:8px;padding:8px 14px;font-size:14px;margin:4px 0 12px}
+</style>
+</head>
+<body>
+
+<!-- ===================== CONFIG ===================== -->
+<!-- API_URL is the GAS /exec URL (not secret on its own - data needs the token).
+     The TOKEN is NOT shipped in this page. It is entered once on the phone and
+     stored in localStorage only, so this public page carries no secret. -->
+<script>
+  var CONFIG = {
+    API_URL: "https://script.google.com/macros/s/AKfycbzokTkC93s1-DjZzFoN4jGdJhwFFgj7YKQRglrt5KMe2g1863CnTRMCj2fLPn1hcc4k/exec"    // GAS /exec URL (deployed 2026-06-15)
+  };
+  // token lives only on this device after first entry
+  function getToken(){ return localStorage.getItem("dnk_token") || ""; }
+  function setToken(v){ localStorage.setItem("dnk_token", v); }
+  function clearToken(){ localStorage.removeItem("dnk_token"); }
+</script>
+
+<header>
+  <div class="ttl"><h1>DNK TASKS</h1><span class="tag">Ideas Forged in Steel</span></div>
+  <div class="statusbar">
+    <span id="updated">loading...</span>
+    <button class="refresh" onclick="load(true)">Refresh</button>
+  </div>
+</header>
+<div class="stale" id="stale">Offline - showing last saved list</div>
+
+<div class="wrap" id="main"></div>
+
+<div class="compbar" id="compbar"><a href="#" onclick="showCompleted();return false;">View completed tasks</a></div>
+
+<button class="fab" onclick="openAdd()">+</button>
+
+<!-- Add-task modal -->
+<div class="modal" id="addModal">
+  <div class="sheet">
+    <h2>New task</h2>
+    <label>Title</label>
+    <input type="text" id="aTitle" placeholder="What needs doing?">
+    <label>Detail (optional)</label>
+    <textarea id="aDetail" rows="3" placeholder="Notes, who, context..."></textarea>
+    <label>Due date (optional)</label>
+    <input type="date" id="aDue">
+    <button class="save" onclick="submitAdd()">Add task</button>
+    <button class="cancel" onclick="closeAdd()">Cancel</button>
+  </div>
+</div>
+
+<!-- Passcode gate (shown only if no token stored on this device) -->
+<div class="modal" id="gateModal">
+  <div class="sheet">
+    <h2>DNK Tasks — enter passcode</h2>
+    <p style="color:#8a96a0;font-size:13px;margin:0 0 8px">One time on this device. Get the code from Dylan/Art.</p>
+    <input type="password" id="gateInput" placeholder="passcode" autocomplete="off"
+           onkeydown="if(event.key==='Enter')submitGate()">
+    <div id="gateErr" style="color:#f0a0ad;font-size:13px;margin-top:8px;display:none">Wrong code — try again.</div>
+    <button class="save" onclick="submitGate()">Unlock</button>
+  </div>
+</div>
+
+<script>
+/* ---------------- state ---------------- */
+var CACHE_KEY = "dnk_tasks_cache_v1";
+var tasks = [];
+var today = "";
+var openId = null;          // which drawer is open
+
+var CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+var SECTIONS = [
+  {bucket:"lead",     label:"🆕 NEW LEADS",  collapsed:false},
+  {bucket:"triage",   label:"⚡ TRIAGE",           collapsed:false},
+  {bucket:"overdue",  label:"🔴 OVERDUE",     collapsed:false},
+  {bucket:"today",    label:"📅 TODAY",       collapsed:false},
+  {bucket:"upcoming", label:"UPCOMING",                collapsed:false},
+  {bucket:"someday",  label:"SOMEDAY",                 collapsed:true}
+];
+
+/* ---------------- networking ---------------- */
+function api(method, body) {
+  var tok = getToken();
+  var url = CONFIG.API_URL;
+  var opts = {method: method};
+  if (method === "GET") {
+    url += (url.indexOf("?") < 0 ? "?" : "&") + "key=" + encodeURIComponent(tok);
+    if (body && body.view) { url += "&view=" + encodeURIComponent(body.view); }
+  } else {
+    body = body || {};
+    body.key = tok;
+    // text/plain avoids a CORS preflight against Apps Script.
+    opts.headers = {"Content-Type": "text/plain;charset=utf-8"};
+    opts.body = JSON.stringify(body);
+  }
+  return fetch(url, opts).then(function (r) { return r.json(); });
+}
+
+function load(manual) {
+  api("GET").then(function (res) {
+    if (res && res.tasks) {
+      tasks = res.tasks;
+      today = res.today || isoToday();
+      localStorage.setItem(CACHE_KEY, JSON.stringify({tasks: tasks, today: today, at: Date.now()}));
+      document.getElementById("stale").style.display = "none";
+      stamp();
+      render();
+    } else if (res && res.error === "unauthorized") {
+      clearToken(); openGate();
+    } else if (res && res.error) {
+      stamp("error: " + res.error);
+    }
+  }).catch(function () {
+    loadCache(true);
+  });
+}
+
+/* ---------------- passcode gate ---------------- */
+function openGate(){
+  document.getElementById("gateModal").classList.add("show");
+  setTimeout(function(){ var i=document.getElementById("gateInput"); if(i) i.focus(); }, 100);
+}
+function submitGate(){
+  var v = (document.getElementById("gateInput").value || "").trim();
+  if(!v) return;
+  setToken(v);
+  // validate with a real fetch; wrong code -> backend says unauthorized
+  api("GET", {view:"data"}).then(function(res){
+    if(res && res.tasks){
+      document.getElementById("gateModal").classList.remove("show");
+      document.getElementById("gateInput").value = "";
+      document.getElementById("gateErr").style.display = "none";
+      tasks = res.tasks; today = res.today || isoToday();
+      localStorage.setItem(CACHE_KEY, JSON.stringify({tasks:tasks,today:today,at:Date.now()}));
+      stamp(); render();
+    } else {
+      clearToken();
+      document.getElementById("gateErr").style.display = "block";
+    }
+  }).catch(function(){
+    document.getElementById("gateErr").textContent = "Can't reach the list — check connection.";
+    document.getElementById("gateErr").style.display = "block";
+  });
+}
+
+function loadCache(stale) {
+  var raw = localStorage.getItem(CACHE_KEY);
+  if (raw) {
+    try {
+      var c = JSON.parse(raw);
+      tasks = c.tasks || [];
+      today = c.today || isoToday();
+      render();
+      if (stale) {
+        document.getElementById("stale").style.display = "block";
+        stamp("cached");
+      }
+    } catch (e) {}
+  } else if (stale) {
+    document.getElementById("main").innerHTML =
+      '<div class="empty-all">Can\'t reach the task list and nothing cached yet.</div>';
+  }
+}
+
+function stamp(extra) {
+  var d = new Date();
+  var hh = ("0" + d.getHours()).slice(-2), mm = ("0" + d.getMinutes()).slice(-2);
+  document.getElementById("updated").textContent =
+    "updated " + hh + ":" + mm + (extra ? " (" + extra + ")" : "");
+}
+
+function isoToday() {
+  var d = new Date();
+  return d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + ("0"+d.getDate()).slice(-2);
+}
+
+/* ---------------- sorting (mirrors backend sort_key) ---------------- */
+function reclassifyAndSort() {
+  // After a local edit we recompute buckets so the UI stays consistent
+  // without a round-trip. Mirrors classify_() in Code.gs.
+  tasks.forEach(function (t) {
+    var due = (t.due_date || "").substring(0, 10);
+    var hasDue = !!due;
+    var hasPrio = (t.priority !== "" && t.priority !== null && t.priority !== undefined);
+    var src = String(t.source || "manual").toLowerCase();
+    var sec = String(t.section || "").toLowerCase();
+    var b;
+    if (src === "lead" && sec !== "triaged") b = "lead";
+    else if (sec === "triage" || (!hasDue && !hasPrio && src === "manual")) b = "triage";
+    else if (hasDue && due < today) b = "overdue";
+    else if (hasDue && due === today) b = "today";
+    else if (hasDue && due > today) b = "upcoming";
+    else b = "someday";
+    var group = {lead:0,triage:1,overdue:2,today:3,upcoming:4,someday:5}[b];
+    var prio = hasPrio ? String(t.priority) : "5";
+    var sub = (b==="overdue"||b==="upcoming"||b==="today")
+      ? ((due||"9999-99-99")+"|"+prio) : (prio+"|"+String(t.created||""));
+    t.bucket = b;
+    t.sort_key = group + "|" + sub + "|" + String(t.id||"");
+  });
+  tasks.sort(function (a,b){ return a.sort_key < b.sort_key ? -1 : (a.sort_key > b.sort_key ? 1 : 0); });
+}
+
+/* ---------------- due chip ---------------- */
+function dayDiff(due) {
+  var d1 = new Date(today + "T00:00:00");
+  var d2 = new Date(due + "T00:00:00");
+  return Math.round((d2 - d1) / 86400000);
+}
+function chipFor(t) {
+  var due = (t.due_date || "").substring(0,10);
+  if (t.bucket === "lead") return {cls:"lead", txt:"LEAD"};
+  if (t.bucket === "triage") return {cls:"", txt:"TRIAGE"};
+  if (!due) return null;
+  var n = dayDiff(due);
+  if (n < 0)  return {cls:"over", txt:(-n)+"d OVERDUE"};
+  if (n === 0) return {cls:"today", txt:"TODAY"};
+  if (n === 1) return {cls:"soon", txt:"1d"};
+  return {cls:"soon", txt:n+"d"};
+}
+
+/* ---------------- render ---------------- */
+function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+function render() {
+  var main = document.getElementById("main");
+  if (!tasks.length) {
+    main.innerHTML = '<div class="empty-all">All clear. Nothing on the list.</div>';
+    return;
+  }
+  var html = "";
+  SECTIONS.forEach(function (sec) {
+    var items = tasks.filter(function (t){ return t.bucket === sec.bucket; });
+    var emptyCls = items.length ? "" : " empty";
+    html += '<div class="section' + emptyCls + '">';
+    html += '<div class="sechead">' + sec.label + '<span class="cnt">' + items.length + '</span></div>';
+    items.forEach(function (t){ html += taskHTML(t); });
+    html += '</div>';
+  });
+  main.innerHTML = html;
+}
+
+function taskHTML(t) {
+  var chip = chipFor(t);
+  var chipHtml = chip ? '<span class="chip ' + chip.cls + '">' + esc(chip.txt) + '</span>' : '';
+  var pri = (t.priority !== "" && t.priority != null) ? '<span class="pri">P' + esc(t.priority) + '</span>' : '';
+  var openCls = (openId === t.id) ? " open" : "";
+  var metaBits = [];
+  if (t.source && t.source !== "manual") metaBits.push(esc(t.source));
+  var meta = metaBits.length ? '<div class="meta">' + metaBits.join(" · ") + '</div>' : '';
+
+  return '<div class="task' + openCls + '" id="task-' + esc(t.id) + '">'
+    + '<div class="row">'
+    +   '<div class="ck" onclick="complete(event,\'' + esc(t.id) + '\')">' + CHECK_SVG + '</div>'
+    +   '<div class="ttlw" onclick="toggle(\'' + esc(t.id) + '\')">'
+    +     '<div class="ttext">' + esc(t.title) + pri + '</div>' + meta
+    +   '</div>'
+    +   chipHtml
+    + '</div>'
+    + '<div class="drawer">'
+    +   (t.detail ? '<div class="detail">' + esc(t.detail) + '</div>' : '<div class="detail" style="color:#6c7782">(no detail)</div>')
+    +   drawerActions(t)
+    + '</div>'
+    + '</div>';
+}
+
+function drawerActions(t) {
+  var id = esc(t.id);
+  var h = '<div class="actions">';
+  if (t.bucket === "lead") {
+    h += '<button class="btn make" onclick="makeTask(\'' + id + '\')">Make Task</button>';
+    h += '<button class="btn done" onclick="completeId(\'' + id + '\')">Done / Dismiss</button>';
+  } else if (t.bucket === "triage") {
+    h += '<button class="btn asap" onclick="setAsap(\'' + id + '\')">ASAP</button>';
+    h += '<button class="btn date" onclick="toggleDate(\'' + id + '\')">Set date</button>';
+    h += '<button class="btn done" onclick="completeId(\'' + id + '\')">Done</button>';
+  } else {
+    h += '<button class="btn date" onclick="toggleDate(\'' + id + '\')">Reschedule</button>';
+    h += '<button class="btn done" onclick="completeId(\'' + id + '\')">Done</button>';
+  }
+  h += '</div>';
+  h += '<div class="dateform" id="df-' + id + '">'
+    +  '<input type="date" id="di-' + id + '">'
+    +  '<button class="btn ghost" onclick="saveDate(\'' + id + '\')">Save date</button>'
+    +  '</div>';
+  return h;
+}
+
+/* ---------------- interactions ---------------- */
+function toggle(id) {
+  openId = (openId === id) ? null : id;
+  render();
+}
+
+function findTask(id){ for (var i=0;i<tasks.length;i++) if (String(tasks[i].id)===String(id)) return tasks[i]; return null; }
+
+function complete(ev, id) { ev.stopPropagation(); completeId(id); }
+
+function completeId(id) {
+  var el = document.getElementById("task-" + id);
+  if (el) {
+    var ck = el.querySelector(".ck"); if (ck) ck.classList.add("checked");
+    el.classList.add("leaving");
+  }
+  // optimistic remove
+  setTimeout(function () {
+    tasks = tasks.filter(function (t){ return String(t.id) !== String(id); });
+    if (openId === id) openId = null;
+    render();
+  }, 260);
+  api("POST", {action:"complete", id:id}).catch(function(){ load(); });
+}
+
+function setAsap(id) {
+  var t = findTask(id); if (t){ t.priority = 1; t.section = "asap"; }
+  reclassifyAndSort(); render();
+  api("POST", {action:"update", id:id, fields:{priority:1, section:"asap"}}).catch(function(){ load(); });
+}
+
+function toggleDate(id) {
+  var df = document.getElementById("df-" + id);
+  if (df) df.classList.toggle("show");
+}
+
+function saveDate(id) {
+  var inp = document.getElementById("di-" + id);
+  var val = inp ? inp.value : "";
+  if (!val) return;
+  var t = findTask(id); if (t){ t.due_date = val; if (t.section==="triage") t.section=""; }
+  reclassifyAndSort(); render();
+  api("POST", {action:"update", id:id, fields:{due_date:val, section:""}}).catch(function(){ load(); });
+}
+
+function makeTask(id) {
+  // Promote a lead: mark triaged so it leaves the lead bucket, then let Dylan
+  // set a date via the now-visible reschedule controls.
+  var t = findTask(id); if (t){ t.section = "triaged"; t.source = "lead"; }
+  reclassifyAndSort();
+  openId = id;
+  render();
+  // open the date form for convenience
+  setTimeout(function(){ toggleDate(id); }, 50);
+  api("POST", {action:"update", id:id, fields:{section:"triaged"}}).catch(function(){ load(); });
+}
+
+/* ---------------- add modal ---------------- */
+function openAdd(){ document.getElementById("addModal").classList.add("show"); }
+function closeAdd(){
+  document.getElementById("addModal").classList.remove("show");
+  document.getElementById("aTitle").value = "";
+  document.getElementById("aDetail").value = "";
+  document.getElementById("aDue").value = "";
+}
+function submitAdd() {
+  var title = document.getElementById("aTitle").value.trim();
+  if (!title) { document.getElementById("aTitle").focus(); return; }
+  var detail = document.getElementById("aDetail").value.trim();
+  var due = document.getElementById("aDue").value;
+  var body = {action:"add", title:title, detail:detail, source:"manual"};
+  if (due) body.due_date = due;
+  closeAdd();
+  api("POST", body).then(function(){ load(); }).catch(function(){ load(); });
+}
+
+/* ---------------- completed view ---------------- */
+function showCompleted() {
+  var main = document.getElementById("main");
+  document.getElementById("compbar").style.display = "none";
+  main.innerHTML = '<button class="backbtn" onclick="backToActive()">&larr; Back to tasks</button>'
+    + '<div class="empty-all">Loading completed...</div>';
+  api("GET", {view:"completed"}).then(function (res) {
+    var list = (res && res.completed) || [];
+    var html = '<button class="backbtn" onclick="backToActive()">&larr; Back to tasks</button>';
+    if (!list.length) { html += '<div class="empty-all">No completed tasks yet.</div>'; }
+    else {
+      html += '<div class="sechead">✓ COMPLETED<span class="cnt">' + list.length + '</span></div>';
+      list.forEach(function (t) {
+        var when = (t.completed || "").substring(0,16).replace("T"," ");
+        html += '<div class="comprow">' + esc(t.title)
+          + '<div class="when">' + esc(when) + '</div></div>';
+      });
+    }
+    main.innerHTML = html;
+  }).catch(function () {
+    main.innerHTML = '<button class="backbtn" onclick="backToActive()">&larr; Back to tasks</button>'
+      + '<div class="empty-all">Could not load completed (offline).</div>';
+  });
+}
+function backToActive() {
+  document.getElementById("compbar").style.display = "block";
+  render();
+}
+
+/* ---------------- lifecycle ---------------- */
+document.addEventListener("visibilitychange", function () {
+  if (!document.hidden) load();
+});
+window.addEventListener("focus", function () { load(); });
+
+// First paint from cache (instant), then gate-or-load.
+loadCache(false);
+if (getToken()) { load(); } else { openGate(); }
+</script>
+</body>
+</html>
