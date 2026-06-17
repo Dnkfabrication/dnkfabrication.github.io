@@ -379,6 +379,7 @@ function drawerActions(t) {
     h += '<button class="btn done" onclick="completeId(\'' + id + '\')">Done</button>';
   } else {
     h += '<button class="btn date" onclick="toggleDate(\'' + id + '\')">Reschedule</button>';
+    h += '<button class="btn" onclick="setTriage(\'' + id + '\')">Triage</button>';
     h += '<button class="btn done" onclick="completeId(\'' + id + '\')">Done</button>';
   }
   h += '</div>';
@@ -415,9 +416,18 @@ function completeId(id) {
 }
 
 function setAsap(id) {
-  var t = findTask(id); if (t){ t.priority = 1; t.section = "asap"; }
+  // ASAP = do it now: surface it in TODAY at top priority (exits triage).
+  // (Old code set section="asap", which had no bucket -> fell through to Someday.)
+  var t = findTask(id); if (t){ t.priority = 1; t.due_date = today; t.section = ""; }
   reclassifyAndSort(); render();
-  api("POST", {action:"update", id:id, fields:{priority:1, section:"asap"}}).catch(function(){ load(); });
+  api("POST", {action:"update", id:id, fields:{priority:1, due_date:today, section:""}}).catch(function(){ load(); });
+}
+
+function setTriage(id) {
+  // Send any task back to the TRIAGE queue (undated, awaiting an asap-or-date call).
+  var t = findTask(id); if (t){ t.section = "triage"; t.due_date = ""; t.priority = ""; }
+  reclassifyAndSort(); render();
+  api("POST", {action:"update", id:id, fields:{section:"triage", due_date:"", priority:""}}).catch(function(){ load(); });
 }
 
 function toggleDate(id) {
