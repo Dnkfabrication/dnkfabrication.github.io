@@ -730,27 +730,9 @@
   </div>
 </section>
 
-<!-- THE COLLECTION -->
-<section class="collection-teaser" id="collection">
-  <div class="collection-teaser-inner" id="ct-inner">
-    <!-- Populated by art-data.js -->
-    <div class="ct-image-wrap">
-      <div class="ct-image-placeholder">Photo Coming Soon</div>
-      <div class="ct-badge">Featured Work</div>
-    </div>
-    <div class="ct-info fade-up">
-      <div class="section-label">The Collection</div>
-      <h2>Iron Rose Gate</h2>
-      <div class="ct-artist">Dylan Hinesly &amp; Audrey Valadez &middot; 2024</div>
-      <p class="ct-story">Designed as a one-of-a-kind entryway piece for a private residence. Every petal was hand-cut and shaped individually before being welded into the main arch. The thorned vine pattern along the frame took nearly 60 hours of bench work. No two will ever be identical.</p>
-      <div class="ct-price">$4,800</div>
-      <div class="ct-price-note">One-of-a-kind &middot; Inquiries by appointment</div>
-      <div class="ct-actions">
-        <a href="art.html" class="btn-primary">Inquire About This Piece</a>
-        <a href="art.html" class="btn-ghost">View The Collection</a>
-      </div>
-    </div>
-  </div>
+<!-- THE COLLECTION — hidden until a REAL piece exists in art-data.js (no placeholder fiction, ever) -->
+<section class="collection-teaser" id="collection" style="display:none">
+  <div class="collection-teaser-inner" id="ct-inner"></div>
 </section>
 
 <!-- ABOUT -->
@@ -989,6 +971,30 @@
 
 <script src="art-data.js"></script>
 <script>
+  // The Collection teaser — renders ONLY real pieces from art-data.js; stays hidden when empty
+  (function () {
+    if (typeof ART_PIECES === 'undefined' || !ART_PIECES.length) return;
+    const p = ART_PIECES.find(x => x.featured) || ART_PIECES[0];
+    const img = p.image
+      ? `<img src="${p.image}" alt="${p.title}">`
+      : `<div class="ct-image-placeholder">Photo Coming Soon</div>`;
+    document.getElementById('ct-inner').innerHTML = `
+      <div class="ct-image-wrap">${img}<div class="ct-badge">Featured Work</div></div>
+      <div class="ct-info fade-up">
+        <div class="section-label">The Collection</div>
+        <h2>${p.title}</h2>
+        <div class="ct-artist">${p.artist} &middot; ${p.year}</div>
+        <p class="ct-story">${p.story}</p>
+        <div class="ct-price">$${Number(p.price).toLocaleString()}</div>
+        <div class="ct-price-note">One-of-a-kind &middot; Inquiries by appointment</div>
+        <div class="ct-actions">
+          <a href="art.html" class="btn-primary">Inquire About This Piece</a>
+          <a href="art.html" class="btn-ghost">View The Collection</a>
+        </div>
+      </div>`;
+    document.getElementById('collection').style.display = '';
+  })();
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) entry.target.classList.add('visible');
