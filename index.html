@@ -59,6 +59,7 @@
     "@type": "OfferCatalog",
     "name": "Fabrication Services",
     "itemListElement": [
+      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Emergency Field Welding & Metal Repair"}},
       {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Fiber Laser Cutting"}},
       {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "CNC Plasma Cutting"}},
       {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "MIG Welding"}},
@@ -88,10 +89,44 @@
     --white: #f0ede8;
     --orange: #e05c00;
     --orange-dim: #a84400;
+    --red: #d92b2b;
     --rule: #333;
   }
 
   html { scroll-behavior: smooth; }
+
+  .em-band {
+    background: var(--charcoal);
+    border-bottom: 1px solid var(--rule);
+  }
+  .em-band-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0.9rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    border-left: 2px solid var(--red);
+    padding-left: 1.5rem;
+  }
+  .em-band-text { display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+  .em-band-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.05rem;
+    letter-spacing: 0.18em;
+    color: var(--red);
+    white-space: nowrap;
+  }
+  .em-band-sub { color: var(--silver); font-size: 0.95rem; }
+  .em-band-more {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 0.95rem;
+    white-space: nowrap;
+  }
+  .em-band-more:hover { color: var(--red); }
 
   body {
     background: var(--black);
@@ -712,6 +747,7 @@
     <li><a href="#process">Process</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="art.html" style="color:var(--orange)">The Collection</a></li>
+    <li><a href="emergency.html" style="color:var(--red)">Priority Response</a></li>
   </ul>
 </nav>
 
@@ -727,6 +763,17 @@
       <a href="#contact" class="btn-primary">Get a Quote</a>
       <a href="#work" class="btn-ghost">See Our Work</a>
     </div>
+  </div>
+</section>
+
+<!-- PRIORITY RESPONSE STRIP -->
+<section class="em-band" id="emergency-band">
+  <div class="em-band-inner">
+    <div class="em-band-text">
+      <span class="em-band-label">Priority Response</span>
+      <span class="em-band-sub">Equipment-down service for commercial &amp; industrial operations. Flat-rate, premium, nights &amp; weekends.</span>
+    </div>
+    <a href="emergency.html" class="em-band-more">Details &rarr;</a>
   </div>
 </section>
 
@@ -965,6 +1012,7 @@
     <li><a href="#services">Services</a></li>
     <li><a href="#work">Work</a></li>
     <li><a href="art.html">The Collection</a></li>
+    <li><a href="emergency.html" style="color:var(--red)">Priority Response</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
 </footer>
