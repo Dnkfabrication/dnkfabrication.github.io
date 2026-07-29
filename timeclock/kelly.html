@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#111111">
+<title>DNK Time Clock</title>
+<style>
+  :root {
+    --bg: #111; --card: #1d1d1f; --line: #333;
+    --txt: #f2f2f2; --dim: #9a9a9a;
+    --green: #1f9d40; --green-dn: #157a30;
+    --red: #c23a2b; --red-dn: #9c2e22;
+    --accent: #e8a020;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    background: var(--bg); color: var(--txt);
+    font-family: system-ui, Roboto, Arial, sans-serif;
+    max-width: 480px; margin: 0 auto; padding: 12px 14px 40px;
+  }
+  header { display: flex; justify-content: space-between; align-items: baseline; padding: 4px 2px 10px; }
+  header h1 { font-size: 1.05rem; letter-spacing: .06em; }
+  header .who { color: var(--dim); font-size: .8rem; text-align: right; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-bottom: 14px; }
+  #status .state { font-size: 1.5rem; font-weight: 700; }
+  #status .state.in { color: var(--green); }
+  #status .state.out { color: var(--dim); }
+  #status .sub { color: var(--dim); font-size: .9rem; margin-top: 4px; }
+  #clock { font-variant-numeric: tabular-nums; color: var(--accent); font-size: .95rem; margin-top: 6px; }
+  #bigbtn {
+    width: 100%; border: none; border-radius: 16px;
+    font-size: 1.6rem; font-weight: 800; letter-spacing: .04em;
+    padding: 26px 0; margin: 2px 0 14px; color: #fff; cursor: pointer;
+    touch-action: manipulation;
+  }
+  #bigbtn.in  { background: var(--green); }
+  #bigbtn.in:active  { background: var(--green-dn); }
+  #bigbtn.out { background: var(--red); }
+  #bigbtn.out:active { background: var(--red-dn); }
+  h2 { font-size: .85rem; color: var(--dim); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+  .weeknav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .weeknav button {
+    background: var(--card); color: var(--txt); border: 1px solid var(--line);
+    border-radius: 10px; font-size: 1.1rem; padding: 6px 18px; cursor: pointer;
+  }
+  .weeknav .label { font-size: .9rem; color: var(--txt); }
+  table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+  td, th { padding: 7px 4px; text-align: left; border-bottom: 1px solid var(--line); }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tr.today td { color: var(--accent); }
+  tr.total td { font-weight: 800; border-bottom: none; padding-top: 10px; }
+  #punches { font-size: .9rem; color: var(--dim); line-height: 1.7; }
+  .row-btns { display: flex; gap: 10px; margin-top: 4px; }
+  .row-btns button {
+    flex: 1; border: none; border-radius: 12px; padding: 14px 6px;
+    font-size: .95rem; font-weight: 700; cursor: pointer; color: #fff;
+    touch-action: manipulation;
+  }
+  #sendbtn { background: #2b6cb0; }
+  #undobtn { background: #444; }
+  footer { color: var(--dim); font-size: .72rem; text-align: center; margin-top: 18px; line-height: 1.5; }
+</style>
+</head>
+<body>
+<header>
+  <h1>DNK TIME CLOCK</h1>
+  <div class="who">Kelly McDonald<br>$16.50/hr</div>
+</header>
+
+<div class="card" id="status">
+  <div class="state out" id="stateTxt">OFF THE CLOCK</div>
+  <div class="sub" id="stateSub">Tap the button when you start.</div>
+  <div id="clock"></div>
+</div>
+
+<button id="bigbtn" class="in">CLOCK IN</button>
+
+<div class="card" id="fixcard" style="display:none; border-color:var(--accent)">
+  <h2 style="color:var(--accent)">Missed a clock-out</h2>
+  <div id="fixlist"></div>
+</div>
+
+<div class="card">
+  <h2>Today</h2>
+  <div id="punches">No punches yet today.</div>
+</div>
+
+<div class="card">
+  <div class="weeknav">
+    <button id="prevWk" aria-label="previous week">&#8249;</button>
+    <div class="label" id="wkLabel"></div>
+    <button id="nextWk" aria-label="next week">&#8250;</button>
+  </div>
+  <table>
+    <tbody id="wkBody"></tbody>
+  </table>
+</div>
+
+<div class="row-btns">
+  <button id="sendbtn">TEXT HOURS TO DYLAN</button>
+  <button id="undobtn">UNDO LAST</button>
+</div>
+
+<footer>
+  Punches are saved on this phone only &mdash; text your hours to Dylan at the end of each day or week.<br>
+  DNK Fabrication &middot; Lubbock, TX
+</footer>
+
+<script>
+(function () {
+  var KEY = 'dnk_punches_kelly';
+  var RATE = 16.50;
+  var DYLAN = '8176023512';
+  var wkOffset = 0; // 0 = this week
+
+  function load()  { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { return []; } }
+  function save(p) { localStorage.setItem(KEY, JSON.stringify(p)); }
+
+  function fmtTime(d) {
+    var h = d.getHours(), m = d.getMinutes(), ap = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    return h + ':' + (m < 10 ? '0' : '') + m + ' ' + ap;
+  }
+  function fmtDate(d) { return (d.getMonth() + 1) + '/' + d.getDate(); }
+  function dayKey(d)  { return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+
+  function monday(offsetWeeks) {
+    var d = new Date();
+    d.setHours(0, 0, 0, 0);
+    var dow = (d.getDay() + 6) % 7; // Mon=0
+    d.setDate(d.getDate() - dow + offsetWeeks * 7);
+    return d;
+  }
+
+  // Pair sequential in->out; duration credited to the IN day.
+  // A missing OUT is NEVER discarded and NEVER counted to "now" across days --
+  // both of those are money bugs (7/29: an in-in sequence silently ate a whole
+  // day's hours; a prior-day open punch ballooned to 30 hrs). Instead the
+  // session is returned with needsFix=true, worth 0 hrs, and the UI nags to fix
+  // it. Only an open punch STARTED TODAY runs live against the clock.
+  function sessions(punches) {
+    var out = [], open = null, openIdx = -1;
+    var todayK = dayKey(new Date());
+    function pushOpen() {
+      if (!open) return;
+      var live = dayKey(open) === todayK;
+      out.push({ start: open, end: null, idx: openIdx, needsFix: !live, live: live });
+      open = null; openIdx = -1;
+    }
+    for (var i = 0; i < punches.length; i++) {
+      var p = punches[i];
+      if (p.type === 'in') {
+        pushOpen();                       // an IN with an IN already open = forgotten OUT
+        open = new Date(p.t); openIdx = i;
+      } else if (p.type === 'out' && open) {
+        out.push({ start: open, end: new Date(p.t), needsFix: false, live: false });
+        open = null; openIdx = -1;
+      }
+    }
+    pushOpen();
+    return out;
+  }
+  function hrs(s) {
+    if (s.needsFix) return 0;             // unknown duration is 0, never a guess
+    var end = s.end || new Date();
+    return Math.max(0, (end - s.start) / 3600000);
+  }
+  function openFixes(punches) {
+    return sessions(punches).filter(function (s) { return s.needsFix; });
+  }
+
+  function state(punches) {
+    var last = punches[punches.length - 1];
+    return (last && last.type === 'in') ? last : null;
+  }
+
+  function render() {
+    var punches = load();
+    var inPunch = state(punches);
+    var big = document.getElementById('bigbtn');
+    var st = document.getElementById('stateTxt');
+    var sub = document.getElementById('stateSub');
+
+    if (inPunch) {
+      st.textContent = 'ON THE CLOCK';
+      st.className = 'state in';
+      sub.textContent = 'In since ' + fmtTime(new Date(inPunch.t));
+      big.textContent = 'CLOCK OUT';
+      big.className = 'out';
+    } else {
+      st.textContent = 'OFF THE CLOCK';
+      st.className = 'state out';
+      sub.textContent = 'Tap the button when you start.';
+      big.textContent = 'CLOCK IN';
+      big.className = 'in';
+    }
+
+    // live line: today's running total
+    var todayKey = dayKey(new Date());
+    var tHrs = 0;
+    sessions(punches).forEach(function (s) {
+      if (dayKey(s.start) === todayKey) tHrs += hrs(s);
+    });
+    document.getElementById('clock').textContent =
+      'Today: ' + tHrs.toFixed(2) + ' hrs ($' + (tHrs * RATE).toFixed(2) + ')';
+
+    // today's punch list
+    var list = punches.filter(function (p) { return dayKey(new Date(p.t)) === todayKey; });
+    var el = document.getElementById('punches');
+    if (list.length === 0) { el.textContent = 'No punches yet today.'; }
+    else {
+      el.innerHTML = list.map(function (p) {
+        return (p.type === 'in' ? 'IN&nbsp;&nbsp;' : 'OUT ') + fmtTime(new Date(p.t));
+      }).join('<br>');
+    }
+
+    renderFixes(punches);
+    renderWeek(punches);
+  }
+
+  // A forgotten OUT is repaired here: tap FIX, type the time you actually left,
+  // and the OUT punch is inserted right after that IN so the day pays correctly.
+  function renderFixes(punches) {
+    var fixes = openFixes(punches);
+    var card = document.getElementById('fixcard');
+    var el = document.getElementById('fixlist');
+    if (fixes.length === 0) { card.style.display = 'none'; el.innerHTML = ''; return; }
+    card.style.display = 'block';
+    el.innerHTML = fixes.map(function (s) {
+      return '<div style="margin-bottom:10px">' +
+             '<div style="color:var(--txt)">' + fmtDate(s.start) + ' &mdash; clocked in ' +
+             fmtTime(s.start) + ', no clock-out</div>' +
+             '<div style="color:var(--dim);font-size:.85rem;margin:2px 0 6px">' +
+             'This day pays 0 until you set the time you left.</div>' +
+             '<button class="fixbtn" data-idx="' + s.idx + '" style="background:var(--accent);' +
+             'color:#111;border:none;border-radius:10px;padding:10px 16px;font-weight:800;' +
+             'cursor:pointer">SET CLOCK-OUT TIME</button></div>';
+    }).join('');
+    Array.prototype.forEach.call(el.querySelectorAll('.fixbtn'), function (b) {
+      b.addEventListener('click', function () { fixPunch(parseInt(b.dataset.idx, 10)); });
+    });
+  }
+
+  function fixPunch(idx) {
+    var punches = load();
+    var inP = punches[idx];
+    if (!inP || inP.type !== 'in') { render(); return; }
+    var inDate = new Date(inP.t);
+    var ans = prompt('What time did you leave on ' + fmtDate(inDate) +
+                     '?\n(clocked in ' + fmtTime(inDate) + ')\n\nExamples: 3:30pm  or  15:30');
+    if (!ans) return;
+    var m = String(ans).trim().toLowerCase()
+              .match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm)?$/);
+    if (!m) { alert('Could not read that time. Try 3:30pm'); return; }
+    var h = parseInt(m[1], 10), mins = m[2] ? parseInt(m[2], 10) : 0, ap = m[3];
+    if (h > 23 || mins > 59) { alert('Not a valid time.'); return; }
+    if (ap === 'pm' && h < 12) h += 12;
+    if (ap === 'am' && h === 12) h = 0;
+    var outDate = new Date(inDate);
+    outDate.setHours(h, mins, 0, 0);
+    if (outDate <= inDate) {              // left after midnight
+      if (!confirm('That is before the clock-in time. Was it the next morning?')) return;
+      outDate.setDate(outDate.getDate() + 1);
+    }
+    var dur = (outDate - inDate) / 3600000;
+    if (!confirm(fmtDate(inDate) + ': ' + fmtTime(inDate) + ' to ' + fmtTime(outDate) +
+                 ' = ' + dur.toFixed(2) + ' hrs. Save it?')) return;
+    punches.splice(idx + 1, 0, { t: outDate.toISOString(), type: 'out', fixed: true });
+    save(punches);
+    render();
+  }
+
+  function weekData(punches, offset) {
+    var mon = monday(offset);
+    var days = [], total = 0;
+    for (var i = 0; i < 7; i++) {
+      var d = new Date(mon); d.setDate(mon.getDate() + i);
+      days.push({ date: d, hrs: 0 });
+    }
+    sessions(punches).forEach(function (s) {
+      for (var i = 0; i < 7; i++) {
+        if (dayKey(s.start) === dayKey(days[i].date)) { days[i].hrs += hrs(s); }
+      }
+    });
+    days.forEach(function (d) { total += d.hrs; });
+    return { mon: mon, days: days, total: total };
+  }
+
+  function renderWeek(punches) {
+    var wk = weekData(punches, wkOffset);
+    var end = new Date(wk.mon); end.setDate(wk.mon.getDate() + 6);
+    document.getElementById('wkLabel').textContent =
+      (wkOffset === 0 ? 'This week ' : '') + fmtDate(wk.mon) + ' – ' + fmtDate(end);
+
+    var names = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    var todayK = dayKey(new Date());
+    var unfixed = {};
+    openFixes(punches).forEach(function (s) { unfixed[dayKey(s.start)] = true; });
+    var html = '';
+    wk.days.forEach(function (d, i) {
+      var cls = dayKey(d.date) === todayK ? ' class="today"' : '';
+      var val = d.hrs > 0 ? d.hrs.toFixed(2) : '—';
+      if (unfixed[dayKey(d.date)]) {
+        val = '<span style="color:var(--accent)">needs out time</span>';
+      }
+      html += '<tr' + cls + '><td>' + names[i] + ' ' + fmtDate(d.date) + '</td>' +
+              '<td class="num">' + val + '</td></tr>';
+    });
+    html += '<tr class="total"><td>Total ' + wk.total.toFixed(2) + ' hrs</td>' +
+            '<td class="num">$' + (wk.total * RATE).toFixed(2) + '</td></tr>';
+    document.getElementById('wkBody').innerHTML = html;
+  }
+
+  document.getElementById('bigbtn').addEventListener('click', function () {
+    var punches = load();
+    var last = punches[punches.length - 1];
+    if (last && (Date.now() - new Date(last.t)) < 120000) {
+      if (!confirm('Last punch was under 2 minutes ago. Punch again?')) return;
+    }
+    var type = (last && last.type === 'in') ? 'out' : 'in';
+    punches.push({ t: new Date().toISOString(), type: type });
+    save(punches);
+    render();
+  });
+
+  document.getElementById('undobtn').addEventListener('click', function () {
+    var punches = load();
+    if (punches.length === 0) return;
+    var last = punches[punches.length - 1];
+    var msg = 'Remove last punch (' + last.type.toUpperCase() + ' ' +
+              fmtTime(new Date(last.t)) + ')?';
+    if (confirm(msg)) { punches.pop(); save(punches); render(); }
+  });
+
+  document.getElementById('sendbtn').addEventListener('click', function () {
+    var punches = load();
+    var wk = weekData(punches, wkOffset);
+    var names = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    var lines = ['DNK hours - Kelly - week of ' + fmtDate(wk.mon)];
+    wk.days.forEach(function (d, i) {
+      if (d.hrs > 0) lines.push(names[i] + ' ' + fmtDate(d.date) + ': ' + d.hrs.toFixed(2));
+    });
+    lines.push('Total: ' + wk.total.toFixed(2) + ' hrs @ $' + RATE.toFixed(2) +
+               ' = $' + (wk.total * RATE).toFixed(2));
+    // never text a total that quietly omits a day - Dylan pays off this message
+    var miss = openFixes(punches).filter(function (s) {
+      return s.start >= wk.mon && s.start < new Date(wk.mon.getTime() + 7 * 86400000);
+    });
+    if (miss.length) {
+      lines.push('NOTE: ' + miss.map(function (s) { return fmtDate(s.start); }).join(', ') +
+                 ' not counted - missed clock-out, need to add the time.');
+    }
+    var body = lines.join('\n');
+    window.location.href = 'sms:' + DYLAN + '?body=' + encodeURIComponent(body);
+  });
+
+  document.getElementById('prevWk').addEventListener('click', function () { wkOffset--; render(); });
+  document.getElementById('nextWk').addEventListener('click', function () {
+    if (wkOffset < 0) { wkOffset++; render(); }
+  });
+
+  render();
+  setInterval(render, 30000); // keep the running total live while on the clock
+})();
+</script>
+</body>
+</html>
