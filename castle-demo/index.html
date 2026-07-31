@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Castle Event Center | Lubbock Wedding Venue &amp; Event Space | Lubbock, TX</title>
+<meta name="description" content="Castle Event Center is Lubbock's premier castle wedding venue and event space - weddings, receptions, graduations, and parties in a unique old-world setting. Serving West Texas and Eastern New Mexico for 18 years. (806) 224-3927">
+<meta property="og:title" content="Castle Event Center | Lubbock Wedding Venue">
+<meta property="og:description" content="The setting where the EVENT centers on you. A real castle venue in Lubbock, TX - weddings, receptions, and events of all types.">
+<meta property="og:image" content="img/hero_castle_wide.jpg">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"EventVenue","name":"Castle Event Center",
+"description":"Premier castle wedding venue and event space in Lubbock, Texas.",
+"telephone":"+1-806-224-3927","email":"ceclubbock@gmail.com",
+"address":{"@type":"PostalAddress","streetAddress":"6417 County Road 7620","addressLocality":"Lubbock","addressRegion":"TX","postalCode":"79424"},
+"url":"https://castleeventcenter.com","maximumAttendeeCapacity":125}
+</script>
+<style>
+  :root {
+    --stone: #2b2620;
+    --stone-light: #3a342c;
+    --parchment: #f5f0e6;
+    --parchment-deep: #ebe4d4;
+    --gold: #b08d3f;
+    --gold-bright: #c9a55a;
+    --burgundy: #6e1f2a;
+    --ink: #2e2a24;
+    --mist: #7d766a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Jost', sans-serif; color: var(--ink); background: var(--parchment); line-height: 1.65; }
+  h1, h2, h3, .serif { font-family: 'Cormorant Garamond', serif; }
+  img { max-width: 100%; display: block; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    background: rgba(43,38,32,0.94); backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem; height: 66px; border-bottom: 1px solid rgba(176,141,63,0.35); }
+  .nav-name { font-family: 'Cormorant Garamond', serif; color: var(--parchment);
+    text-decoration: none; font-size: 1.35rem; letter-spacing: 0.14em; text-transform: uppercase; }
+  .nav-name span { color: var(--gold-bright); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+  .nav-links a { color: #cfc8ba; text-decoration: none; font-size: 0.72rem;
+    letter-spacing: 0.22em; text-transform: uppercase; font-weight: 500; }
+  .nav-links a:hover { color: var(--gold-bright); }
+  .nav-cta { border: 1px solid var(--gold); padding: 0.5rem 1.1rem; color: var(--gold-bright) !important; }
+  @media (max-width: 860px) { .nav-links li:not(:last-child) { display: none; } }
+
+  .hero { position: relative; min-height: 92vh; display: flex; align-items: center;
+    justify-content: center; text-align: center; color: var(--parchment);
+    background: linear-gradient(rgba(30,26,20,0.45), rgba(30,26,20,0.62)), url('img/hero_castle_wide.jpg') center 40%/cover no-repeat; }
+  .hero-inner { padding: 7rem 1.5rem 4rem; max-width: 880px; }
+  .hero .kicker { letter-spacing: 0.35em; text-transform: uppercase; font-size: 0.72rem;
+    color: var(--gold-bright); font-weight: 500; }
+  .hero h1 { font-size: clamp(2.6rem, 7vw, 4.6rem); font-weight: 500; line-height: 1.08; margin: 1rem 0 0.6rem; }
+  .hero .tag { font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: clamp(1.15rem, 2.6vw, 1.5rem); color: #e8e0cf; }
+  .hero .tag b { color: var(--gold-bright); font-style: normal; letter-spacing: 0.08em; }
+  .hero-ctas { margin-top: 2.2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn { display: inline-block; text-decoration: none; letter-spacing: 0.18em;
+    text-transform: uppercase; font-size: 0.74rem; font-weight: 600; padding: 0.95rem 1.9rem; }
+  .btn-gold { background: var(--gold); color: #1e1a14; }
+  .btn-gold:hover { background: var(--gold-bright); }
+  .btn-ghost { border: 1px solid rgba(245,240,230,0.55); color: var(--parchment); }
+  .btn-ghost:hover { border-color: var(--gold-bright); color: var(--gold-bright); }
+  .hero .est { margin-top: 2.6rem; font-size: 0.72rem; letter-spacing: 0.25em;
+    text-transform: uppercase; color: #b6ad9c; }
+
+  section { padding: 5.5rem 1.5rem; }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+  .kicker { letter-spacing: 0.3em; text-transform: uppercase; font-size: 0.7rem;
+    color: var(--gold); font-weight: 600; }
+  h2 { font-size: clamp(1.9rem, 4vw, 2.7rem); font-weight: 500; margin: 0.6rem 0 1.2rem; }
+  .rule { width: 64px; height: 2px; background: var(--gold); margin: 1.4rem 0; }
+
+  .split { display: grid; grid-template-columns: 1.05fr 1fr; gap: 3.5rem; align-items: center; }
+  @media (max-width: 860px) { .split { grid-template-columns: 1fr; gap: 2rem; } }
+  .split img { box-shadow: 0 18px 50px rgba(30,26,20,0.25); }
+  .lead { font-size: 1.06rem; }
+  .awards { display: flex; gap: 2.2rem; margin-top: 1.8rem; flex-wrap: wrap; }
+  .award { border-left: 2px solid var(--gold); padding-left: 1rem; font-size: 0.85rem; color: var(--mist); }
+  .award b { display: block; color: var(--ink); font-size: 0.95rem; }
+
+  .dark { background: var(--stone); color: #ddd5c5; }
+  .dark h2 { color: var(--parchment); }
+  .events-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 1px; background: rgba(176,141,63,0.3); margin-top: 2.5rem; }
+  .event-cell { background: var(--stone); padding: 2rem 1.4rem; text-align: center; }
+  .event-cell h3 { color: var(--gold-bright); font-size: 1.35rem; font-weight: 500; }
+  .event-cell p { font-size: 0.85rem; color: #b6ad9c; margin-top: 0.4rem; }
+
+  .amen { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 2rem; margin-top: 2.5rem; }
+  .amen div { border-top: 2px solid var(--gold); padding-top: 1rem; }
+  .amen h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .amen ul { list-style: none; font-size: 0.92rem; color: #574f43; }
+  .amen li { padding: 0.28rem 0; border-bottom: 1px solid var(--parchment-deep); }
+
+  .pack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.4rem; margin-top: 2.5rem; }
+  .pack { background: var(--parchment); border: 1px solid #d9d0bc; padding: 2rem 1.6rem; position: relative; }
+  .pack.feature { border-color: var(--gold); box-shadow: 0 14px 40px rgba(30,26,20,0.12); }
+  .pack .tier { letter-spacing: 0.28em; text-transform: uppercase; font-size: 0.7rem; color: var(--gold); font-weight: 600; }
+  .pack h3 { font-size: 1.7rem; font-weight: 500; margin: 0.4rem 0 0.9rem; }
+  .pack .price { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; }
+  .pack .price b { font-size: 1.55rem; color: var(--burgundy); }
+  .pack p.inc { font-size: 0.87rem; color: #574f43; margin-top: 0.9rem; }
+  .pack-note { margin-top: 1.6rem; font-size: 0.85rem; color: var(--mist); }
+  .pack-note b { color: var(--burgundy); }
+
+  .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.7rem; margin-top: 2.5rem; }
+  @media (max-width: 720px) { .gallery { grid-template-columns: repeat(2, 1fr); } }
+  .gallery img { aspect-ratio: 4/3; object-fit: cover; width: 100%; }
+
+  .quotes { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2rem; margin-top: 2.5rem; }
+  .quote { font-family: 'Cormorant Garamond', serif; font-size: 1.08rem; font-style: italic; color: #574f43; }
+  .quote::before { content: '\201C'; display: block; font-size: 3rem; line-height: 0.6;
+    color: var(--gold); margin-bottom: 0.8rem; font-style: normal; }
+  .quote span { display: block; margin-top: 0.9rem; font-family: 'Jost', sans-serif;
+    font-style: normal; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mist); }
+
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+  @media (max-width: 860px) { .contact-grid { grid-template-columns: 1fr; } }
+  .contact-line { padding: 1rem 0; border-bottom: 1px solid rgba(176,141,63,0.25);
+    display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .contact-line .lbl { letter-spacing: 0.25em; text-transform: uppercase; font-size: 0.68rem; color: var(--gold-bright); align-self: center; }
+  .contact-line a { color: var(--parchment); text-decoration: none; font-size: 1.05rem; }
+  .contact-line a:hover { color: var(--gold-bright); }
+
+  footer { background: #211d17; color: #8d8574; text-align: center;
+    padding: 2.2rem 1.5rem; font-size: 0.78rem; letter-spacing: 0.06em; }
+  footer .crown { color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1rem; letter-spacing: 0.2em; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#top" class="nav-name">Castle <span>Event Center</span></a>
+  <ul class="nav-links">
+    <li><a href="#venue">The Venue</a></li>
+    <li><a href="#weddings">Weddings</a></li>
+    <li><a href="#packages">Packages</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="tel:8062243927" class="nav-cta">(806) 224-3927</a></li>
+  </ul>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-inner">
+    <div class="kicker">Lubbock, Texas &middot; Wedding Venue &amp; Event Space</div>
+    <h1>Castle Event Center</h1>
+    <p class="tag">The setting where the <b>EVENT</b> centers on you</p>
+    <div class="hero-ctas">
+      <a class="btn btn-gold" href="#contact">Book a Tour</a>
+      <a class="btn btn-ghost" href="#packages">View Packages</a>
+    </div>
+    <div class="est">Serving West Texas &amp; Eastern New Mexico for 18 Years</div>
+  </div>
+</header>
+
+<section id="venue">
+  <div class="wrap split">
+    <img src="img/great_hall_stage.jpg" alt="The Great Hall dressed for a wedding at Castle Event Center" loading="lazy">
+    <div>
+      <div class="kicker">A Real Castle, A Real Celebration</div>
+      <h2>An Old-World Setting Your Guests Will Never Forget</h2>
+      <div class="rule"></div>
+      <p class="lead">From the suits of armor to the working fountains, every corner of the castle
+        was built to make an occasion feel like an occasion. The Great Hall hosts up to 125 guests
+        indoors, the grounds are unlimited, and the property is yours to tailor &mdash; your caterer,
+        your decor, your celebration.</p>
+      <div class="awards">
+        <div class="award"><b>Best of Lubbock</b> Reception Center &middot; 2015</div>
+        <div class="award"><b>Best of Lubbock</b> Reception Center &middot; 2020</div>
+        <div class="award"><b>100% Green</b> The only special-events venue that is</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="dark">
+  <div class="wrap">
+    <div class="kicker">What We Host</div>
+    <h2>Every Event Worth Remembering</h2>
+    <div class="events-grid">
+      <div class="event-cell"><h3>Weddings</h3><p>Ceremony &amp; reception, indoors or on the lawn</p></div>
+      <div class="event-cell"><h3>Receptions</h3><p>The Great Hall, dance floor included</p></div>
+      <div class="event-cell"><h3>Graduations</h3><p>Room for the whole family &mdash; and then some</p></div>
+      <div class="event-cell"><h3>Birthdays &amp; Parties</h3><p>From quincea&ntilde;eras to retirement</p></div>
+      <div class="event-cell"><h3>Corporate &amp; More</h3><p>Meetings, banquets, celebrations of all types</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="weddings">
+  <div class="wrap split">
+    <div>
+      <div class="kicker">Weddings at the Castle</div>
+      <h2>Your Day, Centered on You</h2>
+      <div class="rule"></div>
+      <p class="lead">Say your vows on the lawn against real castle walls, then move the party to the
+        Great Hall. Three ready rooms keep the wedding party comfortable, the nursery keeps the littlest
+        guests happy, and the Cinderella coach is waiting for photos you can't take anywhere else in
+        West Texas.</p>
+      <div class="amen">
+        <div>
+          <h3>The Great Hall</h3>
+          <ul>
+            <li>Dance floor</li>
+            <li>100&ndash;125 guests indoors</li>
+            <li>Unlimited outdoor seating</li>
+            <li>Fountains &amp; water wall</li>
+            <li>Heated indoor pool</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Amenities</h3>
+          <ul>
+            <li>Full kitchen &middot; outside catering welcome</li>
+            <li>Food &amp; alcohol permitted</li>
+            <li>3 ready rooms &middot; 4 restrooms</li>
+            <li>Nursery room</li>
+            <li>Cinderella coach for photos</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <img src="img/outdoor_ceremony.jpg" alt="Outdoor wedding ceremony at the castle walls" loading="lazy">
+  </div>
+</section>
+
+<section class="dark" id="packages">
+  <div class="wrap">
+    <div class="kicker">Straightforward Pricing</div>
+    <h2>Venue Packages</h2>
+    <div class="pack-grid">
+      <div class="pack">
+        <div class="tier">Copper</div>
+        <h3>The Essentials</h3>
+        <div class="price"><b>$1,000</b> Sat &middot; $750 weekday</div>
+        <p class="inc">Great hall, 2 ready rooms, 3 bathrooms, kitchen. 60 chairs, 8 tables, 4 hours.
+          Client handles setup &amp; cleanup.</p>
+      </div>
+      <div class="pack">
+        <div class="tier">Silver</div>
+        <h3>Set the Stage</h3>
+        <div class="price"><b>$1,500</b> Sat &middot; $1,250 weekday</div>
+        <p class="inc">Great hall, 2 ready rooms, 3 bathrooms, kitchen. 80 chairs, 10 tables, 5 hours.
+          Initial setup before your guests arrive. Photos on request.</p>
+      </div>
+      <div class="pack feature">
+        <div class="tier">Gold</div>
+        <h3>The Favorite</h3>
+        <div class="price"><b>$2,000</b> Sat &middot; $1,750 weekday</div>
+        <p class="inc">Great hall, 2 ready rooms, 3 bathrooms, kitchen. 100 chairs, 17 tables,
+          linen tablecloths, 6 hours, setup included. Photos on request.</p>
+      </div>
+      <div class="pack">
+        <div class="tier">Platinum</div>
+        <h3>The Full Castle</h3>
+        <div class="price"><b>$2,500</b> Sat &middot; $2,250 weekday</div>
+        <p class="inc">3 ready rooms, 4 bathrooms, kitchen. 120 chairs, 25 tables, linens,
+          5' cake table, 10 hours, setup included. Reflecting pool available on request.</p>
+      </div>
+    </div>
+    <p class="pack-note"><b>Veterans receive 10% off</b> any venue package. Rehearsal dinners from $500.
+      A-la-carte options available &mdash; call for detailed pricing on non-wedding events and parties.
+      Booking deposit required at scheduling.</p>
+  </div>
+</section>
+
+<section id="gallery">
+  <div class="wrap">
+    <div class="kicker">See the Castle</div>
+    <h2>Gallery</h2>
+    <div class="gallery">
+      <img src="img/reception_lights.jpg" alt="Evening reception under lights in the Great Hall" loading="lazy">
+      <img src="img/wedding_door.jpg" alt="Bride and groom at the castle doors" loading="lazy">
+      <img src="img/tablescape.jpg" alt="Reception tablescapes in the Great Hall" loading="lazy">
+      <img src="img/fountain_arch.jpg" alt="Outdoor fountain and ceremony arch" loading="lazy">
+      <img src="img/coach.jpg" alt="The Cinderella coach photo prop" loading="lazy">
+      <img src="img/great_hall.jpg" alt="Suits of armor in the Great Hall" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="kicker">From Our Guests</div>
+    <h2>Word Travels</h2>
+    <div class="quotes">
+      <div class="quote">Hosted a party for my mom and had the best experience! Helped us with setup,
+        available throughout the event for anything we needed. Cleanup was a breeze.
+        <span>Private party</span></div>
+      <div class="quote">Looks like a castle &mdash; and inside is clean and beautiful! Plenty of tables
+        and chairs, a full kitchen for the caterer. Parker, the owner, was very accommodating.
+        Will definitely rent this venue again.<span>Graduation party</span></div>
+      <div class="quote">The venue perfectly fit our theme and made for a perfect area for some theater
+        kids to let loose on some sword-fighting tournaments. Thank you again.
+        <span>18th birthday</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="dark" id="contact">
+  <div class="wrap contact-grid">
+    <div>
+      <div class="kicker">Book Your Event</div>
+      <h2>Come See It in Person</h2>
+      <p style="color:#b6ad9c">The pictures don't do the property justice. Call or email to
+        schedule a tour and talk through your date.</p>
+      <div style="margin-top:1.5rem">
+        <div class="contact-line"><span class="lbl">Phone</span><a href="tel:8062243927">(806) 224-3927</a></div>
+        <div class="contact-line"><span class="lbl">Email</span><a href="mailto:ceclubbock@gmail.com">ceclubbock@gmail.com</a></div>
+        <div class="contact-line"><span class="lbl">Address</span>
+          <a href="https://maps.google.com/?q=6417+County+Road+7620+Lubbock+TX+79424" rel="noopener">6417 County Road 7620, Lubbock, TX 79424</a></div>
+      </div>
+    </div>
+    <img src="img/hero_castle_wide.jpg" alt="Castle Event Center grounds with event tent" loading="lazy" style="box-shadow:0 18px 50px rgba(0,0,0,0.4)">
+  </div>
+</section>
+
+<footer>
+  <div class="crown">CASTLE EVENT CENTER</div>
+  <div style="margin-top:0.5rem">Weddings &middot; Receptions &middot; Events &middot; Lubbock, Texas</div>
+  <div style="margin-top:0.9rem">&copy; 2026 Castle Event Center &middot; (806) 224-3927</div>
+</footer>
+
+</body>
+</html>
