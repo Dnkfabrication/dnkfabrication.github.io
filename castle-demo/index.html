@@ -356,9 +356,45 @@
           <a href="https://maps.google.com/?q=6417+County+Road+7620+Lubbock+TX+79424" rel="noopener">6417 County Road 7620, Lubbock, TX 79424</a></div>
       </div>
     </div>
-    <img src="img/hero_castle_wide.jpg" alt="Castle Event Center grounds with event tent" loading="lazy" style="box-shadow:0 18px 50px rgba(0,0,0,0.4)">
+    <form class="inquiry" action="https://formspree.io/f/xzdydozz" method="POST">
+      <!-- DEMO WIRING: submissions route to the DNK Formspree account during preview.
+           At go-live this becomes a Castle form delivering to ceclubbock@gmail.com. -->
+      <input type="hidden" name="_subject" value="CASTLE EVENT CENTER inquiry (demo)">
+      <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+      <div class="frow">
+        <label>Name<input type="text" name="name" required></label>
+        <label>Phone<input type="tel" name="phone" required></label>
+      </div>
+      <div class="frow">
+        <label>Email<input type="email" name="email"></label>
+        <label>Event date<input type="date" name="event_date"></label>
+      </div>
+      <div class="frow">
+        <label>Event type
+          <select name="event_type">
+            <option>Wedding</option><option>Reception</option><option>Graduation</option>
+            <option>Birthday / Quinceañera</option><option>Corporate</option><option>Other</option>
+          </select></label>
+        <label>Guest count<input type="number" name="guests" min="1" max="500"></label>
+      </div>
+      <label>Tell us about your event<textarea name="message" rows="3"></textarea></label>
+      <button type="submit" class="btn btn-gold" style="border:0;cursor:pointer;width:100%">Send Inquiry</button>
+    </form>
   </div>
 </section>
+<style>
+  .inquiry label { display: block; font-size: 0.68rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--gold-bright); margin-bottom: 0.9rem; }
+  .inquiry input, .inquiry select, .inquiry textarea { display: block; width: 100%;
+    margin-top: 0.35rem; padding: 0.65rem 0.8rem; background: rgba(245,240,230,0.06);
+    border: 1px solid rgba(176,141,63,0.4); color: var(--parchment);
+    font-family: 'Jost', sans-serif; font-size: 0.95rem; }
+  .inquiry input:focus, .inquiry select:focus, .inquiry textarea:focus {
+    outline: none; border-color: var(--gold-bright); }
+  .inquiry select option { color: #222; }
+  .inquiry .frow { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 560px) { .inquiry .frow { grid-template-columns: 1fr; } }
+</style>
 
 <footer>
   <div class="crown">CASTLE EVENT CENTER</div>
