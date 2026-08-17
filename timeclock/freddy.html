@@ -117,6 +117,9 @@
   function load()  { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { return []; } }
   function save(p) { localStorage.setItem(KEY, JSON.stringify(p)); }
 
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
   function fmtTime(d) {
     var h = d.getHours(), m = d.getMinutes(), ap = h >= 12 ? 'PM' : 'AM';
     h = h % 12 || 12;
@@ -140,22 +143,22 @@
   // session is returned with needsFix=true, worth 0 hrs, and the UI nags to fix
   // it. Only an open punch STARTED TODAY runs live against the clock.
   function sessions(punches) {
-    var out = [], open = null, openIdx = -1;
+    var out = [], open = null, openIdx = -1, openJob = null;
     var todayK = dayKey(new Date());
     function pushOpen() {
       if (!open) return;
       var live = dayKey(open) === todayK;
-      out.push({ start: open, end: null, idx: openIdx, needsFix: !live, live: live });
-      open = null; openIdx = -1;
+      out.push({ start: open, end: null, idx: openIdx, job: openJob, needsFix: !live, live: live });
+      open = null; openIdx = -1; openJob = null;
     }
     for (var i = 0; i < punches.length; i++) {
       var p = punches[i];
       if (p.type === 'in') {
         pushOpen();                       // an IN with an IN already open = forgotten OUT
-        open = new Date(p.t); openIdx = i;
+        open = new Date(p.t); openIdx = i; openJob = p.job || null;
       } else if (p.type === 'out' && open) {
-        out.push({ start: open, end: new Date(p.t), needsFix: false, live: false });
-        open = null; openIdx = -1;
+        out.push({ start: open, end: new Date(p.t), job: openJob, needsFix: false, live: false });
+        open = null; openIdx = -1; openJob = null;
       }
     }
     pushOpen();
@@ -211,7 +214,8 @@
     if (list.length === 0) { el.textContent = 'No punches yet today.'; }
     else {
       el.innerHTML = list.map(function (p) {
-        return (p.type === 'in' ? 'IN&nbsp;&nbsp;' : 'OUT ') + fmtTime(new Date(p.t));
+        return (p.type === 'in' ? 'IN&nbsp;&nbsp;' : 'OUT ') + fmtTime(new Date(p.t)) +
+               (p.job ? ' &mdash; ' + esc(p.job) : '');
       }).join('<br>');
     }
 
@@ -319,7 +323,13 @@
       if (!confirm('Last punch was under 2 minutes ago. Punch again?')) return;
     }
     var type = (last && last.type === 'in') ? 'out' : 'in';
-    punches.push({ t: new Date().toISOString(), type: type });
+    var punch = { t: new Date().toISOString(), type: type };
+    if (type === 'in') {
+      // optional job tag - blank or cancel NEVER blocks the punch (the punch is money)
+      var job = prompt('What job are you on?\n(optional - leave blank and tap OK)');
+      if (job) { job = String(job).trim(); if (job) punch.job = job; }
+    }
+    punches.push(punch);
     save(punches);
     render();
   });
@@ -344,6 +354,20 @@
     });
     lines.push('Total: ' + wk.total.toFixed(2) + ' hrs @ $' + RATE.toFixed(2) +
                ' = $' + (wk.total * RATE).toFixed(2));
+    // by-job split so hours land against jobs, not just days
+    var wkEnd = new Date(wk.mon.getTime() + 7 * 86400000);
+    var byJob = {};
+    sessions(punches).forEach(function (s) {
+      if (s.start >= wk.mon && s.start < wkEnd && hrs(s) > 0) {
+        var k = s.job || 'no job noted';
+        byJob[k] = (byJob[k] || 0) + hrs(s);
+      }
+    });
+    var jobKeys = Object.keys(byJob);
+    if (jobKeys.length > 1 || (jobKeys.length === 1 && jobKeys[0] !== 'no job noted')) {
+      lines.push('By job:');
+      jobKeys.forEach(function (k) { lines.push('- ' + k + ': ' + byJob[k].toFixed(2)); });
+    }
     // never send a total that quietly omits a day - Dylan pays off this message
     var miss = openFixes(punches).filter(function (s) {
       return s.start >= wk.mon && s.start < new Date(wk.mon.getTime() + 7 * 86400000);
