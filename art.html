@@ -462,6 +462,8 @@
     text-decoration: none;
   }
   footer .footer-logo span { color: var(--orange); }
+  footer .footer-brand-wrap { display: flex; flex-direction: column; gap: 0.35rem; }
+  footer .footer-copy { font-size: 0.72rem; letter-spacing: 0.05em; color: var(--dim); }
   footer ul {
     list-style: none;
     display: flex;
@@ -689,7 +691,11 @@
 
 <!-- FOOTER -->
 <footer>
-  <a href="index.html" class="footer-logo">Dn<span>K</span> Fabrication</a>
+  <div class="footer-brand-wrap">
+    <a href="index.html" class="footer-logo">Dn<span>K</span> Fabrication</a>
+    <div class="footer-copy">&copy; 2026 DNK Fabrication &middot; Lubbock, TX</div>
+    <div class="footer-copy">6417 County Road 7620, Lubbock, TX 79424</div>
+  </div>
   <ul>
     <li><a href="index.html#services">Services</a></li>
     <li><a href="index.html#work">Work</a></li>
@@ -829,40 +835,57 @@
     document.getElementById('modal-name').focus();
   }
 
-  document.getElementById('inquiry-overlay').addEventListener('click', function(e) {
-    if (e.target === this) this.classList.remove('open');
-  });
-  document.getElementById('modal-close-btn').addEventListener('click', function() {
-    document.getElementById('inquiry-overlay').classList.remove('open');
-  });
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') document.getElementById('inquiry-overlay').classList.remove('open');
-  });
+  // Modal close/submit wiring lives after this script in the DOM (the overlay
+  // markup is below), so these getElementById calls returned null and threw
+  // at parse time — deferring to DOMContentLoaded restores the intended
+  // click-outside / close-button / Escape / AJAX-submit behaviour instead of
+  // just no-op-guarding it away.
+  document.addEventListener('DOMContentLoaded', function() {
+    const inquiryOverlay = document.getElementById('inquiry-overlay');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+    const modalForm = document.getElementById('modal-form');
 
-  // Formspree AJAX submit
-  document.getElementById('modal-form').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const btn = this.querySelector('.form-submit');
-    btn.textContent = 'Sending…';
-    btn.disabled = true;
-    try {
-      const resp = await fetch(this.action, {
-        method: 'POST',
-        body: new FormData(this),
-        headers: { Accept: 'application/json' }
+    if (inquiryOverlay) {
+      inquiryOverlay.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('open');
       });
-      if (resp.ok) {
-        document.getElementById('modal-form').style.display = 'none';
-        document.getElementById('modal-success').style.display = 'block';
-      } else {
-        btn.textContent = 'Send Inquiry';
-        btn.disabled = false;
-        alert('Something went wrong. Email us directly at dylan@dnkfabrication.com');
-      }
-    } catch {
-      btn.textContent = 'Send Inquiry';
-      btn.disabled = false;
-      alert('Something went wrong. Email us directly at dylan@dnkfabrication.com');
+    }
+    if (modalCloseBtn) {
+      modalCloseBtn.addEventListener('click', function() {
+        if (inquiryOverlay) inquiryOverlay.classList.remove('open');
+      });
+    }
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && inquiryOverlay) inquiryOverlay.classList.remove('open');
+    });
+
+    // Formspree AJAX submit
+    if (modalForm) {
+      modalForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = this.querySelector('.form-submit');
+        btn.textContent = 'Sending…';
+        btn.disabled = true;
+        try {
+          const resp = await fetch(this.action, {
+            method: 'POST',
+            body: new FormData(this),
+            headers: { Accept: 'application/json' }
+          });
+          if (resp.ok) {
+            modalForm.style.display = 'none';
+            document.getElementById('modal-success').style.display = 'block';
+          } else {
+            btn.textContent = 'Send Inquiry';
+            btn.disabled = false;
+            alert('Something went wrong. Email us directly at dylan@dnkfabrication.com');
+          }
+        } catch {
+          btn.textContent = 'Send Inquiry';
+          btn.disabled = false;
+          alert('Something went wrong. Email us directly at dylan@dnkfabrication.com');
+        }
+      });
     }
   });
 
