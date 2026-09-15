@@ -152,7 +152,7 @@
   var AL_SOLID_LB_SQFT = 0.190 * 144 * 0.0975;
   var STEEL_SOLID_LB_SQFT = 0.1345 * 144 * 0.2836;
   var STEEL_BURN_PER_IN = 0.056, STEEL_PIERCE = 0.07;
-  var AL_BURN_PER_IN = 0.060, AL_PIERCE = 0.14;
+  var AL_BURN_PER_IN = 0.060, AL_PIERCE = 0.14, AL_UPLIFT = 1.10;
   var HANDLING_PER_LB = 0.23, HANDLING_FLOOR = 40, SHEET_COUNT = 5, SHEET_AREA_SQFT = (60 * 120) / 144;
   var LEAVES = [
     { name: 'Leaf 1', spec: '2 × 60″ × 60″', area: 50.0 },
@@ -254,7 +254,7 @@
 
     var alSheetLb = AL_SOLID_LB_SQFT * SHEET_AREA_SQFT;
     var alHandling = Math.max(HANDLING_FLOOR, alSheetLb * HANDLING_PER_LB) * SHEET_COUNT;
-    var alCost = totalCutIn * AL_BURN_PER_IN + totalPierces * AL_PIERCE + alHandling;
+    var alCost = (totalCutIn * AL_BURN_PER_IN + totalPierces * AL_PIERCE + alHandling) * AL_UPLIFT;
     cutCostAl.textContent = '$' + alCost.toFixed(0);
   }
 
