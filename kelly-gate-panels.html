@@ -1,0 +1,279 @@
+<title>KRS Gate Panels</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+  :root{
+    --bg:#F2EFE7; --surface:#FBFAF5; --surface-2:#FFFFFF;
+    --text-primary:#201F1B; --text-secondary:#5C584C; --text-muted:#8B8677;
+    --border:rgba(32,31,27,0.14);
+    --accent:#B4611C; --accent-ink:#7A3F10; --accent-soft:#F1DCC0;
+    --al:#3E6E86; --al-soft:#DCEAF0; --al-ink:#1F3E4C;
+    --steel:#8C4B2E; --steel-soft:#EFE0D6; --steel-ink:#5C2E19;
+    --panel:#2A2926; --panel-cut:#EDEAE2; --panel-border:rgba(255,255,255,0.10);
+    --font-display:'Big Shoulders Display',sans-serif;
+    --font-body:'IBM Plex Sans',sans-serif;
+    --font-mono:'IBM Plex Mono',monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#18170F; --surface:#211F17; --surface-2:#27251B;
+      --text-primary:#F1EEE3; --text-secondary:#B7B29F; --text-muted:#7E7A69;
+      --border:rgba(241,238,227,0.14);
+      --accent:#E0923F; --accent-ink:#FBE7CC; --accent-soft:rgba(224,146,63,0.16);
+      --al:#7FB0CB; --al-soft:rgba(127,176,203,0.16); --al-ink:#CFE6F0;
+      --steel:#C98A63; --steel-soft:rgba(201,138,99,0.16); --steel-ink:#F0D9C8;
+      --panel:#232219; --panel-border:rgba(255,255,255,0.10);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#18170F; --surface:#211F17; --surface-2:#27251B;
+    --text-primary:#F1EEE3; --text-secondary:#B7B29F; --text-muted:#7E7A69;
+    --border:rgba(241,238,227,0.14);
+    --accent:#E0923F; --accent-ink:#FBE7CC; --accent-soft:rgba(224,146,63,0.16);
+    --al:#7FB0CB; --al-soft:rgba(127,176,203,0.16); --al-ink:#CFE6F0;
+    --steel:#C98A63; --steel-soft:rgba(201,138,99,0.16); --steel-ink:#F0D9C8;
+    --panel:#232219; --panel-border:rgba(255,255,255,0.10);
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text-primary);font-family:var(--font-body);}
+  .wrap{max-width:760px;margin:0 auto;padding:2.5rem 1.5rem 4rem;}
+  .eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent-ink);background:var(--accent-soft);display:inline-block;padding:4px 10px;border-radius:4px;}
+  h1{font-family:var(--font-display);font-weight:700;font-size:44px;line-height:1.02;margin:0.6rem 0 0.4rem;text-wrap:balance;}
+  .sub{font-size:16px;color:var(--text-secondary);line-height:1.6;max-width:56ch;margin:0 0 2rem;}
+  .steps{list-style:none;margin:0 0 2.5rem;padding:0;display:grid;gap:10px;}
+  .steps li{display:flex;gap:12px;align-items:flex-start;font-size:14px;color:var(--text-secondary);line-height:1.6;}
+  .steps .n{font-family:var(--font-mono);font-weight:600;font-size:12px;color:var(--accent-ink);background:var(--accent-soft);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px;}
+  .card{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem;}
+  .sliderRow{display:flex;align-items:center;gap:14px;margin:0 0 1rem;}
+  .sliderRow label{font-size:13px;color:var(--text-secondary);min-width:132px;}
+  .sliderRow output{font-family:var(--font-mono);font-size:14px;font-weight:500;min-width:52px;text-align:right;font-variant-numeric:tabular-nums;}
+  .previewFoot{display:flex;justify-content:space-between;align-items:center;margin-top:1rem;font-size:13px;color:var(--text-secondary);}
+  .previewFoot output{font-family:var(--font-mono);font-weight:600;color:var(--text-primary);font-variant-numeric:tabular-nums;}
+  .panelCard{background:var(--surface-2);border-radius:10px;padding:1rem;display:flex;justify-content:center;}
+  .weightGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem;}
+  .matCard{border-radius:12px;padding:1.1rem 1.25rem;border:0.5px solid var(--border);}
+  .matCard.al{background:var(--al-soft);}
+  .matCard.steel{background:var(--steel-soft);}
+  .matCard .label{font-family:var(--font-mono);font-size:12px;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:6px;}
+  .matCard.al .label{color:var(--al-ink);}
+  .matCard.steel .label{color:var(--steel-ink);}
+  .matCard .weight{font-family:var(--font-display);font-weight:700;font-size:34px;line-height:1;font-variant-numeric:tabular-nums;}
+  .matCard.al .weight{color:var(--al-ink);}
+  .matCard.steel .weight{color:var(--steel-ink);}
+  .matCard .unit{font-size:13px;color:var(--text-secondary);margin-top:2px;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th{text-align:left;font-weight:500;color:var(--text-muted);font-size:12px;text-transform:uppercase;letter-spacing:0.03em;padding:6px 8px;border-bottom:0.5px solid var(--border);}
+  td{padding:8px;border-bottom:0.5px solid var(--border);font-variant-numeric:tabular-nums;}
+  td:not(:first-child), th:not(:first-child){text-align:right;font-family:var(--font-mono);}
+  .cutNote{background:var(--surface);border:0.5px dashed var(--border);border-radius:10px;padding:1rem 1.25rem;font-size:13px;color:var(--text-secondary);}
+  .foot{font-size:12px;color:var(--text-muted);line-height:1.7;margin-top:2rem;font-family:var(--font-mono);}
+  button{font-family:var(--font-body);}
+</style>
+
+<div class="wrap">
+  <span class="eyebrow">DNK Fabrication</span>
+  <h1>KRS gate panels</h1>
+  <p class="sub">Seven perforated infill sections across three nesting gate leaves, 60&Prime; tall. Drag the sliders to size the morse-code slot pattern &mdash; installed weight for both material options updates as you go.</p>
+
+  <ol class="steps">
+    <li><span class="n">1</span> Drag the slot width and height sliders until the pattern looks right.</li>
+    <li><span class="n">2</span> Compare the aluminum and steel weight totals below &mdash; they update live.</li>
+    <li><span class="n">3</span> Tell Dylan which material and slot size you want.</li>
+  </ol>
+
+  <div class="card">
+    <div class="sliderRow">
+      <label for="slotWidth">Slot width (length)</label>
+      <input type="range" id="slotWidth" min="1" max="30" step="0.5" value="14" style="flex:1;">
+      <output id="slotWidthOut">14.00&Prime;</output>
+    </div>
+    <div class="sliderRow">
+      <label for="slotHeight">Slot height (thickness)</label>
+      <input type="range" id="slotHeight" min="0.25" max="2" step="0.05" value="0.5" style="flex:1;">
+      <output id="slotHeightOut">0.50&Prime;</output>
+    </div>
+    <div class="sliderRow">
+      <label for="slotWeb">Web between slots</label>
+      <input type="range" id="slotWeb" min="0.15" max="1.5" step="0.05" value="0.5" style="flex:1;">
+      <output id="slotWebOut">0.50&Prime;</output>
+    </div>
+    <div class="panelCard">
+      <svg id="panelSvg" viewBox="0 0 515 430" width="100%" style="max-width:420px;" role="img">
+        <title>Live morse-code panel pattern preview</title>
+        <desc>A representative 73 by 60 inch gate panel section showing the randomized slot pattern at the selected width and height, with a true 2 inch solid border.</desc>
+        <rect id="panelBg" fill="var(--panel)" stroke="var(--panel-border)" stroke-width="1"></rect>
+        <g id="slots"></g>
+      </svg>
+    </div>
+    <div class="previewFoot">
+      <span>Open area, full panel incl. border: <output id="openOut">&ndash;</output></span>
+      <button id="regen" type="button">Regenerate ↻</button>
+    </div>
+  </div>
+
+  <div class="weightGrid">
+    <div class="matCard al">
+      <div class="label">Aluminum, 0.190&Prime;</div>
+      <div class="weight"><output id="alTotal">&ndash;</output></div>
+      <div class="unit">lb installed, all 7 panels</div>
+    </div>
+    <div class="matCard steel">
+      <div class="label">10ga steel</div>
+      <div class="weight"><output id="steelTotal">&ndash;</output></div>
+      <div class="unit">lb installed, all 7 panels</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <table>
+      <thead><tr><th>Leaf</th><th>Panel area</th><th>Aluminum</th><th>Steel</th></tr></thead>
+      <tbody id="leafRows"></tbody>
+    </table>
+  </div>
+
+  <div class="cutNote">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <span>Cutting estimate, steel (his material)</span>
+      <output id="cutCostSteel" style="font-family:var(--font-mono);font-weight:600;color:var(--text-primary);font-size:15px;">&ndash;</output>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <span>Cutting estimate, aluminum <span style="color:var(--text-muted);font-size:11px;">(reasoned, pending first cut)</span></span>
+      <output id="cutCostAl" style="font-family:var(--font-mono);font-weight:600;color:var(--text-primary);font-size:15px;">&ndash;</output>
+    </div>
+  </div>
+
+  <p class="foot">Weight = panel area &times; material thickness &times; density &times; (1 &minus; open area). Aluminum 0.0975 lb/in&sup3;, 10ga steel (0.1345&Prime;) 0.2836 lb/in&sup3; &mdash; standard alloy densities. Covers the seven quoted infill panels only (179.6 sq ft total: Leaf 1 two 60&Prime;&times;60&Prime;, Leaf 2 two 73&Prime;&times;60&Prime;, Leaf 3 three 55&Prime;&times;60&Prime;) &mdash; excludes the 4x4 tube frame.</p>
+</div>
+
+<script>
+(function () {
+  var SCALE = 6.5;
+  var PANEL_W_IN = 73, PANEL_H_IN = 60, BORDER_IN = 2;
+  var ROW_PITCH_TARGET_IN = 3.0, ROW_GAP_MIN_IN = 0.3, MIN_SEG_IN = 0.75;
+  var AL_SOLID_LB_SQFT = 0.190 * 144 * 0.0975;
+  var STEEL_SOLID_LB_SQFT = 0.1345 * 144 * 0.2836;
+  var STEEL_BURN_PER_IN = 0.096, STEEL_PIERCE = 0.07;
+  var AL_BURN_PER_IN = 0.060, AL_PIERCE = 0.14;
+  var HANDLING_PER_LB = 0.23, HANDLING_FLOOR = 40, SHEET_COUNT = 5, SHEET_AREA_SQFT = (60 * 120) / 144;
+  var LEAVES = [
+    { name: 'Leaf 1', spec: '2 × 60″ × 60″', area: 50.0 },
+    { name: 'Leaf 2', spec: '2 × 73″ × 60″', area: 60.8333 },
+    { name: 'Leaf 3', spec: '3 × 55″ × 60″', area: 68.75 }
+  ];
+  var TOTAL_AREA = LEAVES.reduce(function (s, l) { return s + l.area; }, 0);
+
+  var slots = document.getElementById('slots');
+  var panelBg = document.getElementById('panelBg');
+  var widthInput = document.getElementById('slotWidth');
+  var heightInput = document.getElementById('slotHeight');
+  var webInput = document.getElementById('slotWeb');
+  var widthOut = document.getElementById('slotWidthOut');
+  var heightOut = document.getElementById('slotHeightOut');
+  var webOut = document.getElementById('slotWebOut');
+  var openOut = document.getElementById('openOut');
+  var alTotal = document.getElementById('alTotal');
+  var steelTotal = document.getElementById('steelTotal');
+  var leafRows = document.getElementById('leafRows');
+  var regenBtn = document.getElementById('regen');
+  var cutCostSteel = document.getElementById('cutCostSteel');
+  var cutCostAl = document.getElementById('cutCostAl');
+  var PREVIEW_AREA_SQFT = (PANEL_W_IN * PANEL_H_IN) / 144;
+
+  var panelWpx = PANEL_W_IN * SCALE, panelHpx = PANEL_H_IN * SCALE;
+  panelBg.setAttribute('x', 20); panelBg.setAttribute('y', 20);
+  panelBg.setAttribute('width', panelWpx); panelBg.setAttribute('height', panelHpx);
+  panelBg.setAttribute('rx', 4);
+
+  LEAVES.forEach(function (l) {
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td style="font-family:var(--font-body);">' + l.name + ' <span style="color:var(--text-muted);">(' + l.spec + ')</span></td>' +
+      '<td>' + l.area.toFixed(1) + ' ft²</td>' +
+      '<td class="al-cell">–</td><td class="steel-cell">–</td>';
+    leafRows.appendChild(tr);
+  });
+
+  function generate(widthIn, heightIn, webIn) {
+    while (slots.firstChild) slots.removeChild(slots.firstChild);
+    var ox = 20, oy = 20;
+    var borderPx = BORDER_IN * SCALE;
+    var slotHpx = heightIn * SCALE;
+    var targetGapIn = Math.max(ROW_GAP_MIN_IN, ROW_PITCH_TARGET_IN - heightIn);
+    var nominalPitch = slotHpx + targetGapIn * SCALE;
+    var usableH = panelHpx - 2 * borderPx;
+    var rows = Math.max(1, Math.floor(usableH / nominalPitch));
+    var rowGap = rows > 1 ? (usableH - rows * slotHpx) / (rows - 1) : 0;
+    var usableW = panelWpx - 2 * borderPx;
+    var maxSegPx = widthIn * SCALE, minSegPx = MIN_SEG_IN * SCALE;
+    var minGapPx = Math.max(0.05, webIn * 0.6) * SCALE, maxGapPx = webIn * 1.4 * SCALE;
+    var yStart = oy + borderPx + (rows === 1 ? (usableH - slotHpx) / 2 : 0);
+    var filled = 0, slotCount = 0, perimeterPx = 0;
+    for (var r = 0; r < rows; r++) {
+      var y = yStart + r * (slotHpx + rowGap);
+      var x = ox + borderPx;
+      var rowEnd = ox + borderPx + usableW;
+      while (x < rowEnd - minSegPx) {
+        var segLen = minSegPx + Math.random() * Math.max(1, maxSegPx - minSegPx);
+        if (x + segLen > rowEnd) segLen = rowEnd - x;
+        if (segLen < minSegPx) break;
+        var rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', x.toFixed(1));
+        rect.setAttribute('y', y.toFixed(1));
+        rect.setAttribute('width', segLen.toFixed(1));
+        rect.setAttribute('height', slotHpx.toFixed(1));
+        rect.setAttribute('rx', '2');
+        rect.setAttribute('fill', 'var(--panel-cut)');
+        slots.appendChild(rect);
+        filled += segLen * slotHpx;
+        slotCount += 1;
+        perimeterPx += 2 * (segLen + slotHpx);
+        x += segLen + (minGapPx + Math.random() * (maxGapPx - minGapPx));
+      }
+    }
+    var openFrac = filled / (panelWpx * panelHpx);
+    openOut.textContent = (openFrac * 100).toFixed(1) + '%';
+
+    var alRetain = AL_SOLID_LB_SQFT * (1 - openFrac);
+    var steelRetain = STEEL_SOLID_LB_SQFT * (1 - openFrac);
+    alTotal.textContent = Math.round(alRetain * TOTAL_AREA) + ' lb';
+    steelTotal.textContent = Math.round(steelRetain * TOTAL_AREA) + ' lb';
+
+    var rows2 = leafRows.querySelectorAll('tr');
+    LEAVES.forEach(function (l, i) {
+      rows2[i].querySelector('.al-cell').textContent = Math.round(alRetain * l.area) + ' lb';
+      rows2[i].querySelector('.steel-cell').textContent = Math.round(steelRetain * l.area) + ' lb';
+    });
+
+    var cutInPerSqFt = (perimeterPx / SCALE) / PREVIEW_AREA_SQFT;
+    var piercesPerSqFt = slotCount / PREVIEW_AREA_SQFT;
+    var totalCutIn = cutInPerSqFt * TOTAL_AREA;
+    var totalPierces = piercesPerSqFt * TOTAL_AREA;
+
+    var steelSheetLb = STEEL_SOLID_LB_SQFT * SHEET_AREA_SQFT;
+    var steelHandling = Math.max(HANDLING_FLOOR, steelSheetLb * HANDLING_PER_LB) * SHEET_COUNT;
+    var steelCost = totalCutIn * STEEL_BURN_PER_IN + totalPierces * STEEL_PIERCE + steelHandling;
+    cutCostSteel.textContent = '$' + steelCost.toFixed(0);
+
+    var alSheetLb = AL_SOLID_LB_SQFT * SHEET_AREA_SQFT;
+    var alHandling = Math.max(HANDLING_FLOOR, alSheetLb * HANDLING_PER_LB) * SHEET_COUNT;
+    var alCost = totalCutIn * AL_BURN_PER_IN + totalPierces * AL_PIERCE + alHandling;
+    cutCostAl.textContent = '$' + alCost.toFixed(0);
+  }
+
+  function currentVals() { return [Number(widthInput.value), Number(heightInput.value), Number(webInput.value)]; }
+
+  widthInput.addEventListener('input', function () {
+    widthOut.textContent = Number(widthInput.value).toFixed(2) + '″';
+    generate.apply(null, currentVals());
+  });
+  heightInput.addEventListener('input', function () {
+    heightOut.textContent = Number(heightInput.value).toFixed(2) + '″';
+    generate.apply(null, currentVals());
+  });
+  webInput.addEventListener('input', function () {
+    webOut.textContent = Number(webInput.value).toFixed(2) + '″';
+    generate.apply(null, currentVals());
+  });
+  regenBtn.addEventListener('click', function () { generate.apply(null, currentVals()); });
+
+  generate.apply(null, currentVals());
+})();
+</script>
