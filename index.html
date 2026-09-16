@@ -371,6 +371,52 @@
     pointer-events: none;
   }
 
+  /* FEATURES (laser-as-machining video) */
+  .features {
+    background: var(--charcoal);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .features-inner {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .features-video {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: var(--black);
+    overflow: hidden;
+  }
+  .features-video video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .features-video::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 40%; height: 40%;
+    border-right: 3px solid var(--orange);
+    border-bottom: 3px solid var(--orange);
+    pointer-events: none;
+  }
+  .features-text p { color: var(--silver); line-height: 1.75; margin-bottom: 1.2rem; }
+  .features-text ul { list-style: none; margin: 1.5rem 0 0; padding: 0; }
+  .features-text li {
+    color: var(--white);
+    font-size: 0.95rem;
+    padding: 0.55rem 0 0.55rem 1.4rem;
+    border-top: 1px solid var(--rule);
+    position: relative;
+  }
+  .features-text li::before {
+    content: '';
+    position: absolute; left: 0; top: 1.05rem;
+    width: 0.6rem; height: 2px; background: var(--orange);
+  }
+  .features-text li:last-child { border-bottom: 1px solid var(--rule); }
+
   /* SERVICES */
   .services { background: var(--black); }
   .services-inner { max-width: 1200px; margin: 0 auto; }
@@ -726,6 +772,7 @@
     .hero { padding: 0 2rem 4rem; }
     .about-inner { grid-template-columns: 1fr; gap: 3rem; }
     .services-grid { grid-template-columns: 1fr; }
+    .features-inner { grid-template-columns: 1fr; gap: 2rem; }
     .gallery-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 240px; }
     .gallery-item:first-child { grid-row: span 1; }
     .stats-inner { grid-template-columns: 1fr 1fr; }
@@ -759,6 +806,7 @@
   <a href="#" class="nav-logo"><img src="dnk_logo_2026.png" alt="DNK Fabrication — Design, Fabrication, Manufacturing" style="height:42px;max-width:80vw;width:auto;object-fit:contain;display:block"></a>
   <ul class="nav-links">
     <li><a href="#services">Services</a></li>
+      <li><a href="#features">Features</a></li>
     <li><a href="#work">Our Work</a></li>
     <li><a href="#process">Process</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -855,6 +903,29 @@
         <div class="service-title">Rapid Response</div>
         <p class="service-desc">When production is down, speed is everything. Owner-answered line, same-day design evaluation, and kitted solutions for energy and industrial customers.</p>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES: laser-cut holes in extruded aluminum (XCI job, 9/14) -->
+<section class="features" id="features">
+  <div class="features-inner">
+    <div class="features-video fade-up">
+      <video autoplay muted loop playsinline preload="metadata" poster="img/laser-holes-extruded-aluminum-poster.jpg" aria-label="Fiber laser cutting a hole pattern into extruded aluminum">
+        <source src="img/laser-holes-extruded-aluminum.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="features-text fade-up">
+      <div class="section-label">Still Drilling Those?</div>
+      <h2>Hole Patterns, Slots &amp; Features &mdash; Cut, Not Machined</h2>
+      <p>That is extruded aluminum going through the laser: every hole located and cut in one pass, no layout, no drill jig, no tool changes. If a feature can be reached from the top of the part, we can put it there in seconds instead of minutes.</p>
+      <p>Bring us the parts you are drilling, punching, or milling today. Extrusions, tube, channel, plate, brackets, rails &mdash; send the print or the part and we will tell you what the laser can take over.</p>
+      <ul>
+        <li>Hole patterns in extrusions, tube, and channel</li>
+        <li>Slots, notches, tabs, and mounting features</li>
+        <li>Consistent location part after part, no jigs to build</li>
+        <li>Runs of 1 to 1,000 &mdash; same setup either way</li>
+      </ul>
     </div>
   </div>
 </section>
