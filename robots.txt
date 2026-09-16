@@ -1,0 +1,59 @@
+# DNK Fabrication — https://www.dnkfabrication.com
+# Search engines and AI assistants are welcome. Being the answer when someone
+# asks "who can laser cut / press brake form this in Lubbock" is the point.
+
+User-agent: *
+Allow: /
+Disallow: /timeclock/
+Disallow: /pan/
+Disallow: /tasks/
+Disallow: /castle-demo/
+Disallow: /kelly-gate-panels.html
+
+# --- AI / LLM crawlers: allowed on purpose ---
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+Sitemap: https://www.dnkfabrication.com/sitemap.xml
