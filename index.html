@@ -446,6 +446,14 @@
   .service-card:hover { background: var(--steel); }
   .service-card:hover::before { width: 100%; }
 
+  .service-img {
+    width: calc(100% + 4rem);
+    margin: -2.5rem -2rem 1.25rem;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(10%);
+  }
   .service-number {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 3.5rem;
@@ -874,6 +882,7 @@
         <p class="service-desc">Precision fiber laser cutting on steel, aluminum, and stainless. Complex patterns, tight tolerances, clean edges — every time.</p>
       </div>
       <div class="service-card fade-up">
+        <img class="service-img" src="img/cnc-press-brake-dnk-shop.jpg" alt="CNC press brake on the DNK Fabrication shop floor, Lubbock TX" loading="lazy">
         <div class="service-number">02</div>
         <div class="service-title">CNC Press Brake Forming</div>
         <p class="service-desc">Laser cut and formed under one roof. CNC-controlled press brake bending for brackets, enclosures, flanges, and formed parts &mdash; repeatable angles, part after part, with no second shop in the loop.</p>
