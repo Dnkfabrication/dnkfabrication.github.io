@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#111111">
+<title>READY TO CUT</title>
+<style>
+  :root {
+    --bg: #111; --card: #1d1d1f; --line: #333;
+    --txt: #f2f2f2; --dim: #9a9a9a;
+    --green: #1f9d40; --green-dn: #157a30;
+    --accent: #e8a020;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    background: var(--bg); color: var(--txt);
+    font-family: system-ui, Roboto, Arial, sans-serif;
+    max-width: 480px; margin: 0 auto; padding: 12px 14px 40px;
+  }
+  header { padding: 4px 2px 12px; }
+  header h1 { font-size: 1.05rem; letter-spacing: .06em; }
+  header .sub { color: var(--dim); font-size: .85rem; margin-top: 4px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-bottom: 14px; }
+  .card .part { font-size: 1.15rem; font-weight: 800; line-height: 1.25; word-break: break-word; }
+  .card .desc { color: var(--dim); font-size: .85rem; margin-top: 6px; line-height: 1.4; word-break: break-word; }
+  .card button {
+    display: block; width: 100%; min-height: 56px; border: none; border-radius: 14px;
+    margin-top: 12px; font-size: 1.35rem; font-weight: 800; letter-spacing: .06em;
+    color: #fff; background: var(--green); cursor: pointer; touch-action: manipulation;
+  }
+  .card button:active { background: var(--green-dn); }
+  .card.sent { opacity: .45; }
+  .card.sent button { background: #444; color: var(--dim); }
+  #msg { color: var(--accent); font-size: 1rem; padding: 14px; text-align: center; }
+  footer { color: var(--dim); font-size: .72rem; text-align: center; margin-top: 18px; line-height: 1.5; }
+</style>
+</head>
+<body>
+<header>
+  <h1>READY TO CUT &mdash; tap when it's off the laser</h1>
+  <div class="sub" id="gen">newest first</div>
+</header>
+
+<div id="msg">loading list&hellip;</div>
+<div id="list"></div>
+
+<footer>
+  Tapping CUT opens an email to Dylan &mdash; hit send in your mail app.<br>
+  DNK Fabrication &middot; Lubbock, TX
+</footer>
+
+<script>
+(function () {
+  var KEY = 'dnk_cut_sent';
+  var WHO = 'Freddy';
+  var DYLAN_EMAIL = 'dylan@dnkfabrication.com';
+
+  function loadSent() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
+  function saveSent(s) { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} }
+
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function fmtNow() {
+    var d = new Date();
+    var h = d.getHours(), m = d.getMinutes(), ap = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    return (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear() + ' ' +
+           h + ':' + (m < 10 ? '0' : '') + m + ' ' + ap;
+  }
+
+  function partLine(r) {
+    var bits = [];
+    if (r.customer) bits.push(r.customer);
+    if (r.part) bits.push(r.part);
+    if (bits.length === 0) return r.file;
+    return bits.join(' – ');
+  }
+
+  function markCut(r, card) {
+    var name = partLine(r);
+    if (!confirm('Mark ' + name + ' as CUT?')) return;
+    var subject = 'CUT: ' + r.file;
+    var body = r.desc + '\n' + fmtNow() + '\n' + WHO;
+    var sent = loadSent();
+    sent[r.file] = new Date().toISOString();
+    saveSent(sent);
+    card.className = 'card sent';
+    card.querySelector('button').textContent = 'SENT';
+    window.location.href = 'mailto:' + DYLAN_EMAIL +
+      '?subject=' + encodeURIComponent(subject) +
+      '&body=' + encodeURIComponent(body);
+  }
+
+  function render(data) {
+    var rows = data.rows || [];
+    var sent = loadSent();
+    var list = document.getElementById('list');
+    document.getElementById('msg').style.display = 'none';
+    document.getElementById('gen').textContent =
+      rows.length + ' on the shelf · newest first · list made ' + (data.generated || '');
+    if (rows.length === 0) { list.innerHTML = '<div class="card">Nothing on the shelf.</div>'; return; }
+    list.innerHTML = '';
+    rows.forEach(function (r) {
+      var isSent = !!sent[r.file];
+      var card = document.createElement('div');
+      card.className = 'card' + (isSent ? ' sent' : '');
+      card.innerHTML =
+        '<div class="part">' + esc(partLine(r)) + '</div>' +
+        '<div class="desc">' + esc(r.desc) + '</div>' +
+        '<button type="button">' + (isSent ? 'SENT' : 'CUT') + '</button>';
+      card.querySelector('button').addEventListener('click', function () {
+        if (loadSent()[r.file]) {
+          if (!confirm('Already marked sent on this phone. Send again?')) return;
+        }
+        markCut(r, card);
+      });
+      list.appendChild(card);
+    });
+  }
+
+  function fail() {
+    document.getElementById('msg').textContent = 'list not loaded — tell Dylan';
+  }
+
+  fetch('shelf.json', { cache: 'no-store' })
+    .then(function (res) { if (!res.ok) throw new Error(res.status); return res.json(); })
+    .then(render)
+    .catch(fail);
+})();
+</script>
+</body>
+</html>
