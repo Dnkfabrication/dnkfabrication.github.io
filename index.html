@@ -74,6 +74,8 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<!-- Homepage hero 3D model (model-viewer). Live 2026-09-24. -->
+<script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -295,6 +297,60 @@
     font-family: 'Barlow', sans-serif;
   }
   .btn-ghost:hover { color: var(--orange); border-color: var(--orange); }
+
+  /* HERO MODEL (live 2026-09-24) */
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 3rem;
+  }
+  /* Pull the model in close beside the headline instead of letting it hug
+     the right edge — narrow the text column and stop spreading the row.
+     [D 2026-09-22 2:40p "the model needs to be shifted left quite a ways"] */
+  .hero-inner .hero-content {
+    max-width: 560px;
+    flex: 0 1 560px;
+  }
+  .hero-model {
+    flex: 0 0 auto;
+    width: 420px;
+    max-width: 42vw;
+  }
+  .hero-model model-viewer {
+    width: 100%;
+    height: 420px;
+    --poster-color: transparent;
+    background: transparent;
+  }
+  .hero-model-caption {
+    margin-top: 0.85rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    color: var(--dim);
+    text-align: center;
+  }
+  .hero-model-caption a {
+    color: var(--orange);
+    text-decoration: none;
+    border-bottom: 1px solid var(--orange-dim);
+  }
+  .hero-model-caption a:hover { border-color: var(--orange); }
+  @media (max-width: 900px) {
+    .hero-inner { flex-direction: column; align-items: flex-start; gap: 2rem; }
+    .hero-model { width: 100%; max-width: 100%; }
+    .hero-model model-viewer { height: 320px; }
+  }
+
+  .hero-model-fallback { position: relative; border: 1px solid var(--rule); overflow: hidden; }
+  .hero-model-fallback img { width: 100%; height: 420px; object-fit: cover; display: block; filter: grayscale(20%) contrast(1.05); }
+  .hero-model-fallback span { position: absolute; top: 0; left: 0; background: var(--orange); color: #fff; font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase; font-weight: 600; padding: 0.4rem 0.8rem; }
+  .hero-model-badge { position: absolute; top: 0; left: 0; background: var(--orange); color: #fff; font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase; font-weight: 600; padding: 0.4rem 0.8rem; z-index: 2; }
+  .hero-model { position: relative; }
+  @media (max-width: 900px) { .hero-model-fallback img { height: 320px; } }
 
   /* SECTIONS */
   section { padding: 6rem 4rem; }
@@ -816,6 +872,7 @@
     <li><a href="#services">Services</a></li>
       <li><a href="#features">Features</a></li>
     <li><a href="#work">Our Work</a></li>
+    <li><a href="models/">Models</a></li>
     <li><a href="#process">Process</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="art.html" style="color:var(--orange)">The Collection</a></li>
@@ -827,14 +884,17 @@
 <section class="hero">
   <img class="hero-img" src="img/dnk-fabrication-custom-metalwork.jpg" alt="DNK Fabrication custom metalwork" loading="eager">
   <div class="hero-bg"></div>
-  <div class="hero-content fade-up">
-    <div class="hero-eyebrow">Lubbock, Texas</div>
-    <h1>Built<br>Different.<br><em>Built Right.</em></h1>
-    <p class="hero-desc">Design &middot; Fabrication &middot; Manufacturing — over 30 years of structural and mechanical solutions for commercial and industrial clients, with thorough structural and environmental analysis behind every build. CNC laser cutting, CNC press brake forming, laser welding, architectural metalwork, custom signage.</p>
-    <div class="hero-cta">
-      <a href="#contact" id="hero-quote-btn" class="btn-primary">Tell Us What You Need</a>
-      <a href="#work" class="btn-ghost">See Our Work</a>
+  <div class="hero-inner">
+    <div class="hero-content fade-up">
+      <div class="hero-eyebrow">Lubbock, Texas</div>
+      <h1>Built<br>Different.<br><em>Built Right.</em></h1>
+      <p class="hero-desc">Design &middot; Fabrication &middot; Manufacturing — over 30 years of structural and mechanical solutions for commercial and industrial clients, with thorough structural and environmental analysis behind every build. CNC laser cutting, CNC press brake forming, laser welding, architectural metalwork, custom signage.</p>
+      <div class="hero-cta">
+        <a href="#contact" id="hero-quote-btn" class="btn-primary">Tell Us What You Need</a>
+        <a href="#work" class="btn-ghost">See Our Work</a>
+      </div>
     </div>
+    <div class="hero-model fade-up" id="hero-model"></div>
   </div>
 </section>
 
@@ -1119,6 +1179,7 @@
   <ul class="footer-links">
     <li><a href="#services">Services</a></li>
     <li><a href="#work">Work</a></li>
+    <li><a href="models/">Models</a></li>
     <li><a href="art.html">The Collection</a></li>
     <li><a href="emergency.html" style="color:var(--red)">Priority Response</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -1893,5 +1954,33 @@
 })();
 </script>
 
+<script src="models/featured.js"></script>
+<script>
+  // Homepage "Current build" slot -- driven by models/featured.json via the
+  // generated models/featured.js (approved models only; see models_featured.py).
+  (function () {
+    const slot = document.getElementById('hero-model');
+    if (!slot) return;
+    const D = (typeof DNK_MODELS !== 'undefined' && DNK_MODELS) || { featured: null, models: [] };
+    const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const m = (D.models || []).find(x => x.id === D.featured) || (D.models || [])[0];
+    if (!m) {
+      slot.innerHTML = `
+        <a class="hero-model-fallback" href="models/" aria-label="Browse our models">
+          <img src="img/laser-cut-decorative-gate.jpg" alt="Laser cut decorative gate by DNK Fabrication" loading="lazy">
+          <span>Our Models</span>
+        </a>
+        <p class="hero-model-caption">Interactive 3D models of our designs &middot; <a href="models/">browse the gallery</a></p>`;
+      return;
+    }
+    slot.innerHTML = `
+      <span class="hero-model-badge">Featured this week</span>
+      <model-viewer src="${esc(m.glb)}" poster="${esc(m.poster)}" alt="3D model: ${esc(m.title)}"
+        loading="lazy" reveal="auto" auto-rotate auto-rotate-delay="800" rotation-per-second="12deg"
+        camera-controls shadow-intensity="1" exposure="1.05" camera-orbit="${esc(m.camera_orbit || '35deg 70deg auto')}"
+        interaction-prompt="none"></model-viewer>
+      <p class="hero-model-caption">Current build — ${esc(m.customer ? m.customer + ' ' : '')}${esc(m.title.toLowerCase())} &middot; <a href="models/">see all models</a>${m.viewer ? ' &middot; <a href="' + esc(m.viewer) + '">full 3D viewer</a>' : ''}</p>`;
+  })();
+</script>
 </body>
 </html>

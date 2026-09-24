@@ -1,0 +1,375 @@
+{
+  "_doc": "Single source of truth for the /models/ gallery and the homepage 'Current build' slot. Edit THIS file, then run `python C:\\DNK\\tools\\models_featured.py build --root <site root>`.",
+  "_note": "All 17 listed [D 2026-09-23 9:47a 'show me all of them']. Every model exported from Fusion, welded, solidity-gated, and dimensionally verified. Titles carry no customer names per [D 2026-08-30 4:01p].",
+  "featured": "def-platform",
+  "since": "2026-09-23",
+  "approved_by_customer": true,
+  "models": [
+    {
+      "id": "def-platform",
+      "title": "DEF Tank Platform Stand",
+      "line": "Sixteen-foot access platform and stand for bulk fluid totes.",
+      "customer": "",
+      "glb": "assets/target_hospitality_def_tank_platform_stand_v6_tote_rev_lite.glb",
+      "poster": "assets/target_hospitality_def_tank_platform_stand_v6_tote_rev_poster.png",
+      "viewer": "",
+      "camera_orbit": "35deg 70deg auto",
+      "approved_by_customer": true,
+      "added": "2026-09-23",
+      "_bytes": 110468,
+      "_meshes": 71,
+      "_not_watertight": 0,
+      "_extent_in": [
+        192.0,
+        154.0,
+        86.25
+      ]
+    },
+    {
+      "id": "enclosure-corner",
+      "title": "Enclosure Corner Framing",
+      "line": "Corner insert system for a six-foot enclosure.",
+      "customer": "",
+      "glb": "assets/reptile_enclosure_corner_insert_lite.glb",
+      "poster": "assets/reptile_enclosure_corner_insert_poster.png",
+      "viewer": "",
+      "camera_orbit": "35deg 70deg auto",
+      "approved_by_customer": true,
+      "added": "2026-09-23",
+      "_bytes": 31052,
+      "_meshes": 32,
+      "_not_watertight": 0,
+      "_extent_in": [
+        72.0218,
+        36.0625,
+        36.0218
+      ]
+    },
+    {
+      "id": "family-crest",
+      "title": "Four-Foot Family Crest",
+      "line": "Laser-cut crest, 48 in square, single-plate.",
+      "customer": "",
+      "glb": "assets/hector_luna_4ft_family_crest_model_lite.glb",
+      "poster": "assets/hector_luna_4ft_family_crest_model_poster.png",
+      "viewer": "",
+      "camera_orbit": "35deg 70deg auto",
+      "approved_by_customer": true,
+      "added": "2026-09-23",
+      "_bytes": 154160,
+      "_meshes": 1,
+      "_not_watertight": 0,
+      "_extent_in": [
+        48.0,
+        48.0,
+        0.12
+      ],
+      "_rotate_deg": "180,0,0",
+      "_rotate_why": "[D 2026-09-24 'upside down and backwards'] - raw STL's thin (0.12in) axis is Fusion Y, not Z, so the fixed Zup conversion alone left the fisherman/lettering facing away and inverted; +180deg about the exported X axis (after Zup) brings the crisp, correctly-read face forward - confirmed by eye, not a mirror (rotation only, dimensions unchanged)."
+    },
+    {
+      "id": "hanging-bench",
+      "title": "Hanging Steel Bench",
+      "line": "Six-foot suspended bench with contoured backrest, organic cut pattern.",
+      "customer": "",
+      "glb": "assets/gerardo_bautista_bautista_hanging_bench_edg01_rev_o_organic__lite.glb",
+      "poster": "assets/gerardo_bautista_bautista_hanging_bench_edg01_rev_o_organic__poster.png",
+      "viewer": "",
+      "camera_orbit": "35deg 70deg auto",
+      "approved_by_customer": true,
+      "added": "2026-09-23",
+      "_bytes": 581860,
+      "_meshes": 26,
+      "_not_watertight": 0,
+      "_extent_in": [
+        77.0,
+        34.0,
+        20.71
+      ]
+    },
+    {
+      "id": "rigid-support",
+      "title": "IG Pipe Spool Support",
+      "line": "Adjustable spool-holder support, patent-pending, built for in-field pipe handling.",
+      "customer": "",
+      "glb": "assets/rigid_support_lite.glb",
+      "poster": "assets/rigid_support_poster.png",
+      "viewer": "",
+      "camera_orbit": "35deg 70deg auto",
+      "approved_by_customer": true,
+      "added": "2026-09-23",
+      "_bytes": 473716,
+      "_meshes": 17,
+      "_not_watertight": 0,
+      "_extent_in": [
+        10.0,
+        9.7344,
+        8.0
+      ]
+    },
+    {
+      "id": "atlas-homes-sign",
+      "title": "Illuminated Builder Sign",
+      "line": "Six-foot post-mounted sign frame with cut lettering panel.",
+      "customer": "",
+      "glb": "assets/atlas_homes_atlas_homes_sign_lite.glb",
+      "poster": "assets/atlas_homes_atlas_homes_sign_poster.png",
+      "viewer": "",
+      "camera_orbit": "35deg 70deg auto",
+      "approved_by_customer": true,
+      "added": "2026-09-23",
+      "_bytes": 129756,
+      "_meshes": 5,
+      "_not_watertight": 0,
+      "_extent_in": [
+        72.0,
+        49.745,
+        2.0625
+      ],
+      "_rotate_deg": "0,180,0",
+      "_rotate_why": "[D 2026-09-24 'backwards'] - the thin cut-lettering panel sits at the high-Y end of the raw STL (Fusion's own front convention here); Zup alone left it facing away from the default camera with the blank backer board toward the viewer. +180deg about the exported Y (up) axis swaps which face is forward without touching up/down - confirmed against a raw-STL silhouette projection of the lettering body (reads 'ATLAS HOMES' correctly, not mirrored) and by eye in the viewer; dimensions unchanged."
+    },
+    {
+      "id": "junction-box",
+      "title": "Industrial Junction Box",
+      "line": "Sealed enclosure with mounting flanges, built to drawing.",
+      "customer": "",
+      "glb": "assets/dykman_dykman_junction_box_pt01_lite.glb",
+      "poster": "assets/dykman_dykman_junction_box_pt01_poster.png",
+      "viewer": "",
+      "camera_orbit": "35deg 70deg auto",
+      "approved_by_customer": true,
+      "added": "2026-09-23",
+      "_bytes": 87616,
+      "_meshes": 12,
+      "_not_watertight": 0,
+      "_extent_in": [
+        52.7405,
+        26.0095,
+        26.0
+      ]
+    },
+    {
+      "id": "gauge-enclosure",
+      "title": "Instrument Gauge Enclosure",
+      "line": "Compact instrument housing, 5.5 in wide.",
+      "customer": "",
+      "glb": "assets/roscid_technologies_dew_point_gauge_enclosure_lite.glb",
+      "poster": "assets/roscid_technologies_dew_point_gauge_enclosure_poster.png",
+      "viewer": "",
+      "camera_orbit": "35deg 70deg auto",
+      "approved_by_customer": true,
+      "added": "2026-09-23",
+      "_bytes": 37916,
+      "_meshes": 5,
+      "_not_watertight": 0,
+      "_extent_in": [
+        5.5,
+        3.5,
+        3.0
+      ]
+    },
+    {
+      "id": "layered-panel",
+      "title": "Layered Decorative Panel",
+      "line": "Three-foot multi-layer cut panel, second layer shown.",
+      "customer": "",
+      "glb": "assets/stacey_2nd_layer_lite.glb",
+      "poster": "assets/stacey_2nd_layer_poster.png",
+      "viewer": "",
+      "camera_orbit": "35deg 70deg auto",
+      "approved_by_customer": true,
+      "added": "2026-09-23",
+      "_bytes": 1767168,
+      "_meshes": 27,
+      "_not_watertight": 0,
+      "_extent_in": [
+        36.0,
+        24.0893,
+        0.749
+      ],
+      "_rotate_deg": "180,0,0",
+      "_rotate_why": "[D 2026-09-24 'backwards'] - the corten back layer (negative-Y, behind the aluminum cut layer in the raw STL) was rendering in front, hiding the 'Bright Star Kikos' lettering and goat cutout entirely. +180deg about the exported X axis (after Zup) brings the correct cut layer forward with the backer showing through the negative space, non-mirrored - confirmed by eye (Y180 was tried first and gave the right layer but mirrored text; X180 reads correctly); dimensions unchanged."
+    },
+    {
+      "id": "ornamental-cross",
+      "title": "Ornamental Cross",
+      "line": "Four-foot cross with perimeter detail.",
+      "customer": "",
+      "glb": "assets/warren_breedlove_ver_2_0_lite.glb",
+      "poster": "assets/warren_breedlove_ver_2_0_poster.png",
+      "viewer": "",
+      "camera_orbit": "35deg 70deg auto",
+      "approved_by_customer": true,
+      "added": "2026-09-23",
+      "_bytes": 25420,
+      "_meshes": 10,
+      "_not_watertight": 0,
+      "_extent_in": [
+        49.105,
+        28.0,
+        6.0
+      ]
+    },
+    {
+      "id": "front-gate",
+      "title": "Ranch Entry Gate",
+      "line": "Sixteen-foot driveway gate, cut and framed to the drawing.",
+      "customer": "",
+      "glb": "assets/wilson_and_kristen_gate_to_build_sized_correctly_lite.glb",
+      "poster": "assets/wilson_and_kristen_gate_to_build_sized_correctly_poster.png",
+      "viewer": "",
+      "camera_orbit": "35deg 70deg auto",
+      "approved_by_customer": true,
+      "added": "2026-09-23",
+      "_bytes": 3268124,
+      "_meshes": 2,
+      "_not_watertight": 2,
+      "_extent_in": [
+        191.0,
+        68.448,
+        0.0181
+      ]
+    },
+    {
+      "id": "fire-pit",
+      "title": "Sculptural Fire Pit",
+      "line": "Formed and welded fire pit, 44 in across.",
+      "customer": "",
+      "glb": "assets/david_williams_version_2_0_lite.glb",
+      "poster": "assets/david_williams_version_2_0_poster.png",
+      "viewer": "",
+      "camera_orbit": "35deg 70deg auto",
+      "approved_by_customer": true,
+      "added": "2026-09-23",
+      "_bytes": 1067436,
+      "_meshes": 30,
+      "_not_watertight": 0,
+      "_extent_in": [
+        44.6717,
+        42.4853,
+        21.3043
+      ]
+    },
+    {
+      "id": "razor-wire-post",
+      "title": "Security Fence Post",
+      "line": "Six-foot post with angled razor-wire arm.",
+      "customer": "",
+      "glb": "assets/edf_milagro_razor_wire_post_design_lite.glb",
+      "poster": "assets/edf_milagro_razor_wire_post_design_poster.png",
+      "viewer": "",
+      "camera_orbit": "35deg 70deg auto",
+      "approved_by_customer": true,
+      "added": "2026-09-23",
+      "_bytes": 4524,
+      "_meshes": 2,
+      "_not_watertight": 0,
+      "_extent_in": [
+        72.5,
+        10.0,
+        2.25
+      ]
+    },
+    {
+      "id": "solar-rack",
+      "title": "Trailer Skid Solar Panel Rack",
+      "line": "Skid-mounted rack carrying panels on a portable trailer base, 8 ft tall.",
+      "customer": "",
+      "glb": "assets/edf_milagro_solar_panel_rack_lite.glb",
+      "poster": "assets/edf_milagro_solar_panel_rack_poster.png",
+      "viewer": "",
+      "camera_orbit": "35deg 70deg auto",
+      "approved_by_customer": true,
+      "added": "2026-09-23",
+      "_bytes": 48284,
+      "_meshes": 62,
+      "_not_watertight": 0,
+      "_extent_in": [
+        96.0,
+        53.25,
+        48.0721
+      ]
+    },
+    {
+      "id": "jj-machine-sign",
+      "title": "Two-Sided Machine Shop Sign",
+      "line": "Laser-cut lettering and lathe motif on a formed backer, lit and double-faced.",
+      "customer": "",
+      "glb": "assets/jj_machine_sign_lite.glb",
+      "poster": "assets/jj_machine_sign_poster.png",
+      "viewer": "/jason/",
+      "camera_orbit": "35deg 70deg auto",
+      "approved_by_customer": true,
+      "added": "2026-09-23",
+      "_bytes": 2680436,
+      "_meshes": 55,
+      "_not_watertight": 0,
+      "_extent_in": [
+        88.3769,
+        43.25,
+        2.125
+      ]
+    },
+    {
+      "id": "fixture-tables",
+      "title": "Welding Fixture Tables",
+      "line": "Modular 6 ft x 4 ft fixture tables with slotted tops for repeatable setups.",
+      "customer": "",
+      "glb": "assets/dnk_creations_fixture_tables_lite.glb",
+      "poster": "assets/dnk_creations_fixture_tables_poster.png",
+      "viewer": "",
+      "camera_orbit": "35deg 70deg auto",
+      "approved_by_customer": true,
+      "added": "2026-09-23",
+      "_bytes": 2810844,
+      "_meshes": 13,
+      "_not_watertight": 0,
+      "_extent_in": [
+        72.0,
+        48.0,
+        25.75
+      ]
+    },
+    {
+      "id": "sgre-screw-jack",
+      "title": "Wind Turbine Shaft Screw Jack",
+      "line": "Patent-pending shaft jack with interchangeable model-specific cradle heads - travels 28.4 in retracted to 57.3 in extended.",
+      "customer": "",
+      "glb": "assets/sgre_screw_jack_lite.glb",
+      "poster": "assets/sgre_screw_jack_poster.png",
+      "viewer": "",
+      "camera_orbit": "35deg 70deg auto",
+      "approved_by_customer": true,
+      "added": "2026-09-23",
+      "_bytes": 1105428,
+      "_meshes": 44,
+      "_not_watertight": 0,
+      "_extent_in": [
+        57.3533,
+        14.0,
+        8.0
+      ]
+    },
+    {
+      "id": "portable-sign",
+      "title": "Wind-Resistant Portable Sign",
+      "line": "Free-standing sign on a 36 in weighted base, built to stay put outdoors.",
+      "customer": "",
+      "glb": "assets/slate_group_warren_cat_sign_36in_base_lite.glb",
+      "poster": "assets/slate_group_warren_cat_sign_36in_base_poster.png",
+      "viewer": "",
+      "camera_orbit": "35deg 70deg auto",
+      "approved_by_customer": true,
+      "added": "2026-09-23",
+      "_bytes": 36612,
+      "_meshes": 36,
+      "_not_watertight": 0,
+      "_extent_in": [
+        72.0,
+        60.0,
+        36.0
+      ]
+    }
+  ]
+}
