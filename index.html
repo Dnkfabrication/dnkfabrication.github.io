@@ -1543,6 +1543,21 @@
     }
     #art-launcher-icon { font-size: 18px; }
 
+    /* Phone-size type. iOS Safari auto-zooms any input under 16px on
+       focus and leaves the page zoomed, which cropped the full-screen
+       chat on iPhone [D 9/24 "cant hardly read anything on an iphone"].
+       16px input = no zoom; 16px bubbles = readable at arm's length. */
+    #art-header { padding: 12px 8px 12px 16px; }
+    #art-header .title { font-size: 21px; }
+    #art-header .subtitle { font-size: 13px; }
+    #art-close { font-size: 32px; width: 44px; height: 44px; }
+    #art-messages { padding: 16px 14px; gap: 12px; }
+    .art-msg { font-size: 16px; line-height: 1.45; max-width: 86%; padding: 10px 13px; }
+    .art-msg.typing { color: var(--silver); }
+    #art-input { font-size: 16px; padding: 10px 12px; }
+    #art-send { font-size: 16px; min-height: 44px; padding: 0 18px; }
+    #art-sms-consent { font-size: 12px !important; }
+
     /* Lock background scroll behind the full-screen takeover so the
        page underneath can't scroll while the chat is open. Toggled
        by JS (openPanel/closePanel) via this class on <body>. */
@@ -1832,9 +1847,13 @@
     function syncMobileHeight() {
       if (!window.visualViewport || !isMobileLayout() || !panel.classList.contains("open")) {
         panel.style.height = "";
+        panel.style.top = "";
         return;
       }
       panel.style.height = Math.round(window.visualViewport.height) + "px";
+      // iOS scrolls the visual viewport when the keyboard opens, so a
+      // top:0 panel sits above what's visible -- pin it to the offset.
+      panel.style.top = Math.round(window.visualViewport.offsetTop) + "px";
     }
 
     function openPanel() {
