@@ -36,14 +36,17 @@
       "camera_orbit": "35deg 70deg auto",
       "approved_by_customer": true,
       "added": "2026-09-23",
-      "_bytes": 31052,
+      "_bytes": 44616,
       "_meshes": 32,
       "_not_watertight": 0,
       "_extent_in": [
         72.0218,
         36.0625,
         36.0218
-      ]
+      ],
+      "_rotate_deg": "0,0,0",
+      "_rotate_why": "[REBUILT 2026-09-24 4:02p] NO rotation. Placement bug, the worst of the set: 15 of 32 bodies out of position, up to 179.19 cm (about 6 ft) on a 72 in assembly. Re-exported through export_cloud_doc_stl_20260924f.py (15 x [PLACEMENT FIXED], all to <= 0.000005 cm) and rebuilt. Symmetric within 0.1%% either way so no rotation; confirmed by eye as one connected framework with nothing floating.",
+      "_source_export": "C:/DNK/jobs/_web_models/reptile_enclosure_corner_insert_f - exported 2026-09-24 by export_cloud_doc_stl_20260924f.py (the FIXED exporter)"
     },
     {
       "id": "family-crest",
@@ -56,7 +59,7 @@
       "camera_orbit": "35deg 70deg auto",
       "approved_by_customer": true,
       "added": "2026-09-23",
-      "_bytes": 154160,
+      "_bytes": 308496,
       "_meshes": 1,
       "_not_watertight": 0,
       "_extent_in": [
@@ -64,8 +67,9 @@
         48.0,
         0.12
       ],
-      "_rotate_deg": "180,0,0",
-      "_rotate_why": "[D 2026-09-24 'upside down and backwards'] - raw STL's thin (0.12in) axis is Fusion Y, not Z, so the fixed Zup conversion alone left the fisherman/lettering facing away and inverted; +180deg about the exported X axis (after Zup) brings the crisp, correctly-read face forward - confirmed by eye, not a mirror (rotation only, dimensions unchanged)."
+      "_rotate_deg": "0,0,0",
+      "_rotate_why": "[REBUILT 2026-09-24 4:02p] NO rotation. Placement bug: Component1 was written 3.0090 in out of position by the old exporter. Re-exported through export_cloud_doc_stl_20260924f.py ([PLACEMENT FIXED] err 7.642955 -> 0.000003 cm) and rebuilt. Facing decided by READING it: 0,0,0 shows 'Un Rinconcito' / 'En El Cielo' correctly; 0,180,0 is mirrored AND upside down. The previous 180,0,0 value was derived by eye against misplaced geometry.",
+      "_source_export": "C:/DNK/jobs/_web_models/hector_luna_4ft_family_crest_model_f - exported 2026-09-24 by export_cloud_doc_stl_20260924f.py (the FIXED exporter)"
     },
     {
       "id": "hanging-bench",
@@ -182,7 +186,7 @@
       "camera_orbit": "35deg 70deg auto",
       "approved_by_customer": true,
       "added": "2026-09-23",
-      "_bytes": 1767168,
+      "_bytes": 4729996,
       "_meshes": 27,
       "_not_watertight": 0,
       "_extent_in": [
@@ -191,7 +195,8 @@
         0.749
       ],
       "_rotate_deg": "180,0,0",
-      "_rotate_why": "[D 2026-09-24 'backwards'] - the corten back layer (negative-Y, behind the aluminum cut layer in the raw STL) was rendering in front, hiding the 'Bright Star Kikos' lettering and goat cutout entirely. +180deg about the exported X axis (after Zup) brings the correct cut layer forward with the backer showing through the negative space, non-mirrored - confirmed by eye (Y180 was tried first and gave the right layer but mirrored text; X180 reads correctly); dimensions unchanged."
+      "_rotate_why": "[REBUILT 2026-09-24 4:02p] rotate 180,0,0. Placement bug: goat second layer 0.9037 in and back corten layer 0.2500 in out of position. Re-exported through export_cloud_doc_stl_20260924f.py (both [PLACEMENT FIXED]) and rebuilt. Facing decided by READING it: 180,0,0 shows BRIGHT / STAR / KIKOS right way up and forwards. WARNING FOR THE NEXT PERSON: 0,180,0 scores 24.1%% of the aluminium layer visible against this one's 24.3%% - all but identical - and is UPSIDE DOWN. Visible-pixel count distinguishes front from back and is blind to upside-down and to mirroring. Do not pick a facing from it.",
+      "_source_export": "C:/DNK/jobs/_web_models/stacey_2nd_layer_f - exported 2026-09-24 by export_cloud_doc_stl_20260924f.py (the FIXED exporter)"
     },
     {
       "id": "ornamental-cross",
