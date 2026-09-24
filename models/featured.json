@@ -118,7 +118,7 @@
       "camera_orbit": "35deg 70deg auto",
       "approved_by_customer": true,
       "added": "2026-09-23",
-      "_bytes": 255636,
+      "_bytes": 254052,
       "_meshes": 5,
       "_not_watertight": 0,
       "_extent_in": [
@@ -128,7 +128,8 @@
       ],
       "_rotate_why": "[REBUILT 2026-09-24 2:10p] EXPORTER BUG, not an orientation problem. em.createSTLExportOptions(proxy_body) writes the mesh in the component's DEFINITION space and ignores the occurrence transform, while the proxy's boundingBox query honours it - so manifest bbox_in was right and the STL was wrong. Only Component2 (the cut-letter panel) was affected, because it is the only occurrence with a non-identity transform; it was written 2.000 in back and 1.250 in down, buried inside the Component5 cabinet, so NO camera angle could show the lettering. Every other body landed at 0.0000 in error. Corrected by a pure translation (extents matched exactly, min and max deltas identical, so no rotation was guessed) into C:/DNK/jobs/_web_models/atlas_homes_atlas_homes_sign_placed, then rebuilt: all 5 bodies now within 0.000002 in of Fusion's own numbers and the assembly measures 49.745 x 2.125 x 72.0 = whole_model_bbox_in exactly. The 1/16 in over the old 2.0625 is the letter panel standing proud of the cabinet, as designed. THEN 0,180,0 is genuinely required: the Z-up conversion maps Fusion's front (+Y) to GLB -Z, away from model-viewer's camera. Verified by measurement, not by eye: letter panel 0.0%% -> 63.4%% of visible pixels, white backer 0.0%% -> 5.3%% (it shows ONLY through the cut letters - 5.3%% light in the poster matches exactly), cabinet 94.3%% -> 21.4%%. Poster signature 17 light blobs, 15 over 30px, largest 30.1%% of light - against 1 blob at 100%% for the blank slab that was live. Supersedes the 9/24 rotation note, whose 'confirmed by eye in the viewer' claim was false. Same exporter defect is the likely cause of open item #9 (Max sign frame: 'bbox and STLs disagree').",
       "_rotate_deg": "0,180,0",
-      "_poster_note": "rendered by C:/DNK/tools/render_model_poster.py (numpy z-buffer), not a model-viewer browser capture - headless Chrome has no WebGL on this box and the in-app browser pane reported a 0x0 viewport. May read flatter than its neighbours; re-shoot in a browser when one works."
+      "_poster_note": "rendered by C:/DNK/tools/render_model_poster.py (numpy z-buffer), not a model-viewer browser capture - headless Chrome has no WebGL on this box and the in-app browser pane reported a 0x0 viewport. May read flatter than its neighbours; re-shoot in a browser when one works.",
+      "_source_export": "C:/DNK/jobs/_web_models/atlas_homes_atlas_homes_sign_f - exported 2026-09-24 2:29p by export_cloud_doc_stl_20260924f.py, the FIXED exporter. Two independent Fusion runs ('e' 2:26p and 'f' 2:29p) produced byte-identical STLs for all 5 bodies. check_stl_vs_manifest.py: 5/5 at 0.0000 in. The exporter's own placement gate logged [PLACEMENT FIXED] Component2:1/Body1 err 5.080000 -> 0.000005 cm; the other four bodies needed no transform and came out byte-identical to the 9/23 export. This GLB gives pixel-identical visibility to the hand-corrected one it replaces (letters 63.4%, white backer 5.3%, cabinet 21.4%) - two independent routes to the same model."
     },
     {
       "id": "junction-box",
