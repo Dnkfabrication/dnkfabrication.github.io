@@ -3,7 +3,7 @@
 window.DNK_MODELS = {
   "featured": "def-platform",
   "since": "2026-09-23",
-  "generated": "2026-09-23T09:50:53",
+  "generated": "2026-09-24T16:12:22",
   "models": [
     {
       "id": "def-platform",
@@ -34,14 +34,17 @@ window.DNK_MODELS = {
       "viewer": "",
       "camera_orbit": "35deg 70deg auto",
       "added": "2026-09-23",
-      "_bytes": 31052,
+      "_bytes": 44616,
       "_meshes": 32,
       "_not_watertight": 0,
       "_extent_in": [
         72.0218,
         36.0625,
         36.0218
-      ]
+      ],
+      "_rotate_deg": "0,0,0",
+      "_rotate_why": "[REBUILT 2026-09-24 4:02p] NO rotation. Placement bug, the worst of the set: 15 of 32 bodies out of position, up to 179.19 cm (about 6 ft) on a 72 in assembly. Re-exported through export_cloud_doc_stl_20260924f.py (15 x [PLACEMENT FIXED], all to <= 0.000005 cm) and rebuilt. Symmetric within 0.1%% either way so no rotation; confirmed by eye as one connected framework with nothing floating.",
+      "_source_export": "C:/DNK/jobs/_web_models/reptile_enclosure_corner_insert_f - exported 2026-09-24 by export_cloud_doc_stl_20260924f.py (the FIXED exporter)"
     },
     {
       "id": "family-crest",
@@ -53,14 +56,17 @@ window.DNK_MODELS = {
       "viewer": "",
       "camera_orbit": "35deg 70deg auto",
       "added": "2026-09-23",
-      "_bytes": 154160,
+      "_bytes": 308496,
       "_meshes": 1,
       "_not_watertight": 0,
       "_extent_in": [
         48.0,
         48.0,
         0.12
-      ]
+      ],
+      "_rotate_deg": "0,0,0",
+      "_rotate_why": "[REBUILT 2026-09-24 4:02p] NO rotation. Placement bug: Component1 was written 3.0090 in out of position by the old exporter. Re-exported through export_cloud_doc_stl_20260924f.py ([PLACEMENT FIXED] err 7.642955 -> 0.000003 cm) and rebuilt. Facing decided by READING it: 0,0,0 shows 'Un Rinconcito' / 'En El Cielo' correctly; 0,180,0 is mirrored AND upside down. The previous 180,0,0 value was derived by eye against misplaced geometry.",
+      "_source_export": "C:/DNK/jobs/_web_models/hector_luna_4ft_family_crest_model_f - exported 2026-09-24 by export_cloud_doc_stl_20260924f.py (the FIXED exporter)"
     },
     {
       "id": "hanging-bench",
@@ -110,14 +116,18 @@ window.DNK_MODELS = {
       "viewer": "",
       "camera_orbit": "35deg 70deg auto",
       "added": "2026-09-23",
-      "_bytes": 129756,
+      "_bytes": 254052,
       "_meshes": 5,
       "_not_watertight": 0,
       "_extent_in": [
-        72.0,
         49.745,
-        2.0625
-      ]
+        72.0,
+        2.125
+      ],
+      "_rotate_why": "[REBUILT 2026-09-24 2:10p] EXPORTER BUG, not an orientation problem. em.createSTLExportOptions(proxy_body) writes the mesh in the component's DEFINITION space and ignores the occurrence transform, while the proxy's boundingBox query honours it - so manifest bbox_in was right and the STL was wrong. Only Component2 (the cut-letter panel) was affected, because it is the only occurrence with a non-identity transform; it was written 2.000 in back and 1.250 in down, buried inside the Component5 cabinet, so NO camera angle could show the lettering. Every other body landed at 0.0000 in error. Corrected by a pure translation (extents matched exactly, min and max deltas identical, so no rotation was guessed) into C:/DNK/jobs/_web_models/atlas_homes_atlas_homes_sign_placed, then rebuilt: all 5 bodies now within 0.000002 in of Fusion's own numbers and the assembly measures 49.745 x 2.125 x 72.0 = whole_model_bbox_in exactly. The 1/16 in over the old 2.0625 is the letter panel standing proud of the cabinet, as designed. THEN 0,180,0 is genuinely required: the Z-up conversion maps Fusion's front (+Y) to GLB -Z, away from model-viewer's camera. Verified by measurement, not by eye: letter panel 0.0%% -> 63.4%% of visible pixels, white backer 0.0%% -> 5.3%% (it shows ONLY through the cut letters - 5.3%% light in the poster matches exactly), cabinet 94.3%% -> 21.4%%. Poster signature 17 light blobs, 15 over 30px, largest 30.1%% of light - against 1 blob at 100%% for the blank slab that was live. Supersedes the 9/24 rotation note, whose 'confirmed by eye in the viewer' claim was false. Same exporter defect is the likely cause of open item #9 (Max sign frame: 'bbox and STLs disagree').",
+      "_rotate_deg": "0,180,0",
+      "_poster_note": "rendered by C:/DNK/tools/render_model_poster.py (numpy z-buffer), not a model-viewer browser capture - headless Chrome has no WebGL on this box and the in-app browser pane reported a 0x0 viewport. May read flatter than its neighbours; re-shoot in a browser when one works.",
+      "_source_export": "C:/DNK/jobs/_web_models/atlas_homes_atlas_homes_sign_f - exported 2026-09-24 2:29p by export_cloud_doc_stl_20260924f.py, the FIXED exporter. Two independent Fusion runs ('e' 2:26p and 'f' 2:29p) produced byte-identical STLs for all 5 bodies. check_stl_vs_manifest.py: 5/5 at 0.0000 in. The exporter's own placement gate logged [PLACEMENT FIXED] Component2:1/Body1 err 5.080000 -> 0.000005 cm; the other four bodies needed no transform and came out byte-identical to the 9/23 export. This GLB gives pixel-identical visibility to the hand-corrected one it replaces (letters 63.4%, white backer 5.3%, cabinet 21.4%) - two independent routes to the same model."
     },
     {
       "id": "junction-box",
@@ -167,14 +177,38 @@ window.DNK_MODELS = {
       "viewer": "",
       "camera_orbit": "35deg 70deg auto",
       "added": "2026-09-23",
-      "_bytes": 1767196,
+      "_bytes": 4729996,
       "_meshes": 27,
       "_not_watertight": 0,
       "_extent_in": [
         36.0,
         24.0893,
         0.749
-      ]
+      ],
+      "_rotate_deg": "180,0,0",
+      "_rotate_why": "[REBUILT 2026-09-24 4:02p] rotate 180,0,0. Placement bug: goat second layer 0.9037 in and back corten layer 0.2500 in out of position. Re-exported through export_cloud_doc_stl_20260924f.py (both [PLACEMENT FIXED]) and rebuilt. Facing decided by READING it: 180,0,0 shows BRIGHT / STAR / KIKOS right way up and forwards. WARNING FOR THE NEXT PERSON: 0,180,0 scores 24.1%% of the aluminium layer visible against this one's 24.3%% - all but identical - and is UPSIDE DOWN. Visible-pixel count distinguishes front from back and is blind to upside-down and to mirroring. Do not pick a facing from it.",
+      "_source_export": "C:/DNK/jobs/_web_models/stacey_2nd_layer_f - exported 2026-09-24 by export_cloud_doc_stl_20260924f.py (the FIXED exporter)"
+    },
+    {
+      "id": "ranch-scene-sign",
+      "title": "Oilfield Ranch Scene Sign",
+      "line": "Cut-silhouette sign panel - pump jack, storage tank and a hunting scene.",
+      "customer": "",
+      "glb": "assets/max_sign_frame_lite.glb",
+      "poster": "assets/max_sign_frame_poster.png",
+      "viewer": "",
+      "camera_orbit": "35deg 70deg auto",
+      "added": "2026-09-24",
+      "_bytes": 1672748,
+      "_meshes": 2,
+      "_extent_in": [
+        28.6427,
+        17.7466,
+        0.3399
+      ],
+      "_rotate_deg": "0,0,0",
+      "_rotate_why": "[ADDED 2026-09-24 4:12p] Old open item #9, blocked since 9/23. It was NOT a scale problem: the old exporter wrote Component2 47.2690 in and Component3 6.1845 in out of position, which inflated the assembly bbox and made the builder's unit check read 67.26 raw units/in against mm's 25.4 - the refusal was correct, the cause was placement. Re-exported through export_cloud_doc_stl_20260924g.py: [PLACEMENT FIXED] on both bodies. It then hit the OLD solidity gate (1 mesh not watertight, 0 open boundary edges); measurement showed v/f 0.42 and 3,084 non-manifold edges - welded and hole-free, not the shattered signature (v/f ~3.0, 116,664 open edges). The gate was rebuilt to test that signature and proven 6/6 against the real .bak-shattered files. Facing READ, not inferred: 0,0,0 shows 'McClure' correctly; 0,180,0 is MIRRORED.",
+      "_source_export": "C:/DNK/jobs/_web_models/max_sign_frame_g - exported 2026-09-24 4:06p by export_cloud_doc_stl_20260924g.py"
     },
     {
       "id": "ornamental-cross",
