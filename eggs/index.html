@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Egg Money</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Eggs">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%23E8A93E'/%3E%3Cellipse cx='90' cy='104' rx='46' ry='58' fill='%23FFF8EC'/%3E%3Cellipse cx='72' cy='82' rx='14' ry='9' fill='%23FFFFFF' opacity='0.6'/%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #FBF3E7;
+    --surface: #FFFFFF;
+    --surface-2: #F3E7D3;
+    --text: #3A2E22;
+    --text-muted: #8A7A66;
+    --accent: #E8A93E;
+    --accent-text: #3A2408;
+    --border: #E4D5BC;
+    --income: #4C7A4C;
+    --expense: #B5533C;
+    --danger: #C0392B;
+    --shadow: rgba(58,46,34,0.14);
+    color-scheme: light;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #221A12;
+      --surface: #2E2416;
+      --surface-2: #3A2E1C;
+      --text: #F2E6D3;
+      --text-muted: #B8A688;
+      --accent: #E8A93E;
+      --accent-text: #241B0A;
+      --border: #4A3B26;
+      --income: #86C186;
+      --expense: #E08868;
+      --danger: #E57368;
+      --shadow: rgba(0,0,0,0.45);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #221A12;
+    --surface: #2E2416;
+    --surface-2: #3A2E1C;
+    --text: #F2E6D3;
+    --text-muted: #B8A688;
+    --accent: #E8A93E;
+    --accent-text: #241B0A;
+    --border: #4A3B26;
+    --income: #86C186;
+    --expense: #E08868;
+    --danger: #E57368;
+    --shadow: rgba(0,0,0,0.45);
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  }
+  [hidden] { display: none !important; }
+  .wrap { max-width: 480px; margin: 0 auto; }
+  header {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    background: var(--bg);
+    padding: 18px 0 10px;
+    z-index: 5;
+  }
+  h1 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  .date-sub { margin-top: 2px; color: var(--text-muted); font-size: 14px; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 10px var(--shadow);
+  }
+
+  .segmented {
+    display: flex;
+    background: var(--surface-2);
+    border-radius: 999px;
+    padding: 3px;
+    gap: 3px;
+    margin-bottom: 12px;
+  }
+  .segmented button {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 6px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .segmented button.active {
+    background: var(--accent);
+    color: var(--accent-text);
+  }
+
+  .totals-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .stat { text-align: center; }
+  .stat .label { font-size: 12px; color: var(--text-muted); letter-spacing: 0.02em; }
+  .stat .value {
+    font-size: 19px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    margin-top: 2px;
+  }
+  .net-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+  .net-row .label { font-size: 14px; color: var(--text-muted); }
+  .net-row .value { font-size: 20px; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+  .price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .price-row .label { font-size: 14px; color: var(--text-muted); }
+  .price-field {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--surface-2);
+    border-radius: 10px;
+    padding: 6px 10px;
+  }
+  .price-field span { color: var(--text-muted); font-size: 15px; }
+  .price-field input {
+    width: 64px;
+    border: none;
+    background: transparent;
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .price-field input:focus { outline: none; }
+  .price-help { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+
+  .btn-primary {
+    width: 100%;
+    border: none;
+    border-radius: 16px;
+    background: var(--accent);
+    color: var(--accent-text);
+    font-size: 19px;
+    font-weight: 800;
+    padding: 20px 12px;
+    cursor: pointer;
+    transition: transform 120ms ease, filter 120ms ease;
+  }
+  .btn-primary.is-flashing { transform: scale(0.97); filter: brightness(1.12); }
+  .btn-secondary {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 700;
+    padding: 14px 12px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  .sheet { margin-top: 10px; }
+  .field { margin-bottom: 10px; }
+  .field label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 4px; }
+  .field input {
+    width: 100%;
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--text);
+    border-radius: 10px;
+    padding: 12px 10px;
+    font-size: 16px;
+  }
+  .field input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .sheet-actions { display: flex; gap: 8px; margin-top: 4px; }
+  .sheet-actions button { flex: 1; padding: 12px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; }
+  .sheet-save { border: none; background: var(--accent); color: var(--accent-text); }
+  .sheet-cancel { border: 1px solid var(--border); background: transparent; color: var(--text); }
+  .field-error { color: var(--danger); font-size: 13px; margin-top: -4px; margin-bottom: 8px; }
+
+  h2 { font-size: 15px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin: 18px 0 8px; }
+
+  .history-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .history-row:last-child { border-bottom: none; }
+  .hr-main { flex: 1; min-width: 0; }
+  .hr-top { display: flex; gap: 8px; align-items: baseline; }
+  .hr-date { font-size: 13px; color: var(--text-muted); }
+  .hr-type { font-size: 14px; font-weight: 700; }
+  .hr-note {
+    font-size: 13px;
+    color: var(--text-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .hr-amount { font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .amount-income { color: var(--income); }
+  .amount-expense { color: var(--expense); }
+  .hr-delete {
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 12px;
+    padding: 6px 4px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .hr-delete.confirming { color: var(--danger); font-weight: 700; }
+
+  .empty-state { text-align: center; color: var(--text-muted); font-size: 14px; padding: 22px 8px; }
+
+  .footer-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+  .btn-copy {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    border-radius: 12px;
+    padding: 13px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .btn-copy.copied { color: var(--income); border-color: var(--income); }
+  .email-link {
+    display: block;
+    text-align: center;
+    padding: 13px;
+    border-radius: 12px;
+    color: var(--text);
+    background: var(--surface-2);
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Egg Money</h1>
+    <div class="date-sub" id="todayLabel"></div>
+  </header>
+
+  <div class="card">
+    <div class="segmented" id="rangeToggle">
+      <button type="button" data-range="month" class="active">This month</button>
+      <button type="button" data-range="all">All time</button>
+    </div>
+    <div class="totals-grid">
+      <div class="stat">
+        <div class="label">Dozens sold</div>
+        <div class="value" id="statDozens">0</div>
+      </div>
+      <div class="stat">
+        <div class="label">Egg income</div>
+        <div class="value" id="statIncome">$0.00</div>
+      </div>
+      <div class="stat">
+        <div class="label">Expenses</div>
+        <div class="value" id="statExpenses">$0.00</div>
+      </div>
+    </div>
+    <div class="net-row">
+      <div class="label">Net</div>
+      <div class="value" id="statNet">$0.00</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="price-row">
+      <div class="label">Price per dozen</div>
+      <div class="price-field">
+        <span>$</span>
+        <input id="priceInput" type="number" inputmode="decimal" step="0.01" min="0" value="5.00">
+      </div>
+    </div>
+    <div class="price-help">Applies to sales from now on.</div>
+  </div>
+
+  <button type="button" class="btn-primary" id="soldBtn">Sold 1 dozen</button>
+  <button type="button" class="btn-secondary" id="addExpenseBtn">Add expense</button>
+
+  <div class="card sheet" id="expenseSheet" hidden>
+    <div class="field">
+      <label for="expenseAmount">Amount ($)</label>
+      <input id="expenseAmount" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0.00">
+    </div>
+    <div class="field">
+      <label for="expenseNote">What for</label>
+      <input id="expenseNote" type="text" placeholder="Feed, boxes, gas...">
+    </div>
+    <div class="field-error" id="expenseError" hidden>Enter an amount more than $0.</div>
+    <div class="sheet-actions">
+      <button type="button" class="sheet-cancel" id="expenseCancel">Cancel</button>
+      <button type="button" class="sheet-save" id="expenseSave">Save</button>
+    </div>
+  </div>
+
+  <h2>History</h2>
+  <div class="card" id="historyCard">
+    <div id="historyList"></div>
+  </div>
+
+  <div class="footer-actions">
+    <button type="button" class="btn-copy" id="copyBtn">Copy summary</button>
+    <a class="email-link" id="emailLink" href="#">Email summary</a>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var STORAGE_KEY = "eggMoney.v1";
+  var range = "month";
+  var pendingDeleteId = null;
+  var pendingDeleteTimer = null;
+
+  function defaultState() {
+    return { price: 500, history: [] };
+  }
+
+  function loadState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return defaultState();
+      var parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== "object") return defaultState();
+      return {
+        price: Number.isFinite(parsed.price) && parsed.price > 0 ? parsed.price : 500,
+        history: Array.isArray(parsed.history) ? parsed.history : []
+      };
+    } catch (e) {
+      return defaultState();
+    }
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {}
+  }
+
+  var state = loadState();
+
+  function makeId() {
+    return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8);
+  }
+
+  function money(cents) {
+    var v = (Math.round(cents) / 100).toFixed(2);
+    return "$" + v;
+  }
+
+  function formatDate(iso) {
+    try {
+      var d = new Date(iso);
+      return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    } catch (e) {
+      return iso;
+    }
+  }
+
+  function inRange(iso, r) {
+    if (r === "all") return true;
+    var now = new Date();
+    var d = new Date(iso);
+    return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+  }
+
+  function filteredHistory() {
+    return state.history.filter(function (r) { return inRange(r.date, range); });
+  }
+
+  function computeTotals(list) {
+    var dozens = 0, income = 0, expense = 0;
+    for (var i = 0; i < list.length; i++) {
+      var r = list[i];
+      if (r.type === "sale") { dozens += 1; income += r.cents; }
+      else { expense += r.cents; }
+    }
+    return { dozens: dozens, income: income, expense: expense, net: income - expense };
+  }
+
+  function sortedNewestFirst(list) {
+    return list.slice().sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
+  }
+
+  function buildSummaryText() {
+    var list = sortedNewestFirst(filteredHistory());
+    var t = computeTotals(list);
+    var rangeLabel = range === "all" ? "All time" : "This month";
+    var lines = [];
+    lines.push("Egg Money summary - " + rangeLabel);
+    lines.push("Dozens sold: " + t.dozens);
+    lines.push("Egg income: " + money(t.income));
+    lines.push("Expenses: " + money(t.expense));
+    lines.push("Net: " + money(t.net));
+    lines.push("");
+    lines.push("History:");
+    if (list.length === 0) {
+      lines.push("No entries yet.");
+    } else {
+      list.forEach(function (r) {
+        var d = formatDate(r.date);
+        if (r.type === "sale") {
+          lines.push(d + "  Sale  +" + money(r.cents));
+        } else {
+          lines.push(d + "  Expense  -" + money(r.cents) + (r.note ? "  (" + r.note + ")" : ""));
+        }
+      });
+    }
+    return lines.join("\n");
+  }
+
+  function render() {
+    document.getElementById("statDozens").textContent = String(computeTotals(filteredHistory()).dozens);
+    var t = computeTotals(filteredHistory());
+    document.getElementById("statDozens").textContent = String(t.dozens);
+    document.getElementById("statIncome").textContent = money(t.income);
+    document.getElementById("statExpenses").textContent = money(t.expense);
+    var netEl = document.getElementById("statNet");
+    netEl.textContent = money(t.net);
+    netEl.style.color = t.net < 0 ? "var(--expense)" : "var(--income)";
+
+    var segButtons = document.querySelectorAll("#rangeToggle button");
+    segButtons.forEach(function (b) {
+      b.classList.toggle("active", b.getAttribute("data-range") === range);
+    });
+
+    var listEl = document.getElementById("historyList");
+    var list = sortedNewestFirst(filteredHistory());
+    listEl.innerHTML = "";
+    if (list.length === 0) {
+      var empty = document.createElement("div");
+      empty.className = "empty-state";
+      empty.textContent = "No sales yet. Tap Sold 1 dozen when you make your first sale.";
+      listEl.appendChild(empty);
+    } else {
+      list.forEach(function (r) {
+        var row = document.createElement("div");
+        row.className = "history-row";
+
+        var main = document.createElement("div");
+        main.className = "hr-main";
+        var top = document.createElement("div");
+        top.className = "hr-top";
+        var dateEl = document.createElement("span");
+        dateEl.className = "hr-date";
+        dateEl.textContent = formatDate(r.date);
+        var typeEl = document.createElement("span");
+        typeEl.className = "hr-type";
+        typeEl.textContent = r.type === "sale" ? "Sale" : "Expense";
+        top.appendChild(dateEl);
+        top.appendChild(typeEl);
+        main.appendChild(top);
+        if (r.type === "expense" && r.note) {
+          var noteEl = document.createElement("div");
+          noteEl.className = "hr-note";
+          noteEl.textContent = r.note;
+          main.appendChild(noteEl);
+        }
+
+        var amountEl = document.createElement("div");
+        amountEl.className = "hr-amount " + (r.type === "sale" ? "amount-income" : "amount-expense");
+        amountEl.textContent = (r.type === "sale" ? "+" : "-") + money(r.cents);
+
+        var delBtn = document.createElement("button");
+        delBtn.type = "button";
+        delBtn.className = "hr-delete";
+        var isConfirming = pendingDeleteId === r.id;
+        delBtn.textContent = isConfirming ? "Tap again" : "Delete";
+        if (isConfirming) delBtn.classList.add("confirming");
+        delBtn.addEventListener("click", function () { handleDeleteTap(r.id); });
+
+        row.appendChild(main);
+        row.appendChild(amountEl);
+        row.appendChild(delBtn);
+        listEl.appendChild(row);
+      });
+    }
+
+    var emailLink = document.getElementById("emailLink");
+    var subject = encodeURIComponent("Egg Money summary");
+    var body = encodeURIComponent(buildSummaryText());
+    emailLink.setAttribute("href", "mailto:?subject=" + subject + "&body=" + body);
+  }
+
+  function handleDeleteTap(id) {
+    if (pendingDeleteId === id) {
+      state.history = state.history.filter(function (r) { return r.id !== id; });
+      saveState();
+      pendingDeleteId = null;
+      if (pendingDeleteTimer) clearTimeout(pendingDeleteTimer);
+      render();
+      return;
+    }
+    pendingDeleteId = id;
+    if (pendingDeleteTimer) clearTimeout(pendingDeleteTimer);
+    pendingDeleteTimer = setTimeout(function () {
+      pendingDeleteId = null;
+      render();
+    }, 4000);
+    render();
+  }
+
+  function setToday() {
+    var el = document.getElementById("todayLabel");
+    try {
+      el.textContent = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
+    } catch (e) {
+      el.textContent = "";
+    }
+  }
+
+  function initPriceInput() {
+    var input = document.getElementById("priceInput");
+    input.value = (state.price / 100).toFixed(2);
+    input.addEventListener("change", function () {
+      var v = parseFloat(input.value);
+      if (!isFinite(v) || v <= 0) {
+        input.value = (state.price / 100).toFixed(2);
+        return;
+      }
+      state.price = Math.round(v * 100);
+      saveState();
+      input.value = (state.price / 100).toFixed(2);
+    });
+  }
+
+  function initSoldButton() {
+    var btn = document.getElementById("soldBtn");
+    btn.addEventListener("click", function () {
+      state.history.push({ id: makeId(), date: new Date().toISOString(), type: "sale", cents: state.price });
+      saveState();
+      btn.classList.add("is-flashing");
+      setTimeout(function () { btn.classList.remove("is-flashing"); }, 260);
+      render();
+    });
+  }
+
+  function initExpenseSheet() {
+    var sheet = document.getElementById("expenseSheet");
+    var addBtn = document.getElementById("addExpenseBtn");
+    var amountInput = document.getElementById("expenseAmount");
+    var noteInput = document.getElementById("expenseNote");
+    var errorEl = document.getElementById("expenseError");
+
+    addBtn.addEventListener("click", function () {
+      sheet.hidden = !sheet.hidden;
+      errorEl.hidden = true;
+      if (!sheet.hidden) amountInput.focus();
+    });
+
+    document.getElementById("expenseCancel").addEventListener("click", function () {
+      amountInput.value = "";
+      noteInput.value = "";
+      errorEl.hidden = true;
+      sheet.hidden = true;
+    });
+
+    document.getElementById("expenseSave").addEventListener("click", function () {
+      var v = parseFloat(amountInput.value);
+      if (!isFinite(v) || v <= 0) {
+        errorEl.hidden = false;
+        return;
+      }
+      var cents = Math.round(v * 100);
+      var note = noteInput.value.trim();
+      state.history.push({ id: makeId(), date: new Date().toISOString(), type: "expense", cents: cents, note: note });
+      saveState();
+      amountInput.value = "";
+      noteInput.value = "";
+      errorEl.hidden = true;
+      sheet.hidden = true;
+      render();
+    });
+  }
+
+  function initRangeToggle() {
+    document.getElementById("rangeToggle").addEventListener("click", function (e) {
+      var btn = e.target.closest("button[data-range]");
+      if (!btn) return;
+      range = btn.getAttribute("data-range");
+      render();
+    });
+  }
+
+  function fallbackCopy(text) {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function initCopyButton() {
+    var btn = document.getElementById("copyBtn");
+    btn.addEventListener("click", function () {
+      var text = buildSummaryText();
+      var showCopied = function () {
+        var original = "Copy summary";
+        btn.textContent = "Copied";
+        btn.classList.add("copied");
+        setTimeout(function () {
+          btn.textContent = original;
+          btn.classList.remove("copied");
+        }, 2000);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(showCopied).catch(function () {
+          if (fallbackCopy(text)) showCopied();
+        });
+      } else {
+        if (fallbackCopy(text)) showCopied();
+      }
+    });
+  }
+
+  setToday();
+  initPriceInput();
+  initSoldButton();
+  initExpenseSheet();
+  initRangeToggle();
+  initCopyButton();
+  render();
+})();
+</script>
+</body>
+</html>
