@@ -159,7 +159,7 @@
         pushOpen();                       // an IN with an IN already open = forgotten OUT
         open = new Date(p.t); openIdx = i; openJob = p.job || null;
       } else if (p.type === 'out' && open) {
-        out.push({ start: open, end: new Date(p.t), job: openJob, needsFix: false, live: false });
+        out.push({ start: open, end: new Date(p.t), job: openJob, fixedOut: !!p.fixed, needsFix: false, live: false });
         open = null; openIdx = -1; openJob = null;
       }
     }
@@ -168,8 +168,28 @@
   }
   function hrs(s) {
     if (s.needsFix) return 0;             // unknown duration is 0, never a guess
+    if (!okDate(s.start) || (s.end && !okDate(s.end))) return 0;  // no time on record = 0, never a guess
     var end = s.end || new Date();
     return Math.max(0, (end - s.start) / 3600000);
+  }
+  function okDate(d) { return d instanceof Date && !isNaN(d.getTime()); }
+  // ONE precision for pay [GF-0392]: each day rounds to hundredths of an hour
+  // FIRST; the week total is the SUM of those rounded days; the dollar line is
+  // that same displayed total x rate (half-up to the cent). Integer math, so the
+  // day lines, Total and $ always cross-foot exactly.
+  function h100(h) { return Math.round(h * 100 + 1e-9); }
+  function fmtH(n) { return (n / 100).toFixed(2); }
+  function money(n) { return '$' + (Math.round(n * Math.round(RATE * 100) / 100 + 1e-9) / 100).toFixed(2); }
+  // one in/out pair for the hours message, in this phone's local time
+  function inOut(s) {
+    if (!okDate(s.start) || (s.end && !okDate(s.end))) return 'in/out not recorded';
+    var t = 'In ' + fmtTime(s.start) + ' - Out ';
+    if (s.live) return t + '(still on the clock)';
+    if (s.needsFix || !s.end) return t + 'missing (not counted)';
+    t += fmtTime(s.end);
+    if (dayKey(s.end) !== dayKey(s.start)) t += ' (next day ' + fmtDate(s.end) + ')';
+    if (s.fixedOut) t += ' (out time entered later)';
+    return t;
   }
   function openFixes(punches) {
     return sessions(punches).filter(function (s) { return s.needsFix; });
@@ -208,7 +228,7 @@
       if (dayKey(s.start) === todayKey) tHrs += hrs(s);
     });
     document.getElementById('clock').textContent =
-      'Today: ' + tHrs.toFixed(2) + ' hrs ($' + (tHrs * RATE).toFixed(2) + ')';
+      'Today: ' + fmtH(h100(tHrs)) + ' hrs (' + money(h100(tHrs)) + ')';
 
     // today's punch list
     var list = punches.filter(function (p) { return dayKey(new Date(p.t)) === todayKey; });
@@ -284,13 +304,15 @@
       var d = new Date(mon); d.setDate(mon.getDate() + i);
       days.push({ date: d, hrs: 0 });
     }
+    days.forEach(function (d) { d.sess = []; });
     sessions(punches).forEach(function (s) {
       for (var i = 0; i < 7; i++) {
-        if (dayKey(s.start) === dayKey(days[i].date)) { days[i].hrs += hrs(s); }
+        if (dayKey(s.start) === dayKey(days[i].date)) { days[i].hrs += hrs(s); days[i].sess.push(s); }
       }
     });
-    days.forEach(function (d) { total += d.hrs; });
-    return { mon: mon, days: days, total: total };
+    var total100 = 0;
+    days.forEach(function (d) { total += d.hrs; d.h = h100(d.hrs); total100 += d.h; });
+    return { mon: mon, days: days, total: total, total100: total100 };
   }
 
   function renderWeek(punches) {
@@ -306,15 +328,15 @@
     var html = '';
     wk.days.forEach(function (d, i) {
       var cls = dayKey(d.date) === todayK ? ' class="today"' : '';
-      var val = d.hrs > 0 ? d.hrs.toFixed(2) : '—';
+      var val = d.hrs > 0 ? fmtH(d.h) : '—';
       if (unfixed[dayKey(d.date)]) {
         val = '<span style="color:var(--accent)">needs out time</span>';
       }
       html += '<tr' + cls + '><td>' + names[i] + ' ' + fmtDate(d.date) + '</td>' +
               '<td class="num">' + val + '</td></tr>';
     });
-    html += '<tr class="total"><td>Total ' + wk.total.toFixed(2) + ' hrs</td>' +
-            '<td class="num">$' + (wk.total * RATE).toFixed(2) + '</td></tr>';
+    html += '<tr class="total"><td>Total ' + fmtH(wk.total100) + ' hrs</td>' +
+            '<td class="num">' + money(wk.total100) + '</td></tr>';
     document.getElementById('wkBody').innerHTML = html;
   }
 
@@ -351,11 +373,15 @@
     var names = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     var subject = 'DNK hours - Freddy - week of ' + fmtDate(wk.mon);
     var lines = [];
+    // per day: the day's hours (same line as before), then every in/out pair under it
     wk.days.forEach(function (d, i) {
-      if (d.hrs > 0) lines.push(names[i] + ' ' + fmtDate(d.date) + ': ' + d.hrs.toFixed(2));
+      if (d.hrs > 0 || d.sess.length) {
+        lines.push(names[i] + ' ' + fmtDate(d.date) + ': ' + fmtH(d.h));
+        d.sess.forEach(function (s) { lines.push('   ' + inOut(s)); });
+      }
     });
-    lines.push('Total: ' + wk.total.toFixed(2) + ' hrs @ $' + RATE.toFixed(2) +
-               ' = $' + (wk.total * RATE).toFixed(2));
+    lines.push('Total: ' + fmtH(wk.total100) + ' hrs @ $' + RATE.toFixed(2) +
+               ' = ' + money(wk.total100));
     // by-job split so hours land against jobs, not just days
     var wkEnd = new Date(wk.mon.getTime() + 7 * 86400000);
     var byJob = {};
