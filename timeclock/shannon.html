@@ -115,7 +115,7 @@
   var wkOffset = 0; // 0 = this week
 
   function load()  { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { return []; } }
-  function save(p) { localStorage.setItem(KEY, JSON.stringify(p)); }
+  function save(p) { localStorage.setItem(KEY, JSON.stringify(p)); syncNow(); }
 
   function esc(s) {
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -290,7 +290,10 @@
     var dur = (outDate - inDate) / 3600000;
     if (!confirm(fmtDate(inDate) + ': ' + fmtTime(inDate) + ' to ' + fmtTime(outDate) +
                  ' = ' + dur.toFixed(2) + ' hrs. Save it?')) return;
-    punches.splice(idx + 1, 0, { t: outDate.toISOString(), type: 'out', fixed: true });
+    // this repairs the pairing for inP's day -- re-queue inP's own id too so
+    // the corrected session re-upserts cleanly server-side (upsert is safe).
+    if (inP.id) unmarkSynced(inP.id);
+    punches.splice(idx + 1, 0, { t: outDate.toISOString(), type: 'out', fixed: true, id: newId() });
     save(punches);
     render();
   }
@@ -345,7 +348,7 @@
       if (!confirm('Last punch was under 2 minutes ago. Punch again?')) return;
     }
     var type = (last && last.type === 'in') ? 'out' : 'in';
-    var punch = { t: new Date().toISOString(), type: type };
+    var punch = { t: new Date().toISOString(), type: type, id: newId() };
     if (type === 'in') {
       // optional job tag - blank or cancel NEVER blocks the punch (the punch is money)
       var job = prompt('What job are you on?\n(optional - leave blank and tap OK)');
@@ -413,8 +416,113 @@
     if (wkOffset < 0) { wkOffset++; render(); }
   });
 
+  // ---- GAS sync ---------------------------------------------------------
+  // Punch is saved to localStorage first, always. Sync is best-effort and
+  // never blocks or alters the punch UI. Failures are silent and queued.
+  var SYNC_URL = 'https://script.google.com/macros/s/AKfycbwVdY1B5KtM0_CVpJNcbk6dtBBSk5ULPnwDk-dFE1hFF5rBJOLNLvjsUL1iove23p4tiQ/exec';
+  var SYNCED_KEY = 'dnk_synced_shannon';
+  var EMP_NAME = 'Shannon';
+
+  function newId() { return Date.now() + '_' + Math.random().toString(36).slice(2, 8); }
+
+  function loadSynced() { try { return JSON.parse(localStorage.getItem(SYNCED_KEY)) || []; } catch (e) { return []; } }
+  function saveSynced(arr) { localStorage.setItem(SYNCED_KEY, JSON.stringify(arr)); }
+  function markSynced(ids) {
+    var s = loadSynced();
+    ids.forEach(function (id) { if (s.indexOf(id) === -1) s.push(id); });
+    saveSynced(s);
+  }
+  function unmarkSynced(id) {
+    var s = loadSynced();
+    var i = s.indexOf(id);
+    if (i !== -1) { s.splice(i, 1); saveSynced(s); }
+  }
+
+  // Backfill ids on old punches lacking one, persisting the change once.
+  function ensureIds() {
+    var punches = load();
+    var changed = false;
+    punches.forEach(function (p) {
+      if (!p.id) { p.id = newId(); changed = true; }
+    });
+    if (changed) { localStorage.setItem(KEY, JSON.stringify(punches)); }
+    return punches;
+  }
+
+  // ISO 8601 string in America/Chicago wall-clock time, offset computed live
+  // via Intl (never hardcoded, so it tracks CST/CDT correctly).
+  function chicagoIso(d) {
+    var parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Chicago', hour12: false,
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit'
+    }).formatToParts(d);
+    var map = {};
+    parts.forEach(function (p) { map[p.type] = p.value; });
+    if (map.hour === '24') map.hour = '00';
+    var asUTC = Date.UTC(Number(map.year), Number(map.month) - 1, Number(map.day),
+                          Number(map.hour), Number(map.minute), Number(map.second));
+    var diffMin = Math.round((asUTC - d.getTime()) / 60000);
+    var sign = diffMin <= 0 ? '-' : '+';
+    var abs = Math.abs(diffMin);
+    var oh = String(Math.floor(abs / 60));
+    var om = String(abs % 60);
+    if (oh.length < 2) oh = '0' + oh;
+    if (om.length < 2) om = '0' + om;
+    return map.year + '-' + map.month + '-' + map.day + 'T' +
+           map.hour + ':' + map.minute + ':' + map.second + sign + oh + ':' + om;
+  }
+
+  function collectForSync() {
+    var punches = ensureIds();
+    var synced = loadSynced();
+    var cutoff = Date.now() - 14 * 24 * 3600000;
+    var rows = [];
+    punches.forEach(function (p) {
+      var t = new Date(p.t).getTime();
+      if (isNaN(t) || t < cutoff) return;
+      if (synced.indexOf(p.id) !== -1) return;
+      rows.push({
+        timestamp: chicagoIso(new Date(p.t)),
+        employee: EMP_NAME,
+        type: p.type === 'in' ? 'IN' : 'OUT',
+        note: p.job || '',
+        id: p.id
+      });
+    });
+    return rows;
+  }
+
+  var syncing = false;
+  function syncNow() {
+    if (syncing) return;
+    var rows = collectForSync();
+    if (!rows.length) return;
+    syncing = true;
+    fetch(SYNC_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'punchBatch', data: rows })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.ok) { markSynced(rows.map(function (r) { return r.id; })); }
+      })
+      .catch(function () { /* leave queued, silent */ })
+      .then(function () { syncing = false; });
+  }
+
+  window.addEventListener('online', syncNow);
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') syncNow();
+  });
+  setInterval(syncNow, 60000);
+  // -----------------------------------------------------------------------
+
   render();
   setInterval(render, 30000); // keep the running total live while on the clock
+  ensureIds();
+  syncNow();
 })();
 </script>
 </body>
