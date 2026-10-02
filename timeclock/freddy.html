@@ -82,6 +82,20 @@
   <div id="fixlist"></div>
 </div>
 
+<div class="card" id="addcard" style="border-color:var(--accent)">
+  <h2 style="color:var(--accent)">Forgot to clock in?</h2>
+  <div id="addform" style="display:none">
+    <div style="color:var(--dim);font-size:.85rem;margin:2px 0 6px">Day</div>
+    <input type="date" id="addDate" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--line);background:#111;color:var(--txt);font-size:1rem">
+    <div style="color:var(--dim);font-size:.85rem;margin:8px 0 6px">Started</div>
+    <input type="time" id="addStart" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--line);background:#111;color:var(--txt);font-size:1rem">
+    <div style="color:var(--dim);font-size:.85rem;margin:8px 0 6px">Left</div>
+    <input type="time" id="addEnd" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--line);background:#111;color:var(--txt);font-size:1rem">
+    <div id="addMsg" style="color:var(--accent);font-size:.9rem;margin:8px 0 0"></div>
+  </div>
+  <button id="addbtn" style="background:var(--accent);color:#111;border:none;border-radius:10px;padding:10px 16px;font-weight:800;cursor:pointer;margin-top:8px">ADD MISSED SHIFT</button>
+</div>
+
 <div class="card">
   <h2>Today</h2>
   <div id="punches">No punches yet today.</div>
@@ -160,7 +174,7 @@
         pushOpen();                       // an IN with an IN already open = forgotten OUT
         open = new Date(p.t); openIdx = i; openJob = p.job || null;
       } else if (p.type === 'out' && open) {
-        out.push({ start: open, end: new Date(p.t), job: openJob, fixedOut: !!p.fixed, needsFix: false, live: false });
+        out.push({ start: open, end: new Date(p.t), job: openJob, fixedOut: !!p.fixed, manual: !!p.manual, needsFix: false, live: false });
         open = null; openIdx = -1; openJob = null;
       }
     }
@@ -190,6 +204,7 @@
     t += fmtTime(s.end);
     if (dayKey(s.end) !== dayKey(s.start)) t += ' (next day ' + fmtDate(s.end) + ')';
     if (s.fixedOut) t += ' (out time entered later)';
+    if (s.manual) t += ' (MANUAL - whole shift entered later)';
     return t;
   }
   function openFixes(punches) {
@@ -301,6 +316,74 @@
     render();
   }
 
+  // A whole forgotten shift (never clocked in) is added here: day + start +
+  // end. It writes a normal IN and OUT punch, slotted in time order, each
+  // marked manual with a note, so it pays, syncs and emails like any other
+  // punch -- and the hours email labels it (MANUAL). Refusals write nothing.
+  // Returns the error text, or '' when saved.
+  function addShift(dateStr, startStr, endStr) {
+    var dm = String(dateStr || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    var sm = String(startStr || '').match(/^(\d{1,2}):(\d{2})$/);
+    var em = String(endStr || '').match(/^(\d{1,2}):(\d{2})$/);
+    if (!dm || !sm || !em) return 'Fill in the day, start time and end time.';
+    var y = +dm[1], mo = +dm[2] - 1, da = +dm[3];
+    var inDate = new Date(y, mo, da, +sm[1], +sm[2], 0, 0);
+    var outDate = new Date(y, mo, da, +em[1], +em[2], 0, 0);
+    if (!okDate(inDate) || !okDate(outDate) || inDate.getDate() !== da) return 'Not a valid day or time.';
+    if (outDate <= inDate) return 'End time must be after start time.';
+    var now = new Date();
+    if (outDate > now) return 'That shift is in the future - nothing saved.';
+    if (inDate.getTime() < now.getTime() - 14 * 24 * 3600000) return 'That is more than 14 days ago - text Dylan instead. Nothing saved.';
+    var dur = (outDate - inDate) / 3600000;
+    if (dur > 16) return 'That is longer than 16 hours - check the times. Nothing saved.';
+    var punches = load();
+    var clash = sessions(punches).filter(function (s) {
+      var e = s.end || (s.live ? now : null);
+      if (!e) return s.start < outDate;    // open IN (no out yet) at or before this shift
+      return s.start < outDate && e > inDate;
+    });
+    if (clash.length) {
+      var c = clash[0];
+      if (!c.end) return 'You have a clock-in at ' + fmtDate(c.start) + ' ' + fmtTime(c.start) +
+                         ' with no clock-out. Clock out or set that clock-out time first. Nothing saved.';
+      return 'That overlaps punches already on ' + fmtDate(c.start) + ' (' + fmtTime(c.start) +
+             ' - ' + fmtTime(c.end) + '). Nothing saved.';
+    }
+    var pos = punches.length;
+    for (var i = 0; i < punches.length; i++) {
+      if (new Date(punches[i].t) > inDate) { pos = i; break; }
+    }
+    if (pos > 0 && punches[pos - 1].type === 'in') {
+      return 'There is an open clock-in before that shift. Fix it first. Nothing saved.';
+    }
+    if (!confirm('Add missed shift ' + fmtDate(inDate) + ': ' + fmtTime(inDate) + ' to ' +
+                 fmtTime(outDate) + ' = ' + dur.toFixed(2) + ' hrs?\nDylan will see it marked MANUAL.')) return 'Not saved.';
+    var note = 'MANUAL - missed shift added ' + fmtDate(now) + ' ' + fmtTime(now);
+    punches.splice(pos, 0,
+      { t: inDate.toISOString(), type: 'in', manual: true, note: note, id: newId() },
+      { t: outDate.toISOString(), type: 'out', manual: true, note: note, id: newId() });
+    save(punches);
+    render();
+    return '';
+  }
+
+  document.getElementById('addbtn').addEventListener('click', function () {
+    var form = document.getElementById('addform');
+    var msg = document.getElementById('addMsg');
+    if (form.style.display === 'none') {
+      form.style.display = 'block'; msg.textContent = '';
+      this.textContent = 'SAVE MISSED SHIFT';
+      return;
+    }
+    var err = addShift(document.getElementById('addDate').value,
+                       document.getElementById('addStart').value,
+                       document.getElementById('addEnd').value);
+    if (err) { msg.textContent = err; return; }
+    msg.textContent = 'Saved.';
+    form.style.display = 'none';
+    this.textContent = 'ADD MISSED SHIFT';
+  });
+
   function weekData(punches, offset) {
     var mon = monday(offset);
     var days = [], total = 0;
@@ -380,7 +463,8 @@
     // per day: the day's hours (same line as before), then every in/out pair under it
     wk.days.forEach(function (d, i) {
       if (d.hrs > 0 || d.sess.length) {
-        lines.push(names[i] + ' ' + fmtDate(d.date) + ': ' + fmtH(d.h));
+        var man = d.sess.some(function (s) { return s.manual; }) ? ' (MANUAL)' : '';
+        lines.push(names[i] + ' ' + fmtDate(d.date) + ': ' + fmtH(d.h) + man);
         d.sess.forEach(function (s) { lines.push('   ' + inOut(s)); });
       }
     });
@@ -489,7 +573,7 @@
         timestamp: chicagoIso(new Date(p.t)),
         employee: EMP_NAME,
         type: p.type === 'in' ? 'IN' : 'OUT',
-        note: p.job || '',
+        note: p.note ? (p.job ? p.job + ' | ' : '') + p.note : (p.job || ''),
         id: p.id
       });
     });
