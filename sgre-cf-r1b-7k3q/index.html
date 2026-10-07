@@ -65,11 +65,17 @@
   <img id="iso" src="assets/iso_B.png" alt="Isometric view" style="width:100%;max-width:760px;display:block;margin:28px auto 0;border-radius:12px;border:1px solid var(--line);background:#fff">
 </div></section>
 <script>
+(function(){
 var M={A:["assets/sgre_crows_foot_r1A.glb","assets/iso_A.png"],B:["assets/sgre_crows_foot_r1B.glb","assets/iso_B.png"]};
-document.querySelectorAll("#tg button").forEach(function(b){b.onclick=function(){
-  var m=M[b.dataset.k];document.getElementById("mv").src=m[0];document.getElementById("iso").src=m[1];
-  document.querySelectorAll("#tg button").forEach(function(o){var on=o===b;o.style.background=on?"var(--navy)":"#fff";o.style.color=on?"#fff":"var(--navy)";});
-};});
+var mv=document.getElementById("mv"),iso=document.getElementById("iso"),btns=document.querySelectorAll("#tg button");
+function setDesign(k){
+  var m=M[k];if(!m||!mv)return;
+  mv.setAttribute("src",m[0]);mv.src=m[0];if(iso)iso.src=m[1];
+  btns.forEach(function(o){var on=o.getAttribute("data-k")===k;o.setAttribute("aria-pressed",on?"true":"false");o.classList.toggle("active",on);o.style.background=on?"var(--navy)":"#fff";o.style.color=on?"#fff":"var(--navy)";});
+}
+btns.forEach(function(b){b.type="button";b.addEventListener("click",function(){setDesign(b.getAttribute("data-k"));});});
+setDesign("B");
+})();
 </script>
 <section class="cta"><div class="wrap">
   <h2 style="font-size:1.6rem">Questions or changes?</h2>
