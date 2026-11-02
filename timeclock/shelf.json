@@ -1,8 +1,21 @@
 {
- "generated": "2026-11-02 15:15",
+ "generated": "2026-11-02 15:30",
  "shelf": "C:\\Users\\mridy\\Desktop\\DnK custom gcodes\\READY TO CUT",
- "count": 45,
+ "count": 46,
  "rows": [
+  {
+   "file": "VENUS-SOCKET-TEST-COUPON_CRC-0.048_18.700x2.360_QTY1_20261102_18GA",
+   "ext": ".dxf",
+   "named": true,
+   "customer": "VENUS",
+   "part": "SOCKET TEST COUPON",
+   "material": "18 ga CRC (0.048)",
+   "size": "18.700x2.360",
+   "qty": "1",
+   "mtime": 1793654664,
+   "landed": "Mon 11/2 3:24p",
+   "desc": "VENUS – SOCKET TEST COUPON – 18 ga CRC (0.048) – 18.700x2.360 – qty 1 – landed Mon 11/2 3:24p"
+  },
   {
    "file": "VENUS-BACKS_CRC-0.048_48x96_QTY14_20261102_ETCH_SHEET1of7",
    "ext": ".lxds",
