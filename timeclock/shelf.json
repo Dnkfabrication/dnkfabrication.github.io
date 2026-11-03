@@ -1,8 +1,21 @@
 {
- "generated": "2026-11-03 17:15",
+ "generated": "2026-11-03 17:30",
  "shelf": "C:\\Users\\mridy\\Desktop\\DnK custom gcodes\\READY TO CUT",
- "count": 56,
+ "count": 57,
  "rows": [
+  {
+   "file": "VENUS-SHELVES_PNO-0.075_48x96_QTY2_20261103_ETCH_V7_SHEET1of4",
+   "ext": ".lxds",
+   "named": true,
+   "customer": "VENUS",
+   "part": "SHELVES",
+   "material": "14 ga PNO (0.075)",
+   "size": "48x96",
+   "qty": "2",
+   "mtime": 1793748514,
+   "landed": "Tue 11/3 5:28p",
+   "desc": "VENUS – SHELVES – 14 ga PNO (0.075) – 48x96 – qty 2 – landed Tue 11/3 5:28p"
+  },
   {
    "file": "VENUS-SHELVES_PNO-0.075_48x96_QTY1_20261103_ETCH_V7_SHEET4of4",
    "ext": ".lxds",
