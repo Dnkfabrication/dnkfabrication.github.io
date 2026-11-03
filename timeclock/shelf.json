@@ -1,8 +1,21 @@
 {
- "generated": "2026-11-03 08:45",
+ "generated": "2026-11-03 09:00",
  "shelf": "C:\\Users\\mridy\\Desktop\\DnK custom gcodes\\READY TO CUT",
- "count": 53,
+ "count": 54,
  "rows": [
+  {
+   "file": "REVLIMIT-NOMAD-500SD-MOUNT_1-8IN_HRC-0.125_3x4.885_QTY4_20261103",
+   "ext": ".dxf",
+   "named": true,
+   "customer": "REVLIMIT",
+   "part": "NOMAD 500SD MOUNT_1 8IN",
+   "material": "1/8\" HRC (0.125)",
+   "size": "3x4.885",
+   "qty": "4",
+   "mtime": 1793717245,
+   "landed": "Tue 11/3 8:47a",
+   "desc": "REVLIMIT – NOMAD 500SD MOUNT_1 8IN – 1/8\" HRC (0.125) – 3x4.885 – qty 4 – landed Tue 11/3 8:47a"
+  },
   {
    "file": "VENUS-FACES_CRC-0.048_35.73x40.17_QTY1_20261102_ETCH_V3_SHEET7of7_TABFIX",
    "ext": ".lxds",
