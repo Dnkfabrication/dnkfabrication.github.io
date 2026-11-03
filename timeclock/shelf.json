@@ -1,8 +1,21 @@
 {
- "generated": "2026-11-03 12:30",
+ "generated": "2026-11-03 12:45",
  "shelf": "C:\\Users\\mridy\\Desktop\\DnK custom gcodes\\READY TO CUT",
- "count": 54,
+ "count": 55,
  "rows": [
+  {
+   "file": "VENUS-TEST-RECEPT-0500x1155_PNO-0.075_48x96_QTY1_20261103",
+   "ext": ".dxf",
+   "named": true,
+   "customer": "VENUS",
+   "part": "TEST RECEPT 0500x1155",
+   "material": "14 ga PNO (0.075)",
+   "size": "48x96",
+   "qty": "1",
+   "mtime": 1793731386,
+   "landed": "Tue 11/3 12:43p",
+   "desc": "VENUS – TEST RECEPT 0500x1155 – 14 ga PNO (0.075) – 48x96 – qty 1 – landed Tue 11/3 12:43p"
+  },
   {
    "file": "REVLIMIT-NOMAD-500SD-MOUNT_1-8IN_HRC-0.125_3x4.885_QTY4_20261103",
    "ext": ".dxf",
