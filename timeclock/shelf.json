@@ -1,8 +1,60 @@
 {
- "generated": "2026-11-03 15:45",
+ "generated": "2026-11-03 16:00",
  "shelf": "C:\\Users\\mridy\\Desktop\\DnK custom gcodes\\READY TO CUT",
- "count": 56,
+ "count": 60,
  "rows": [
+  {
+   "file": "VENUS-WRAPCLIP-STRIP_CRC-0.048_18.37x1.58_QTY18_20261103",
+   "ext": ".lxds",
+   "named": true,
+   "customer": "VENUS",
+   "part": "WRAPCLIP STRIP",
+   "material": "18 ga CRC (0.048)",
+   "size": "18.37x1.58",
+   "qty": "18",
+   "mtime": 1793743103,
+   "landed": "Tue 11/3 3:58p",
+   "desc": "VENUS – WRAPCLIP STRIP – 18 ga CRC (0.048) – 18.37x1.58 – qty 18 – landed Tue 11/3 3:58p"
+  },
+  {
+   "file": "VENUS-SHELVES_PNO-0.075_48x96_QTY2_20261103_ETCH_V7_SHEET3of4",
+   "ext": ".lxds",
+   "named": true,
+   "customer": "VENUS",
+   "part": "SHELVES",
+   "material": "14 ga PNO (0.075)",
+   "size": "48x96",
+   "qty": "2",
+   "mtime": 1793742393,
+   "landed": "Tue 11/3 3:46p",
+   "desc": "VENUS – SHELVES – 14 ga PNO (0.075) – 48x96 – qty 2 – landed Tue 11/3 3:46p"
+  },
+  {
+   "file": "VENUS-SHELVES_PNO-0.075_48x96_QTY2_20261103_ETCH_V7_SHEET2of4",
+   "ext": ".lxds",
+   "named": true,
+   "customer": "VENUS",
+   "part": "SHELVES",
+   "material": "14 ga PNO (0.075)",
+   "size": "48x96",
+   "qty": "2",
+   "mtime": 1793742389,
+   "landed": "Tue 11/3 3:46p",
+   "desc": "VENUS – SHELVES – 14 ga PNO (0.075) – 48x96 – qty 2 – landed Tue 11/3 3:46p"
+  },
+  {
+   "file": "VENUS-SHELVES_PNO-0.075_48x96_QTY2_20261103_ETCH_V7_SHEET1of4",
+   "ext": ".lxds",
+   "named": true,
+   "customer": "VENUS",
+   "part": "SHELVES",
+   "material": "14 ga PNO (0.075)",
+   "size": "48x96",
+   "qty": "2",
+   "mtime": 1793742385,
+   "landed": "Tue 11/3 3:46p",
+   "desc": "VENUS – SHELVES – 14 ga PNO (0.075) – 48x96 – qty 2 – landed Tue 11/3 3:46p"
+  },
   {
    "file": "VENUS-SHELVES_PNO-0.075_48x96_QTY1_20261103_ETCH_V7_SHEET4of4",
    "ext": ".lxds",
