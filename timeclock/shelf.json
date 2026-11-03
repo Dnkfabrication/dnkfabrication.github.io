@@ -1,7 +1,7 @@
 {
- "generated": "2026-11-03 16:15",
+ "generated": "2026-11-03 16:30",
  "shelf": "C:\\Users\\mridy\\Desktop\\DnK custom gcodes\\READY TO CUT",
- "count": 60,
+ "count": 59,
  "rows": [
   {
    "file": "VENUS-LBRACKET_HRC-0.105_21x30_QTY25_20261103",
@@ -39,19 +39,6 @@
    "size": "48x96",
    "qty": "2",
    "mtime": 1793742389,
-   "landed": "Tue 11/3 3:46p",
-   "desc": "VENUS – SHELVES – 14 ga PNO (0.075) – 48x96 – qty 2 – landed Tue 11/3 3:46p"
-  },
-  {
-   "file": "VENUS-SHELVES_PNO-0.075_48x96_QTY2_20261103_ETCH_V7_SHEET1of4",
-   "ext": ".lxds",
-   "named": true,
-   "customer": "VENUS",
-   "part": "SHELVES",
-   "material": "14 ga PNO (0.075)",
-   "size": "48x96",
-   "qty": "2",
-   "mtime": 1793742385,
    "landed": "Tue 11/3 3:46p",
    "desc": "VENUS – SHELVES – 14 ga PNO (0.075) – 48x96 – qty 2 – landed Tue 11/3 3:46p"
   },
