@@ -1,20 +1,20 @@
 {
- "generated": "2026-11-03 16:00",
+ "generated": "2026-11-03 16:15",
  "shelf": "C:\\Users\\mridy\\Desktop\\DnK custom gcodes\\READY TO CUT",
  "count": 60,
  "rows": [
   {
-   "file": "VENUS-WRAPCLIP-STRIP_CRC-0.048_18.37x1.58_QTY18_20261103",
+   "file": "VENUS-LBRACKET_HRC-0.105_21x30_QTY25_20261103",
    "ext": ".lxds",
    "named": true,
    "customer": "VENUS",
-   "part": "WRAPCLIP STRIP",
-   "material": "18 ga CRC (0.048)",
-   "size": "18.37x1.58",
-   "qty": "18",
-   "mtime": 1793743103,
-   "landed": "Tue 11/3 3:58p",
-   "desc": "VENUS – WRAPCLIP STRIP – 18 ga CRC (0.048) – 18.37x1.58 – qty 18 – landed Tue 11/3 3:58p"
+   "part": "LBRACKET",
+   "material": "12 ga HRC (0.105)",
+   "size": "21x30",
+   "qty": "25",
+   "mtime": 1793743403,
+   "landed": "Tue 11/3 4:03p",
+   "desc": "VENUS – LBRACKET – 12 ga HRC (0.105) – 21x30 – qty 25 – landed Tue 11/3 4:03p"
   },
   {
    "file": "VENUS-SHELVES_PNO-0.075_48x96_QTY2_20261103_ETCH_V7_SHEET3of4",
