@@ -143,12 +143,27 @@
   function fmtDate(d) { return (d.getMonth() + 1) + '/' + d.getDate(); }
   function dayKey(d)  { return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
 
-  function monday(offsetWeeks) {
-    var d = new Date();
-    d.setHours(0, 0, 0, 0);
-    var dow = (d.getDay() + 6) % 7; // Mon=0
-    d.setDate(d.getDate() - dow + offsetWeeks * 7);
-    return d;
+  // PAY WEEK [D 11/6 10:01a "our pay weeks will run from sat to friday"]: weeks starting
+  // on/after CUT (Sat 2026-11-07) run Sat..Fri. Anything before CUT keeps the old Monday
+  // weeks, so nothing paid before 11/7 moves. The old week of Mon 11/2 therefore ends Fri 11/6.
+  var CUT = new Date(2026, 10, 7);
+  var DIFF_PCT = 15; // weekend differential [D 11/6 10:01a], Sat+Sun on/after CUT; hours credited to clock-in date
+  function addDays(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
+  function weekStartOf(d) {
+    d = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    if (d >= CUT) return addDays(d, -((d.getDay() + 1) % 7)); // Sat=0
+    return addDays(d, -((d.getDay() + 6) % 7));               // Mon=0 (old logic)
+  }
+  function weekLen(s) {
+    if (s >= CUT) return 7;
+    return Math.min(7, Math.round((CUT - s) / 86400000));
+  }
+  function isWeekendDiff(d) { return d >= CUT && (d.getDay() === 0 || d.getDay() === 6); }
+  function monday(offsetWeeks) { // start of the pay week, offsetWeeks from this one
+    var s = weekStartOf(new Date());
+    while (offsetWeeks < 0) { s = weekStartOf(addDays(s, -1)); offsetWeeks++; }
+    while (offsetWeeks > 0) { s = addDays(s, weekLen(s)); offsetWeeks--; }
+    return s;
   }
 
   // Pair sequential in->out; duration credited to the IN day.
@@ -192,6 +207,9 @@
   // day lines, Total and $ always cross-foot exactly.
   function h100(h) { return Math.round(h * 100 + 1e-9); }
   function fmtH(n) { return (n / 100).toFixed(2); }
+  function cents(n) { return Math.round(n * Math.round(RATE * 100) / 100 + 1e-9); }
+  function diffCents(w100) { return Math.round(w100 * Math.round(RATE * 100) * DIFF_PCT / 10000 + 1e-9); }
+  function moneyC(c) { return '$' + (c / 100).toFixed(2); }
   function money(n) { return '$' + (Math.round(n * Math.round(RATE * 100) / 100 + 1e-9) / 100).toFixed(2); }
   // one in/out pair for the hours message, in this phone's local time
   function inOut(s) {
@@ -242,7 +260,7 @@
       if (dayKey(s.start) === todayKey) tHrs += hrs(s);
     });
     document.getElementById('clock').textContent =
-      'Today: ' + fmtH(h100(tHrs)) + ' hrs (' + money(h100(tHrs)) + ')';
+      'Today: ' + fmtH(h100(tHrs)) + ' hrs (' + moneyC(cents(h100(tHrs)) + (isWeekendDiff(new Date()) ? diffCents(h100(tHrs)) : 0)) + ')';
 
     // today's punch list
     var list = punches.filter(function (p) { return dayKey(new Date(p.t)) === todayKey; });
@@ -384,29 +402,35 @@
 
   function weekData(punches, offset) {
     var mon = monday(offset);
+    var len = weekLen(mon);
     var days = [], total = 0;
-    for (var i = 0; i < 7; i++) {
-      var d = new Date(mon); d.setDate(mon.getDate() + i);
+    for (var i = 0; i < len; i++) {
+      var d = addDays(mon, i);
       days.push({ date: d, hrs: 0 });
     }
     days.forEach(function (d) { d.sess = []; });
     sessions(punches).forEach(function (s) {
-      for (var i = 0; i < 7; i++) {
+      for (var i = 0; i < len; i++) {
         if (dayKey(s.start) === dayKey(days[i].date)) { days[i].hrs += hrs(s); days[i].sess.push(s); }
       }
     });
-    var total100 = 0;
-    days.forEach(function (d) { total += d.hrs; d.h = h100(d.hrs); total100 += d.h; });
-    return { mon: mon, days: days, total: total, total100: total100 };
+    var total100 = 0, w100 = 0;
+    days.forEach(function (d) {
+      total += d.hrs; d.h = h100(d.hrs); total100 += d.h;
+      if (isWeekendDiff(d.date)) w100 += d.h;
+    });
+    var base = cents(total100), dc = diffCents(w100);
+    return { mon: mon, len: len, end: addDays(mon, len), days: days, total: total, total100: total100,
+             w100: w100, baseCents: base, diffCents: dc, totalCents: base + dc };
   }
 
   function renderWeek(punches) {
     var wk = weekData(punches, wkOffset);
-    var end = new Date(wk.mon); end.setDate(wk.mon.getDate() + 6);
+    var end = addDays(wk.mon, wk.len - 1);
     document.getElementById('wkLabel').textContent =
       (wkOffset === 0 ? 'This week ' : '') + fmtDate(wk.mon) + ' – ' + fmtDate(end);
 
-    var names = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    var names = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     var todayK = dayKey(new Date());
     var unfixed = {};
     openFixes(punches).forEach(function (s) { unfixed[dayKey(s.start)] = true; });
@@ -417,11 +441,15 @@
       if (unfixed[dayKey(d.date)]) {
         val = '<span style="color:var(--accent)">needs out time</span>';
       }
-      html += '<tr' + cls + '><td>' + names[i] + ' ' + fmtDate(d.date) + '</td>' +
+      html += '<tr' + cls + '><td>' + names[d.date.getDay()] + ' ' + fmtDate(d.date) + '</td>' +
               '<td class="num">' + val + '</td></tr>';
     });
+    if (wk.w100 > 0) {
+      html += '<tr><td>Weekend differential (' + DIFF_PCT + '%) ' + fmtH(wk.w100) + ' hrs</td>' +
+              '<td class="num">' + moneyC(wk.diffCents) + '</td></tr>';
+    }
     html += '<tr class="total"><td>Total ' + fmtH(wk.total100) + ' hrs</td>' +
-            '<td class="num">' + money(wk.total100) + '</td></tr>';
+            '<td class="num">' + moneyC(wk.totalCents) + '</td></tr>';
     document.getElementById('wkBody').innerHTML = html;
   }
 
@@ -455,21 +483,28 @@
   document.getElementById('sendbtn').addEventListener('click', function () {
     var punches = load();
     var wk = weekData(punches, wkOffset);
-    var names = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    var names = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     var subject = 'DNK hours - Xaiden - week of ' + fmtDate(wk.mon);
     var lines = [];
     // per day: the day's hours (same line as before), then every in/out pair under it
     wk.days.forEach(function (d, i) {
       if (d.hrs > 0 || d.sess.length) {
         var man = d.sess.some(function (s) { return s.manual; }) ? ' (MANUAL)' : '';
-        lines.push(names[i] + ' ' + fmtDate(d.date) + ': ' + fmtH(d.h) + man);
+        lines.push(names[d.date.getDay()] + ' ' + fmtDate(d.date) + ': ' + fmtH(d.h) + man);
         d.sess.forEach(function (s) { lines.push('   ' + inOut(s)); });
       }
     });
-    lines.push('Total: ' + fmtH(wk.total100) + ' hrs @ $' + RATE.toFixed(2) +
-               ' = ' + money(wk.total100));
+    if (wk.w100 > 0) {
+      lines.push('Weekend differential (' + DIFF_PCT + '%): ' + fmtH(wk.w100) + ' hrs x $' + RATE.toFixed(2) +
+                 ' x ' + (DIFF_PCT / 100).toFixed(2) + ' = ' + moneyC(wk.diffCents));
+      lines.push('Total: ' + fmtH(wk.total100) + ' hrs @ $' + RATE.toFixed(2) +
+                 ' + weekend differential = ' + moneyC(wk.totalCents));
+    } else {
+      lines.push('Total: ' + fmtH(wk.total100) + ' hrs @ $' + RATE.toFixed(2) +
+                 ' = ' + moneyC(wk.totalCents));
+    }
     // by-job split so hours land against jobs, not just days
-    var wkEnd = new Date(wk.mon.getTime() + 7 * 86400000);
+    var wkEnd = wk.end;
     var byJob = {};
     sessions(punches).forEach(function (s) {
       if (s.start >= wk.mon && s.start < wkEnd && hrs(s) > 0) {
@@ -484,7 +519,7 @@
     }
     // never send a total that quietly omits a day - Dylan pays off this message
     var miss = openFixes(punches).filter(function (s) {
-      return s.start >= wk.mon && s.start < new Date(wk.mon.getTime() + 7 * 86400000);
+      return s.start >= wk.mon && s.start < wk.end;
     });
     if (miss.length) {
       lines.push('NOTE: ' + miss.map(function (s) { return fmtDate(s.start); }).join(', ') +
