@@ -1,8 +1,21 @@
 {
- "generated": "2026-11-06 10:15",
+ "generated": "2026-11-06 10:30",
  "shelf": "C:\\Users\\mridy\\Desktop\\DnK custom gcodes\\READY TO CUT",
- "count": 61,
+ "count": 62,
  "rows": [
+  {
+   "file": "CODY-MILLER-WISHLIST-DIGITS_NICKEL-0.033_2x2_QTY3_20261106_NOMIRROR_V7",
+   "ext": ".lxds",
+   "named": false,
+   "customer": "",
+   "part": "",
+   "material": "",
+   "size": "",
+   "qty": "",
+   "mtime": 1793982120,
+   "landed": "Fri 11/6 10:22a",
+   "desc": "CODY-MILLER-WISHLIST-DIGITS_NICKEL-0.033_2x2_QTY3_20261106_NOMIRROR_V7 – landed Fri 11/6 10:22a"
+  },
   {
    "file": "VENUS-SHELVES_PNO-0.075_48x96_QTY1_20261103_ETCH_V7_SHEET4of4",
    "ext": ".lxds",
