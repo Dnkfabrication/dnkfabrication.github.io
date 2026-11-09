@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Upload Your File for a Laser Quote | DNK Fabrication</title>
+<meta name="description" content="Send your DXF, DWG, STEP, PDF or photo to DNK Fabrication in Lubbock, TX for a CNC laser cutting quote.">
+<style>
+  :root{--orange:#E05C00;--char:#111111;--paper:#f4f2ee;--dim:#6b6b6b}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--char);color:#fff;font-family:Barlow,Arial,sans-serif;line-height:1.5}
+  header{padding:1.2rem 16px;border-bottom:1px solid #2a2a2a}
+  header a{color:#fff;text-decoration:none;font-weight:700;letter-spacing:.08em}
+  header a span{color:var(--orange)}
+  main{max-width:640px;margin:0 auto;padding:2rem 16px 4rem}
+  h1{font-size:1.7rem;margin:0 0 .5rem}
+  p.lead{color:#cfcfcf;margin:0 0 1.5rem}
+  label{display:block;font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;font-weight:600;margin:1.1rem 0 .35rem}
+  input[type=text],input[type=email],input[type=tel],textarea{width:100%;padding:.8rem;background:#1b1b1b;border:1px solid #3a3a3a;color:#fff;font:inherit}
+  input[type=file]{width:100%;padding:1rem;background:#1b1b1b;border:2px dashed var(--orange);color:#fff}
+  textarea{min-height:110px}
+  .hint{font-size:.8rem;color:#aaa;margin-top:.3rem}
+  button{margin-top:1.6rem;width:100%;background:var(--orange);color:#fff;border:0;padding:1rem;font:600 .85rem Barlow,Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase;cursor:pointer}
+  button[disabled]{opacity:.6;cursor:wait}
+  #msg{margin-top:1rem;padding:.9rem;display:none}
+  #msg.ok{display:block;border:1px solid var(--orange)}
+  #msg.err{display:block;border:1px solid #fff}
+  .hp{position:absolute;left:-9999px}
+  a{color:var(--orange)}
+</style>
+</head>
+<body>
+<header><a href="index.html">Dn<span>K</span> FABRICATION</a></header>
+<main>
+  <h1>Upload your file for a laser quote</h1>
+  <p class="lead" style="margin-bottom:.4rem">Quotes typically delivered same day.</p>
+  <p class="lead" style="font-size:.85rem;margin-bottom:1rem">24-48 hour rush available for laser parts, simple brackets, simple fabrication and tool repairs.</p>
+  <p class="lead">Send us your drawing and we will quote it. Material, thickness and quantity help. Prefer to talk? Call <a href="tel:8063372087">(806) 337-2087</a>.</p>
+  <form id="f" enctype="multipart/form-data" novalidate>
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" required autocomplete="name">
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" required autocomplete="email">
+    <label for="phone">Phone (optional)</label>
+    <input type="tel" id="phone" name="phone" autocomplete="tel">
+    <label for="file">Your file</label>
+    <input type="file" id="file" name="upload" required accept=".dxf,.dwg,.step,.stp,.pdf,.png,.jpg,.jpeg,.heic,.webp,.gif">
+    <div class="hint">DXF, DWG, STEP/STP, PDF or a photo. Up to 25 MB.</div>
+    <label for="message">Material, thickness, quantity, notes</label>
+    <textarea id="message" name="message" placeholder="e.g. 1/4 in A36, qty 20, need by Friday"></textarea>
+    <div class="hp"><label>Leave blank<input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label></div>
+    <button type="submit" id="go">Send file for quote</button>
+    <div id="msg" role="status"></div>
+  </form>
+</main>
+<script>
+(function () {
+  // Production endpoint = Cloudflare Worker (see upload_worker/README in marketing folder). Not deployed yet.
+  var PROD = 'https://dnk-quote-upload.dylan-5bd.workers.dev/upload';
+  var local = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+  var URL_ = local ? 'http://localhost:8791/upload' : PROD;
+  // ?formtest=1 on localhost swaps in a fake Formspree endpoint so test runs send nothing real.
+  var FORM_URL = (local && /[?&]formtest=1/.test(location.search)) ? 'http://localhost:8792/f' : 'https://formspree.io/f/xzdydozz';
+  var MAX = 25 * 1024 * 1024, OK = /\.(dxf|dwg|step|stp|pdf|png|jpe?g|heic|webp|gif)$/i;
+  var f = document.getElementById('f'), m = document.getElementById('msg'), b = document.getElementById('go');
+  function say(c, t) { m.className = c; m.textContent = t; }
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var file = document.getElementById('file').files[0];
+    if (!f.name.value.trim() || !/.+@.+\..+/.test(f.email.value)) return say('err', 'Please enter your name and a valid email.');
+    if (!file) return say('err', 'Please choose a file.');
+    if (!OK.test(file.name)) return say('err', 'That file type is not accepted. Use DXF, DWG, STEP, PDF or an image.');
+    if (file.size > MAX) return say('err', 'That file is over 25 MB. Please call or email it instead.');
+    b.disabled = true; say('ok', 'Uploading...');
+    var CALL = 'Please call (806) 337-2087 or email dylan@dnkfabrication.com.';
+    var fail = function (t) { say('err', t); b.disabled = false; };
+    // Step 1: worker stores the file only. Step 2: the browser posts the lead to Formspree like the quote form does.
+    fetch(URL_, { method: 'POST', body: new FormData(f) })
+      .then(function (r) { return r.json().then(function (j) { return { r: r, j: j }; }); })
+      .then(function (x) {
+        if (!(x.r.ok && x.j.ok && x.j.file_link)) return fail((x.j && x.j.error) || 'Upload failed, nothing was sent. ' + CALL);
+        var lead = new FormData();
+        ['name', 'email', 'phone', 'message'].forEach(function (k) { lead.append(k, f.elements[k].value); });
+        lead.append('project', 'File upload quote request');
+        lead.append('file_name', String(x.j.file_name || '').replace(/[^A-Za-z0-9._ -]/g, '').slice(0, 100));
+        lead.append('file_size', x.j.file_size);
+        lead.append('file_link', x.j.file_link);
+        lead.append('_subject', 'New DNK Fabrication Inquiry (file upload)');
+        return fetch(FORM_URL, { method: 'POST', body: lead, headers: { Accept: 'application/json' } }).then(function (r2) {
+          if (r2.ok) { say('ok', 'Received. Dylan will get back to you with a quote.'); f.reset(); b.disabled = false; }
+          else fail('Your file uploaded but we could not send your request. ' + CALL);
+        });
+      })
+      .catch(function () { fail('Something went wrong. ' + CALL); });
+  });
+})();
+</script>
+</body>
+</html>
