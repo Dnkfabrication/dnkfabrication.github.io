@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Featured Projects | DNK Fabrication | Lubbock, TX</title>
+<meta name="description" content="Featured projects from DNK Fabrication in Lubbock, TX: gallery sculpture for a First Friday art show, lighted airport letters, a custom hanging bench, and support for student robotics teams.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.dnkfabrication.com/media.html">
+<meta property="og:title" content="Featured Projects | DNK Fabrication">
+<meta property="og:description" content="Sculpture, lighted letters, custom furniture and student robotics parts, built in Lubbock, TX.">
+<meta property="og:url" content="https://www.dnkfabrication.com/media.html">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://www.dnkfabrication.com/img/media/terah-maher-albers-variations-sculpture-1.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0a0a0a;
+    --charcoal: #111111;
+    --steel: #1e1e1e;
+    --mid: #444444;
+    --dim: #888888;
+    --silver: #bbbbbb;
+    --white: #f0ede8;
+    --light: #F4F1EC;
+    --grey: #6B6B6B;
+    --orange: #E05C00;
+    --orange-dim: #A84400;
+    --rule: #333333;
+  }
+
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  img { max-width: 100%; display: block; }
+
+  /* NAV (same as home page) */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--rule);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo { text-decoration: none; }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    color: var(--silver);
+    text-decoration: none;
+    font-size: 0.72rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--orange); }
+
+  /* PAGE HEAD */
+  .page-head {
+    padding: 9rem 4rem 4rem;
+    background: var(--charcoal);
+    border-bottom: 1px solid var(--rule);
+  }
+  .wrap { max-width: 1200px; margin: 0 auto; }
+  .section-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: var(--orange);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .section-label::after { content: ''; flex: 1; max-width: 60px; height: 1px; background: var(--orange); }
+  h1, h2, h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    color: var(--light);
+  }
+  h1 { font-size: clamp(2.8rem, 7vw, 5.5rem); margin-bottom: 1.25rem; }
+  h1 em, h2 em { color: var(--orange); font-style: normal; }
+  .lede { max-width: 640px; color: var(--silver); font-size: 1.1rem; }
+
+  /* PROJECTS */
+  .project { padding: 5rem 4rem; border-bottom: 1px solid var(--rule); }
+  .project:nth-of-type(even) { background: var(--charcoal); }
+  .project-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 4rem;
+    align-items: start;
+  }
+  .project h2 { font-size: clamp(2.2rem, 4.2vw, 3.6rem); margin-bottom: 1rem; }
+  .status {
+    display: inline-block;
+    font-size: 0.62rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--black);
+    background: var(--orange);
+    padding: 0.3rem 0.7rem;
+    margin-bottom: 1rem;
+  }
+  .meta {
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    color: var(--dim);
+    border-left: 2px solid var(--orange);
+    padding-left: 0.9rem;
+    margin: 1.25rem 0;
+  }
+  .meta a { color: var(--silver); text-decoration: none; border-bottom: 1px solid var(--dim); }
+  .meta a:hover { color: var(--orange); border-color: var(--orange); }
+  .project p { color: var(--silver); margin-bottom: 1rem; }
+  .project p.facts { color: var(--dim); font-size: 0.9rem; }
+
+  .photos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
+  .photos figure { background: var(--steel); overflow: hidden; position: relative; }
+  .photos img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 3 / 4; }
+  .photos.wide { grid-template-columns: 1fr; }
+  .photos.wide img { aspect-ratio: auto; height: auto; }
+  figcaption {
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+    padding: 0.5rem 0.75rem;
+    background: var(--black);
+  }
+  .placeholder {
+    border: 1px dashed var(--mid);
+    background: var(--steel);
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem 1.5rem;
+    gap: 0.5rem;
+  }
+  .placeholder strong {
+    font-family: 'Bebas Neue', sans-serif;
+    font-weight: 400;
+    font-size: 1.8rem;
+    letter-spacing: 0.1em;
+    color: var(--orange);
+  }
+  .placeholder span { color: var(--dim); font-size: 0.9rem; max-width: 360px; }
+
+  /* CTA */
+  .cta {
+    padding: 6rem 4rem;
+    background: var(--charcoal);
+    text-align: center;
+  }
+  .cta h2 { font-size: clamp(2.5rem, 5vw, 4.5rem); margin-bottom: 1rem; }
+  .cta p { color: var(--silver); max-width: 560px; margin: 0 auto 2rem; }
+  .cta-row { display: flex; gap: 1.5rem; justify-content: center; align-items: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--orange);
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 1rem 2rem;
+    transition: background 0.2s;
+    font-family: 'Barlow', sans-serif;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--orange-dim); }
+  .btn-ghost {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    border: 1px solid var(--dim);
+    padding: 1rem 2rem;
+    transition: border-color 0.2s, color 0.2s;
+    font-family: 'Barlow', sans-serif;
+    display: inline-block;
+  }
+  .btn-ghost:hover { color: var(--orange); border-color: var(--orange); }
+  .contact-line { margin-top: 2rem; color: var(--silver); font-size: 1rem; }
+  .contact-line a { color: var(--white); text-decoration: none; border-bottom: 1px solid var(--orange); }
+  .contact-line a:hover { color: var(--orange); }
+
+  /* FOOTER (same as home page) */
+  footer {
+    background: var(--black);
+    border-top: 1px solid var(--rule);
+    padding: 2.5rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.12em; color: var(--white); }
+  .footer-brand span { color: var(--orange); }
+  .footer-copy { font-size: 0.72rem; letter-spacing: 0.1em; color: var(--mid); }
+  .footer-links { display: flex; gap: 2rem; list-style: none; }
+  .footer-links a {
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--dim);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--orange); }
+
+  @media (max-width: 900px) {
+    nav { padding: 0 1rem; }
+    .nav-links { display: none; }
+    .page-head { padding: 6.5rem 1.25rem 2.5rem; }
+    .project { padding: 3rem 1.25rem; }
+    .project-grid { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+    .cta { padding: 4rem 1.25rem; }
+    footer { flex-direction: column; gap: 1.25rem; text-align: center; padding: 2.5rem 1.25rem; }
+    .footer-links { flex-wrap: wrap; justify-content: center; row-gap: 0.75rem; max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><img src="dnk_logo_2026.png" alt="DNK Fabrication — Design, Fabrication, Manufacturing" style="height:42px;max-width:80vw;width:auto;object-fit:contain;display:block"></a>
+  <ul class="nav-links">
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="index.html#features">Features</a></li>
+    <li><a href="index.html#work">Our Work</a></li>
+    <li><a href="media.html" style="color:var(--orange)">Featured Projects</a></li>
+    <li><a href="models/">Models</a></li>
+    <li><a href="index.html#process">Process</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><a href="art.html" style="color:var(--orange)">The Collection</a></li>
+  </ul>
+</nav>
+
+<header class="page-head">
+  <div class="wrap">
+    <div class="section-label">Featured Projects</div>
+    <h1>Built in <em>Lubbock.</em></h1>
+    <p class="lede">A few of the jobs we're proud of right now: gallery sculpture, lighted letters for the airport, a custom hanging bench, and parts for student robot builders.</p>
+  </div>
+</header>
+
+<!-- 1. TERAH MAHER -->
+<section class="project" id="albers-variations">
+  <div class="wrap project-grid">
+    <div>
+      <div class="section-label">First Friday Art Trail</div>
+      <h2>Sheet-Metal Sculpture <em>On Show</em></h2>
+      <div class="meta">
+        <span class="client-name">Albers Variations</span> by <span class="client-name">Terah Maher</span>, <span class="client-name">Assistant Professor, TTU Huckabee College of Architecture</span><br>
+        <span class="client-name">November 5&amp;J Exhibition, <a href="https://casp-arts.org/studios/5j-gallery/" target="_blank" rel="noopener">CASP's 5&amp;J Gallery</a>, 1106 5th St, Lubbock</span><br>
+        First Friday Art Trail, Fri Nov 6, 2026, 6pm
+      </div>
+      <p>On Friday night the work went up in front of the public. We laser cut, formed and assembled the sculptures from the artist's own files, in 20 gauge cold rolled steel, with the slotted bends formed by hand.</p>
+      <p>We also built a stand for each piece. Six sculptures and six stands in all, and the artist was thrilled with how they turned out.</p>
+      <p class="facts">Laser cutting, hand forming, assembly, custom stands.</p>
+    </div>
+    <div class="photos">
+      <figure><img src="img/media/terah-maher-albers-variations-sculpture-1.jpg" alt="Folded sheet-metal sculpture on a black stand at a gallery show" loading="lazy" width="1200" height="1600"><figcaption>On display, First Friday</figcaption></figure>
+      <figure><img src="img/media/terah-maher-albers-variations-sculpture-2.jpg" alt="Angular folded steel sculpture with a hexagonal opening" loading="lazy" width="1200" height="1600"><figcaption>Hand-formed bends</figcaption></figure>
+      <figure><img src="img/media/terah-maher-albers-variations-sculpture-3.jpg" alt="Folded steel sculpture seen from another angle" loading="lazy" width="1200" height="1600"><figcaption>Same piece, new angle</figcaption></figure>
+      <figure><img src="img/media/terah-maher-albers-variations-sculpture-4.jpg" alt="Sheet-metal sculpture with slotted, folded planes" loading="lazy" width="1200" height="1600"><figcaption>Slotted and folded</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- 2. AIRPORT LETTERS -->
+<section class="project" id="airport-letters">
+  <div class="wrap project-grid">
+    <div>
+      <div class="status">In fabrication</div>
+      <div class="section-label">Coming Soon</div>
+      <h2>Lighted <em>Merry Christmas</em> Letters</h2>
+      <div class="meta">
+        For <span class="client-name">Lubbock International Airport</span>      </div>
+      <p>Fourteen lighted letters spelling MERRY CHRISTMAS, on a breakdown stand so they can go up and come down easily. They're in fabrication in our shop now, and powder coat starts Monday, Nov 9.</p>
+      <p>We'll post real photos as soon as they're finished and installed.</p>
+      <p class="facts">Images shown are our design rendering, not the finished letters.</p>
+    </div>
+    <div class="photos wide">
+      <figure><img src="img/media/merry-christmas-lighted-letters-design-rendering-front.jpg" alt="Design rendering of lighted red MERRY CHRISTMAS letters on a breakdown stand" loading="lazy" width="1600" height="571"><figcaption>Design rendering</figcaption></figure>
+      <figure><img src="img/media/merry-christmas-lighted-letters-design-rendering-angle.jpg" alt="Angled design rendering of the lighted letters" loading="lazy" width="1600" height="743"><figcaption>Design rendering, angled view</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- 3. BAUTISTA BENCH -->
+<section class="project" id="hanging-bench">
+  <div class="wrap project-grid">
+    <div>
+      <div class="section-label">Custom Furniture</div>
+      <h2>Custom <em>Hanging Bench</em></h2>
+      <div class="meta">
+        Built for <span class="client-name">Gerardo Bautista, Eco Design Guy</span> &middot; delivered Aug 14, 2026
+      </div>
+      <p>Gerardo Bautista is the founder of Eco Design Guy, an interdisciplinary studio whose products have been featured in Architectural Digest, HGTV and Dwell Magazine. We built this rope-hung porch bench to his drawing: about 77 in long and 34 in deep, with an 11 ga steel tube frame, flat bar slats for the seat, laser-welded panels and four corner eye bolts to hang it from.</p>
+      <p>We made it for a 73 by 33 in cushion and sent it out powder coated. The finish is what this piece is about, so we took our time on it.</p>
+      <p class="facts">Steel tube frame, laser welding, powder coat.</p>
+    </div>
+    <div class="photos wide">
+      <div class="placeholder"><strong>Photos coming</strong><span>Finished-bench photos are on their way. Check back soon.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. EDUCATIONAL ROBOTICS -->
+<section class="project" id="robotics">
+  <div class="wrap project-grid">
+    <div>
+      <div class="section-label">Community</div>
+      <h2>Educational <em>Robotics</em> Support</h2>
+      <div class="meta">
+        Texas Tech robotics teams &middot; <span class="client-name">Liberty High School Robotics, Lubbock-Cooper ISD</span>
+      </div>
+      <p>We like helping young builders get real parts for their robots. A Texas Tech robotics team came to us for laser-cut front parts and a second-generation weapon blade (Weapon V2), and a high school robotics team brought us chassis parts for their robot, cut from 1/8 in aluminum.</p>
+      <p>If you coach or run a robotics program, send us your files and tell us what you're building. We're glad to help.</p>
+      <p class="facts">Laser cutting in steel and aluminum.</p>
+    </div>
+    <div class="photos wide">
+      <div class="placeholder"><strong>Photos coming</strong><span>We'll add photos of the finished robot parts once the teams send them our way.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="contact">
+  <div class="wrap">
+    <div class="section-label" style="justify-content:center">Get In Touch</div>
+    <h2>Let's Build <em>Something.</em></h2>
+    <p>Ready to start a project or just want to talk through an idea? Reach out. We respond fast.</p>
+    <div class="cta-row">
+      <a href="index.html#contact" class="btn-primary">Tell Us What You Need</a>
+      <a href="https://g.page/r/CSYDHTjjIVr1EBM/review" class="btn-ghost" target="_blank" rel="noopener">Worked with us? Leave us a review</a>
+    </div>
+    <p class="contact-line">
+      <a href="tel:8063372087">(806) 337-2087</a> &nbsp;&middot;&nbsp;
+      <a href="mailto:dylan@dnkfabrication.com">dylan@dnkfabrication.com</a>
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-brand">Dn<span>K</span> Fabrication</div>
+  <div class="footer-copy">&copy; 2026 DNK Fabrication &middot; Lubbock, TX</div>
+  <div class="footer-copy">6417 County Road 7620, Lubbock, TX 79424 &middot; <a href="privacy.html" style="color:var(--mid)">Privacy</a></div>
+  <div class="footer-copy">Mon&ndash;Fri 7am&ndash;6pm &middot; Weekends by appointment</div>
+  <ul class="footer-links">
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="index.html#work">Work</a></li>
+    <li><a href="media.html">Featured Projects</a></li>
+    <li><a href="models/">Models</a></li>
+    <li><a href="art.html">The Collection</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+</footer>
+
+</body>
+</html>
