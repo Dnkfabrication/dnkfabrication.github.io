@@ -1,8 +1,21 @@
 {
- "generated": "2026-11-09 07:00",
+ "generated": "2026-11-09 07:15",
  "shelf": "C:\\Users\\mridy\\Desktop\\DnK custom gcodes\\READY TO CUT",
  "count": 62,
  "rows": [
+  {
+   "file": "VENUS-WRAPCLIP-STRIP_CRC-0.048_18.00x3.08_QTY2_20261109_ETCH",
+   "ext": ".dxf",
+   "named": true,
+   "customer": "VENUS",
+   "part": "WRAPCLIP STRIP",
+   "material": "18 ga CRC (0.048)",
+   "size": "18.00x3.08",
+   "qty": "2",
+   "mtime": 1794229183,
+   "landed": "Mon 11/9 6:59a",
+   "desc": "VENUS – WRAPCLIP STRIP – 18 ga CRC (0.048) – 18.00x3.08 – qty 2 – landed Mon 11/9 6:59a"
+  },
   {
    "file": "CODY-MILLER-WISHLIST-DIGITS_NICKEL-0.033_2x2_QTY3_20261106_NOMIRROR_V7",
    "ext": ".lxds",
@@ -41,19 +54,6 @@
    "mtime": 1793748921,
    "landed": "Tue 11/3 5:35p",
    "desc": "VENUS – SHELVES – 14 ga PNO (0.075) – 48x96 – qty 2 – landed Tue 11/3 5:35p"
-  },
-  {
-   "file": "VENUS-WRAPCLIP-STRIP_CRC-0.048_18.00x1.42_QTY18_20261103_ETCH",
-   "ext": ".dxf",
-   "named": true,
-   "customer": "VENUS",
-   "part": "WRAPCLIP STRIP",
-   "material": "18 ga CRC (0.048)",
-   "size": "18.00x1.42",
-   "qty": "18",
-   "mtime": 1793748874,
-   "landed": "Tue 11/3 5:34p",
-   "desc": "VENUS – WRAPCLIP STRIP – 18 ga CRC (0.048) – 18.00x1.42 – qty 18 – landed Tue 11/3 5:34p"
   },
   {
    "file": "VENUS-WRAPCLIP_CRC-0.048_1.000x1.417_QTY18_20261103_ETCH",
