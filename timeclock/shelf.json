@@ -1,8 +1,21 @@
 {
- "generated": "2026-11-09 10:15",
+ "generated": "2026-11-10 15:30",
  "shelf": "C:\\Users\\mridy\\Desktop\\DnK custom gcodes\\READY TO CUT",
- "count": 62,
+ "count": 63,
  "rows": [
+  {
+   "file": "SCOTT-SLOTTEST_HRC-0.250_3x3_QTY1_20261110",
+   "ext": ".dxf",
+   "named": true,
+   "customer": "SCOTT",
+   "part": "SLOTTEST",
+   "material": "1/4\" HRC (0.250)",
+   "size": "3x3",
+   "qty": "1",
+   "mtime": 1794345956,
+   "landed": "Tue 11/10 3:25p",
+   "desc": "SCOTT – SLOTTEST – 1/4\" HRC (0.250) – 3x3 – qty 1 – landed Tue 11/10 3:25p"
+  },
   {
    "file": "VENUS-WRAPCLIP-STRIP_CRC-0.048_18.00x3.08_QTY2_20261109_ETCH",
    "ext": ".dxf",
