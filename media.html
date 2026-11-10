@@ -142,6 +142,8 @@
   .photos img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 3 / 4; }
   .photos.wide { grid-template-columns: 1fr; }
   .photos.wide img { aspect-ratio: auto; height: auto; }
+  .photos figure.video { max-width: 420px; width: 100%; justify-self: center; }
+  .photos video { display: block; width: 100%; height: auto; aspect-ratio: 9 / 16; background: var(--black); }
   figcaption {
     font-size: 0.68rem;
     letter-spacing: 0.12em;
@@ -343,12 +345,12 @@
       <div class="meta">
         Texas Tech robotics teams &middot; <span class="client-name">Liberty High School Robotics, Lubbock-Cooper ISD</span>
       </div>
-      <p>We like helping young builders get real parts for their robots. A Texas Tech robotics team came to us for laser-cut front parts and a second-generation weapon blade (Weapon V2), and a high school robotics team brought us chassis parts for their robot, cut from 1/8 in aluminum.</p>
+      <p>We like helping young builders get real parts for their robots. A Texas Tech robotics team came to us for laser-cut steel blades, and the Liberty High School robotics team brought us chassis parts for their robot, cut from 1/8 in aluminum.</p>
       <p>If you coach or run a robotics program, send us your files and tell us what you're building. We're glad to help.</p>
       <p class="facts">Laser cutting in steel and aluminum.</p>
     </div>
     <div class="photos wide">
-      <div class="placeholder"><strong>Photos coming</strong><span>We'll add photos of the finished robot parts once the teams send them our way.</span></div>
+      <figure class="video"><video src="img/media/liberty-robotics-chassis-laser-cut.mp4" poster="img/media/liberty-robotics-chassis-laser-cut-poster.jpg" width="720" height="1280" muted loop playsinline autoplay preload="metadata" controls aria-label="Laser cutting robot chassis parts for the Liberty High School robotics team"></video><figcaption>On the laser: Liberty High School robot chassis parts</figcaption></figure>
     </div>
   </div>
 </section>
