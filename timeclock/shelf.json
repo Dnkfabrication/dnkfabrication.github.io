@@ -1,21 +1,8 @@
 {
- "generated": "2026-11-18 17:00",
+ "generated": "2026-11-18 17:30",
  "shelf": "C:\\Users\\mridy\\Desktop\\DnK custom gcodes\\READY TO CUT",
- "count": 78,
+ "count": 77,
  "rows": [
-  {
-   "file": "KRS-ALSTRIPS-1of2_AL-0.090_48x120_QTY26_20261118_STOCK-0.095",
-   "ext": ".lxds",
-   "named": true,
-   "customer": "KRS",
-   "part": "ALSTRIPS 1of2",
-   "material": "0.090 aluminum",
-   "size": "48x120",
-   "qty": "26",
-   "mtime": 1795041891,
-   "landed": "Wed 11/18 4:44p",
-   "desc": "KRS – ALSTRIPS 1of2 – 0.090 aluminum – 48x120 – qty 26 – landed Wed 11/18 4:44p"
-  },
   {
    "file": "WILL-ARMSTRONG-CORTEN-BASE01-ETCHONLY_HRC-0.375_95.5x6_QTY1_20261117",
    "ext": ".dxf",
