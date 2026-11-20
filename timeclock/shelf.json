@@ -1,8 +1,21 @@
 {
- "generated": "2026-11-18 17:30",
+ "generated": "2026-11-20 09:15",
  "shelf": "C:\\Users\\mridy\\Desktop\\DnK custom gcodes\\READY TO CUT",
- "count": 77,
+ "count": 78,
  "rows": [
+  {
+   "file": "AEEC-EWG-IND-ETCH-TEST_SS-0.060_6x6_QTY1_20261120_V2",
+   "ext": ".dxf",
+   "named": true,
+   "customer": "AEEC",
+   "part": "EWG IND ETCH TEST",
+   "material": "0.060 stainless",
+   "size": "6x6",
+   "qty": "1",
+   "mtime": 1795186388,
+   "landed": "Fri 11/20 8:53a",
+   "desc": "AEEC – EWG IND ETCH TEST – 0.060 stainless – 6x6 – qty 1 – landed Fri 11/20 8:53a"
+  },
   {
    "file": "WILL-ARMSTRONG-CORTEN-BASE01-ETCHONLY_HRC-0.375_95.5x6_QTY1_20261117",
    "ext": ".dxf",
