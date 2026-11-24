@@ -1,8 +1,21 @@
 {
- "generated": "2026-11-20 09:15",
+ "generated": "2026-11-24 17:15",
  "shelf": "C:\\Users\\mridy\\Desktop\\DnK custom gcodes\\READY TO CUT",
  "count": 78,
  "rows": [
+  {
+   "file": "XCIZONING-SRD09-REST-2UP_HRC-0.135_19.63x3.50_QTY1_20261029",
+   "ext": ".dxf",
+   "named": true,
+   "customer": "XCIZONING",
+   "part": "SRD09 REST 2UP",
+   "material": "10 ga HRC (0.135)",
+   "size": "19.63x3.50",
+   "qty": "1",
+   "mtime": 1795561774,
+   "landed": "Tue 11/24 5:09p",
+   "desc": "XCIZONING – SRD09 REST 2UP – 10 ga HRC (0.135) – 19.63x3.50 – qty 1 – landed Tue 11/24 5:09p"
+  },
   {
    "file": "AEEC-EWG-IND-ETCH-TEST_SS-0.060_6x6_QTY1_20261120_V2",
    "ext": ".dxf",
@@ -652,19 +665,6 @@
    "mtime": 1793282964,
    "landed": "Thu 10/29 9:09a",
    "desc": "XCIZONING – SRD09 REST 2UP – 10 ga HRC (0.135) – 20.23x4.10 – qty 1 – landed Thu 10/29 9:09a"
-  },
-  {
-   "file": "XCIZONING-SRD09-REST-2UP_HRC-0.135_19.63x3.50_QTY1_20261029",
-   "ext": ".dxf",
-   "named": true,
-   "customer": "XCIZONING",
-   "part": "SRD09 REST 2UP",
-   "material": "10 ga HRC (0.135)",
-   "size": "19.63x3.50",
-   "qty": "1",
-   "mtime": 1793281870,
-   "landed": "Thu 10/29 8:51a",
-   "desc": "XCIZONING – SRD09 REST 2UP – 10 ga HRC (0.135) – 19.63x3.50 – qty 1 – landed Thu 10/29 8:51a"
   },
   {
    "file": "XCIZONING-PO4319649-9SRB_GALV-0.0276_8.69x8.71_QTY20_20261029_NOMIRROR_ETCH",
