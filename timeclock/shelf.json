@@ -1,8 +1,21 @@
 {
- "generated": "2026-11-24 17:15",
+ "generated": "2026-11-25 10:15",
  "shelf": "C:\\Users\\mridy\\Desktop\\DnK custom gcodes\\READY TO CUT",
- "count": 78,
+ "count": 79,
  "rows": [
+  {
+   "file": "GARZA-FRAME-ENDCAP_HRC-0.120_3x4.243_QTY2_20261125",
+   "ext": ".dxf",
+   "named": true,
+   "customer": "GARZA",
+   "part": "FRAME ENDCAP",
+   "material": "11 ga HRC (0.120)",
+   "size": "3x4.243",
+   "qty": "2",
+   "mtime": 1795622236,
+   "landed": "Wed 11/25 9:57a",
+   "desc": "GARZA – FRAME ENDCAP – 11 ga HRC (0.120) – 3x4.243 – qty 2 – landed Wed 11/25 9:57a"
+  },
   {
    "file": "XCIZONING-SRD09-REST-2UP_HRC-0.135_19.63x3.50_QTY1_20261029",
    "ext": ".dxf",
